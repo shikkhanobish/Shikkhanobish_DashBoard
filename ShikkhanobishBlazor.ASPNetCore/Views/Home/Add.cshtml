@@ -1,0 +1,456 @@
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Add </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+
+
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="assets/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> Maxine K <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- LOGO -->
+            <div class="logo-box">
+                <a href="index.html" class="logo text-center logo-dark">
+                    <span class="logo-lg">
+                        <img src="assets/images/logo1.png" alt="" height="50" />
+                    </span>
+
+                    <span class="logo-sm">
+                        <img src="assets/images/logo1.png" alt="" height="22" />
+                    </span>
+                </a>
+
+                <a href="index.html" class="logo text-center logo-light">
+                    <span class="logo-lg">
+                        <img src="assets/images/logo1.png" alt="" height="50" />
+                    </span>
+                    <span class="logo-sm">
+                        <img src="assets/images/logo1.png" alt="" height="22" />
+                    </span>
+                </a>
+            </div>
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="assets/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">Jones</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+
+                    <li>
+                        <a href="index.html">
+                            <i class="ti-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="student.html">
+                            <i class="fas fa-user-graduate"></i>
+                            <span> Student </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="teacher.html">
+                            <i class="fas fa-user"></i>
+                            <span> Teacher </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="voucher.html">
+                            <i class="ti-paint-bucket"></i>
+                            <span> Voucher </span>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="add.html">
+                            <i class="fas fa-plus-square"></i>
+                            <span> Add </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>Institution</b></h2>
+                                                <div>
+                                                    <button id="add_institute" class="btn btn-success" type="button" data-toggle="modal" data-target="#add_institute_modal">Add</button>
+                                                    <button id="remove_institute" class="btn btn-danger" type="button" disabled>Remove</button>
+                                                </div>
+                                                <div class="modal" id="add_institute_modal" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Institution</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="add_institute_form">
+                                                                    <div class="form-group">
+                                                                        <label for="add_institute_id">ID</label>
+                                                                        <input class="form-control" id="add_institute_id" type="number" placeholder="Institution ID" required>
+                                                                        <small id="idValidation" class="validation_text form-text text-danger">Only numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_institute_title">Title</label>
+                                                                        <input class="form-control" id="add_institute_title" type="text" placeholder="Institution Title" required>
+                                                                        <small id="titleValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_institute_name">Name</label>
+                                                                        <input class="form-control" id="add_institute_name" type="text" placeholder="Institution Name" required>
+                                                                        <small id="nameValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="submit" id="add_institute_submit" class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <p class="text-muted mb-0">Institute</p> -->
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>Class</b></h2>
+                                                <div>
+                                                    <button id="add_class" class="btn btn-success" type="button" data-toggle="modal" data-target="#add_class_modal">Add</button>
+                                                    <button id="remove_class" class="btn btn-danger" type="button" disabled>Remove</button>
+                                                </div>
+                                                <div class="modal" id="add_class_modal" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Class</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="add_class_form">
+                                                                    <div class="form-group">
+                                                                        <label for="add_class_id">ID</label>
+                                                                        <input class="form-control" id="add_class_id" type="number" placeholder="Class ID" required>
+                                                                        <small id="idValidation" class="validation_text form-text text-danger">Only numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_class_title">Title</label>
+                                                                        <input class="form-control" id="add_class_title" type="text" placeholder="Class Title" required>
+                                                                        <small id="titleValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_class_name">Name</label>
+                                                                        <input class="form-control" id="add_class_name" type="text" placeholder="Class Name" required>
+                                                                        <small id="nameValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_class_under_institute">Institute</label>
+                                                                        <select class="form-control" id="add_class_under_institute">
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="submit" id="add_class_submit" class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>Subject</b></h2>
+                                                <div>
+                                                    <button id="add_subject" class="btn btn-success" type="button" data-toggle="modal" data-target="#add_subject_modal">Add</button>
+                                                    <button id="remove_subject" class="btn btn-danger" type="button" disabled>Remove</button>
+                                                </div>
+                                                <div class="modal" id="add_subject_modal" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Subject</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="add_subject_form">
+                                                                    <div class="form-group">
+                                                                        <label for="add_subject_id">ID</label>
+                                                                        <input class="form-control" id="add_subject_id" type="number" placeholder="Subject ID" required>
+                                                                        <small id="idValidation" class="validation_text form-text text-danger">Only numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_subject_title">Title</label>
+                                                                        <input class="form-control" id="add_subject_title" type="text" placeholder="Subject Title" required>
+                                                                        <small id="titleValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_subject_name">Name</label>
+                                                                        <input class="form-control" id="add_subject_name" type="text" placeholder="Subject Name" required>
+                                                                        <small id="nameValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_subject_group_name">Group Name</label>
+                                                                        <input class="form-control" id="add_subject_group_name" type="text" placeholder="Subject Group Name" required>
+                                                                        <small id="nameValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_subject_under_class">Class</label>
+                                                                        <select class="form-control" id="add_subject_under_class">
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="submit" id="add_subject_submit" class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>Chapter</b></h2>
+                                                <div>
+                                                    <button id="add_chapter" class="btn btn-success" type="button" data-toggle="modal" data-target="#add_chapter_modal">Add</button>
+                                                    <button id="remove_chapter" class="btn btn-danger" type="button" disabled>Remove</button>
+                                                </div>
+                                                <div class="modal" id="add_chapter_modal" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Add Chapter</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="add_chapter_form">
+                                                                    <div class="form-group">
+                                                                        <label for="add_chapter_id">ID</label>
+                                                                        <input class="form-control" id="add_chapter_id" type="number" placeholder="Chapter ID" required>
+                                                                        <small id="idValidation" class="validation_text form-text text-danger">Only numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_chapter_title">Title</label>
+                                                                        <input class="form-control" id="add_chapter_title" type="text" placeholder="Chapter Title" required>
+                                                                        <small id="titleValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_chapter_name">Name</label>
+                                                                        <input class="form-control" id="add_chapter_name" type="text" placeholder="Chapter Name" required>
+                                                                        <small id="nameValidation" class="validation_text form-text text-danger">Only alpha-numeric characters are acceptable</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_chapter_under_subject">Subject</label>
+                                                                        <select class="form-control" id="add_chapter_under_subject">
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="add_chapter_under_subject_under_class">Class</label>
+                                                                        <select class="form-control" id="add_chapter_under_subject_under_class" readonly>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="submit" id="add_chapter_submit" class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row -->
+                    <!-- Institution-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Institution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="institutes_datatable" class="table table-bordered"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Classes-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Class</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="classes_datatable" class="table table-bordered"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Subject-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Subject</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="subjects_datatable" class="table table-bordered"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Chapter-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Chapter</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="chapters_datatable" class="table table-bordered"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+
+
+</body>
+</html>

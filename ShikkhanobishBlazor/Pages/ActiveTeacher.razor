@@ -1,0 +1,872 @@
+﻿@using Flurl.Http;
+@using ShikkhanobishBlazor.Models
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+@page "/ActiveTeacher"
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- LOGO -->
+        <div class="logo-box mt-2 m-0 ml-0">
+            <a href="Count" class="">
+
+                <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+
+            </a>
+        </div>
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> @userName <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span @onclick="Logout">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">@userName</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+
+                    <li>
+                        <a href="https://dashboard.shikkhanobish.com/index.html">
+                            <i class="fas fa-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Count">
+                            <i class="fas fa-calculator"></i>
+                            <span> Count </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Questions">
+                            <i class="far fa-question-circle"></i>
+                            <span> Question </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherApproval">
+                            <i class="fas fa-user-alt"></i>
+                            <span> Teacher Qn. Approval </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ActiveTeacher">
+                            <i class="fas fa-lightbulb"></i>
+                            <span> Active Teacher </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherWithdraw">
+                            <i class="fas fa-money-bill-wave-alt"></i>
+                            <span> Teacher Withdraw </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="SendMessage">
+                            <i class="far fa-share-square"></i>
+                            <span> Send Message </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Active Teacher By Class Counting section</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-sm-4 widget-inline-box">
+                                            <div class="text-center p-3">
+
+                                                <h2 class="mt-2"> <b>@activeTeacher8</b></h2>
+                                                <p class="text-muted mb-0">Class 8</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-sm-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@activeTeacher9and10</b></h2>
+                                                <p class="text-muted mb-0">Class 9&10</p>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-sm-4 ">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@activeTeacher11and12</b></h2>
+                                                <p class="text-muted mb-0">Class 11&12</p>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Active Teacher By Subject Counting section</label>
+                    </div>
+
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+                    <h5 style="color:blueviolet">Active Teacher Class 8 by Subject</h5>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered " style="color: black; text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="background-color : #CECEF6">Math</th>
+                                    <th style="background-color :#CECEF6">Science</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@activeTeacher8Math</td>
+                                    <td>@activeTeacher8Science</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+                    <h5 style="color:blueviolet">Active Teacher Class 9&10 by Subject</h5>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered" style="color: black; text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #E8DAEF;">Physics</th>
+                                    <th style="background-color: #E8DAEF ;">Chemistry</th>
+                                    <th style="background-color: #E8DAEF;  ">Biology</th>
+                                    <th style="background-color: #E8DAEF;  ">GeneralMath</th>
+                                    <th style="background-color: #E8DAEF;">HigherMath</th>
+                                    <th style="background-color: #D5F5E3;  ">Accounting</th>
+                                    <th style="background-color: #D5F5E3; ">Finance</th>
+                                    <th style="background-color: #D5F5E3;  ">Business Entrepreneurship</th>
+                                    <th style="background-color: #D5F5E3; ">GeneralScience</th>
+                                    <th style="background-color: #FADBD8; ">Economics</th>
+                                    <th style="background-color: #FADBD8; ">GeneralScience</th>
+                                    <th style="background-color: #FADBD8; ">IT</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@activeTeacher9and10Phy</td>
+                                    <td>@activeTeacher9and10Chem</td>
+                                    <td>@activeTeacher9and10Bio</td>
+                                    <td>@activeTeacher9and10GM</td>
+                                    <td>@activeTeacher9and10HM</td>
+                                    <td>@activeTeacher9and10Acc</td>
+                                    <td>@activeTeacher9and10Fin</td>
+                                    <td>@activeTeacher9and10Entre</td>
+                                    <td>@activeTeacher9and10GS</td>
+                                    <td>@activeTeacher9and10Eco</td>
+                                    <td>@activeTeacher9and10GS2</td>
+                                    <td>@activeTeacher9and10IT</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+                    <h5 style="color:blueviolet">Active Teacher Class 11&12 by Subject</h5>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered" style="color : black; text-align:center">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #E8DAEF;">Physics1</th>
+                                    <th style="background-color: #E8DAEF;">Physics2</th>
+                                    <th style="background-color: #E8DAEF ;">Chemistry1</th>
+                                    <th style="background-color: #E8DAEF ; ">Chemistry2</th>
+                                    <th style="background-color: #E8DAEF;  ">Biology1</th>
+                                    <th style="background-color: #E8DAEF;  ">Biology2</th>
+                                    <th style="background-color: #E8DAEF;">HigherMath1</th>
+                                    <th style="background-color: #E8DAEF; ">HigherMath2</th>
+                                    <th style="background-color: #D5F5E3; ">Accounting</th>
+                                    <th style="background-color: #D5F5E3; ">Business Org.</th>
+                                    <th style="background-color: #D5F5E3; ">Economics</th>
+                                    <th style="background-color: #D5F5E3; ">Finance&Banking</th>
+                                    <th style="background-color: #FADBD8; ">Logic</th>
+                                    <th style="background-color: #FADBD8; ">Economics</th>
+                                    <th style="background-color: #FADBD8; ">Geography</th>
+                                    <th style="background-color: #FADBD8; ">Civics</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@acitive11and12countPhy1</td>
+                                    <td>@acitive11and12countPhy2</td>
+                                    <td>@acitive11and12countChem1</td>
+                                    <td>@acitive11and12countChem2</td>
+                                    <td>@acitive11and12countBio1</td>
+                                    <td>@acitive11and12countBio2</td>
+                                    <td>@acitive11and12countHM1</td>
+                                    <td>@acitive11and12countHM2</td>
+                                    <td>@acitive11and12countAccounting</td>
+                                    <td>@acitive11and12countBusOrg</td>
+                                    <td>@acitive11and12countEcoBus</td>
+                                    <td>@acitive11and12countFB</td>
+                                    <td>@acitive11and12countLogic</td>
+                                    <td>@acitive11and12countEcoart</td>
+                                    <td>@acitive11and12countGeo</td>
+                                    <td>@acitive11and12countCivic</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
+                </div>
+
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Vendor js -->
+</body>
+</html>
+
+
+@code{
+
+
+    //By Class
+    int activeTeacher8;
+    int activeTeacher9and10;
+    int activeTeacher11and12;
+
+
+    //By Subject
+    int activeTeacher8Math;
+    int activeTeacher8Science;
+
+    int activeTeacher9and10Phy;
+    int activeTeacher9and10Chem;
+    int activeTeacher9and10Bio;
+    int activeTeacher9and10GM;
+    int activeTeacher9and10HM;
+    int activeTeacher9and10Acc;
+    int activeTeacher9and10Fin;
+    int activeTeacher9and10Entre;
+    int activeTeacher9and10GS;
+    int activeTeacher9and10Eco;
+    int activeTeacher9and10GS2;
+    int activeTeacher9and10IT;
+
+    int acitive11and12countPhy1 = 0;
+    int acitive11and12countPhy2 = 0;
+    int acitive11and12countChem1 = 0;
+    int acitive11and12countChem2 = 0;
+    int acitive11and12countBio1 = 0;
+    int acitive11and12countBio2 = 0;
+    int acitive11and12countHM1 = 0;
+    int acitive11and12countHM2 = 0;
+    int acitive11and12countAccounting = 0;
+    int acitive11and12countBusOrg = 0;
+    int acitive11and12countEcoBus = 0;
+    int acitive11and12countFB = 0;
+    int acitive11and12countLogic = 0;
+    int acitive11and12countEcoart = 0;
+    int acitive11and12countGeo = 0;
+    int acitive11and12countCivic = 0;
+
+
+
+
+
+    public string userName { get; set; }
+    public string pass { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await GetActiveTeacherCountByClass();
+
+        await GetActiveTeacherCountBySubjects();
+        await GetLoginInfo();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+        pass = await oLocalStore.GetItemAsync<string>("passWord");
+
+    }
+    public async Task GetLoginInfo()
+    {
+        if (userName == "" && pass == "")
+        {
+            string redirectURL = "/";
+            nvi.NavigateTo(redirectURL);
+        }
+    }
+    [Inject]
+    public NavigationManager nvi { get; set; }
+    public async Task Logout()
+    {
+        await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        nvi.NavigateTo(redirectURL);
+    }
+
+    public async Task GetActiveTeacherCountByClass()
+    {
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+
+        var tList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        var crsList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllCousrList".PostJsonAsync(new { }).ReceiveJson<List<CousrList>>();
+
+
+
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            for (int j = 0; j < crsList.Count; j++)
+            {
+
+                if (tList[i].teacherID == crsList[j].teacherID && tList[i].activeStatus == 1)
+                {
+                    //class8
+                    if (crsList[j].sub1 == 129 || crsList[j].sub2 == 129 || crsList[j].sub3 == 129 || crsList[j].sub4 == 129 || crsList[j].sub5 == 129 || crsList[j].sub6 == 129 || crsList[j].sub7 == 129 || crsList[j].sub8 == 129 || crsList[j].sub9 == 129 || crsList[j].sub10 == 129)
+                    {
+                        count1++;
+                    }
+
+                    if (crsList[j].sub1 == 130 || crsList[j].sub2 == 130 || crsList[j].sub3 == 130 || crsList[j].sub4 == 130 || crsList[j].sub5 == 130 || crsList[j].sub6 == 130 || crsList[j].sub7 == 130 || crsList[j].sub8 == 130 || crsList[j].sub9 == 130 || crsList[j].sub10 == 130)
+                    {
+                        count1++;
+                    }
+
+
+                    //Class 9&10
+                    if (crsList[j].sub1 == 101 || crsList[j].sub2 == 101 || crsList[j].sub3 == 101 || crsList[j].sub4 == 101 || crsList[j].sub5 == 101 || crsList[j].sub6 == 101 || crsList[j].sub7 == 101 || crsList[j].sub8 == 101 || crsList[j].sub9 == 101 || crsList[j].sub10 == 101)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 102 || crsList[j].sub2 == 102 || crsList[j].sub3 == 102 || crsList[j].sub4 == 102 || crsList[j].sub5 == 102 || crsList[j].sub6 == 102 || crsList[j].sub7 == 102 || crsList[j].sub8 == 102 || crsList[j].sub9 == 102 || crsList[j].sub10 == 102)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 103 || crsList[j].sub2 == 103 || crsList[j].sub3 == 103 || crsList[j].sub4 == 103 || crsList[j].sub5 == 103 || crsList[j].sub6 == 103 || crsList[j].sub7 == 103 || crsList[j].sub8 == 103 || crsList[j].sub9 == 103 || crsList[j].sub10 == 103)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 104 || crsList[j].sub2 == 104 || crsList[j].sub3 == 104 || crsList[j].sub4 == 104 || crsList[j].sub5 == 104 || crsList[j].sub6 == 104 || crsList[j].sub7 == 104 || crsList[j].sub8 == 104 || crsList[j].sub9 == 104 || crsList[j].sub10 == 104)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 105 || crsList[j].sub2 == 105 || crsList[j].sub3 == 105 || crsList[j].sub4 == 105 || crsList[j].sub5 == 105 || crsList[j].sub6 == 105 || crsList[j].sub7 == 105 || crsList[j].sub8 == 105 || crsList[j].sub9 == 105 || crsList[j].sub10 == 105)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 106 || crsList[j].sub2 == 106 || crsList[j].sub3 == 106 || crsList[j].sub4 == 106 || crsList[j].sub5 == 106 || crsList[j].sub6 == 106 || crsList[j].sub7 == 106 || crsList[j].sub8 == 106 || crsList[j].sub9 == 106 || crsList[j].sub10 == 106)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 107 || crsList[j].sub2 == 107 || crsList[j].sub3 == 107 || crsList[j].sub4 == 107 || crsList[j].sub5 == 107 || crsList[j].sub6 == 107 || crsList[j].sub7 == 107 || crsList[j].sub8 == 107 || crsList[j].sub9 == 107 || crsList[j].sub10 == 107)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 108 || crsList[j].sub2 == 108 || crsList[j].sub3 == 108 || crsList[j].sub4 == 108 || crsList[j].sub5 == 108 || crsList[j].sub6 == 108 || crsList[j].sub7 == 108 || crsList[j].sub8 == 108 || crsList[j].sub9 == 108 || crsList[j].sub10 == 108)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 109 || crsList[j].sub2 == 109 || crsList[j].sub3 == 109 || crsList[j].sub4 == 109 || crsList[j].sub5 == 109 || crsList[j].sub6 == 109 || crsList[j].sub7 == 109 || crsList[j].sub8 == 109 || crsList[j].sub9 == 109 || crsList[j].sub10 == 109)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 110 || crsList[j].sub2 == 110 || crsList[j].sub3 == 110 || crsList[j].sub4 == 110 || crsList[j].sub5 == 110 || crsList[j].sub6 == 110 || crsList[j].sub7 == 110 || crsList[j].sub8 == 110 || crsList[j].sub9 == 110 || crsList[j].sub10 == 110)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 111 || crsList[j].sub2 == 111 || crsList[j].sub3 == 111 || crsList[j].sub4 == 111 || crsList[j].sub5 == 111 || crsList[j].sub6 == 111 || crsList[j].sub7 == 111 || crsList[j].sub8 == 111 || crsList[j].sub9 == 111 || crsList[j].sub10 == 111)
+                    {
+                        count2++;
+                    }
+
+                    if (crsList[j].sub1 == 112 || crsList[j].sub2 == 112 || crsList[j].sub3 == 112 || crsList[j].sub4 == 112 || crsList[j].sub5 == 112 || crsList[j].sub6 == 112 || crsList[j].sub7 == 112 || crsList[j].sub8 == 112 || crsList[j].sub9 == 112 || crsList[j].sub10 == 112)
+                    {
+                        count2++;
+                    }
+
+
+
+
+                    //Class 11&12
+                    if (crsList[j].sub1 == 113 || crsList[j].sub2 == 113 || crsList[j].sub3 == 113 || crsList[j].sub4 == 113 || crsList[j].sub5 == 113 || crsList[j].sub6 == 113 || crsList[j].sub7 == 113 || crsList[j].sub8 == 113 || crsList[j].sub9 == 113 || crsList[j].sub10 == 113)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 114 || crsList[j].sub2 == 114 || crsList[j].sub3 == 114 || crsList[j].sub4 == 114 || crsList[j].sub5 == 114 || crsList[j].sub6 == 114 || crsList[j].sub7 == 114 || crsList[j].sub8 == 114 || crsList[j].sub9 == 114 || crsList[j].sub10 == 114)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 115 || crsList[j].sub2 == 115 || crsList[j].sub3 == 115 || crsList[j].sub4 == 115 || crsList[j].sub5 == 115 || crsList[j].sub6 == 115 || crsList[j].sub7 == 115 || crsList[j].sub8 == 115 || crsList[j].sub9 == 115 || crsList[j].sub10 == 115)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 116 || crsList[j].sub2 == 116 || crsList[j].sub3 == 116 || crsList[j].sub4 == 116 || crsList[j].sub5 == 116 || crsList[j].sub6 == 116 || crsList[j].sub7 == 116 || crsList[j].sub8 == 116 || crsList[j].sub9 == 116 || crsList[j].sub10 == 116)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 117 || crsList[j].sub2 == 117 || crsList[j].sub3 == 117 || crsList[j].sub4 == 117 || crsList[j].sub5 == 117 || crsList[j].sub6 == 117 || crsList[j].sub7 == 117 || crsList[j].sub8 == 117 || crsList[j].sub9 == 117 || crsList[j].sub10 == 117)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 118 || crsList[j].sub2 == 118 || crsList[j].sub3 == 118 || crsList[j].sub4 == 118 || crsList[j].sub5 == 118 || crsList[j].sub6 == 118 || crsList[j].sub7 == 118 || crsList[j].sub8 == 118 || crsList[j].sub9 == 118 || crsList[j].sub10 == 118)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 119 || crsList[j].sub2 == 119 || crsList[j].sub3 == 119 || crsList[j].sub4 == 119 || crsList[j].sub5 == 119 || crsList[j].sub6 == 119 || crsList[j].sub7 == 119 || crsList[j].sub8 == 119 || crsList[j].sub9 == 119 || crsList[j].sub10 == 119)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 120 || crsList[j].sub2 == 120 || crsList[j].sub3 == 120 || crsList[j].sub4 == 120 || crsList[j].sub5 == 120 || crsList[j].sub6 == 120 || crsList[j].sub7 == 120 || crsList[j].sub8 == 120 || crsList[j].sub9 == 120 || crsList[j].sub10 == 120)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 121 || crsList[j].sub2 == 121 || crsList[j].sub3 == 121 || crsList[j].sub4 == 121 || crsList[j].sub5 == 121 || crsList[j].sub6 == 121 || crsList[j].sub7 == 121 || crsList[j].sub8 == 121 || crsList[j].sub9 == 121 || crsList[j].sub10 == 121)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 122 || crsList[j].sub2 == 122 || crsList[j].sub3 == 122 || crsList[j].sub4 == 122 || crsList[j].sub5 == 122 || crsList[j].sub6 == 122 || crsList[j].sub7 == 122 || crsList[j].sub8 == 122 || crsList[j].sub9 == 122 || crsList[j].sub10 == 122)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 123 || crsList[j].sub2 == 123 || crsList[j].sub3 == 123 || crsList[j].sub4 == 123 || crsList[j].sub5 == 123 || crsList[j].sub6 == 123 || crsList[j].sub7 == 123 || crsList[j].sub8 == 123 || crsList[j].sub9 == 123 || crsList[j].sub10 == 123)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 124 || crsList[j].sub2 == 124 || crsList[j].sub3 == 124 || crsList[j].sub4 == 124 || crsList[j].sub5 == 124 || crsList[j].sub6 == 124 || crsList[j].sub7 == 124 || crsList[j].sub8 == 124 || crsList[j].sub9 == 124 || crsList[j].sub10 == 124)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 125 || crsList[j].sub2 == 125 || crsList[j].sub3 == 125 || crsList[j].sub4 == 125 || crsList[j].sub5 == 125 || crsList[j].sub6 == 125 || crsList[j].sub7 == 125 || crsList[j].sub8 == 125 || crsList[j].sub9 == 125 || crsList[j].sub10 == 125)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 126 || crsList[j].sub2 == 126 || crsList[j].sub3 == 126 || crsList[j].sub4 == 126 || crsList[j].sub5 == 126 || crsList[j].sub6 == 126 || crsList[j].sub7 == 126 || crsList[j].sub8 == 126 || crsList[j].sub9 == 126 || crsList[j].sub10 == 126)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 127 || crsList[j].sub2 == 127 || crsList[j].sub3 == 127 || crsList[j].sub4 == 127 || crsList[j].sub5 == 127 || crsList[j].sub6 == 127 || crsList[j].sub7 == 127 || crsList[j].sub8 == 127 || crsList[j].sub9 == 127 || crsList[j].sub10 == 127)
+                    {
+                        count3++;
+                    }
+
+                    if (crsList[j].sub1 == 128 || crsList[j].sub2 == 128 || crsList[j].sub3 == 128 || crsList[j].sub4 == 128 || crsList[j].sub5 == 128 || crsList[j].sub6 == 128 || crsList[j].sub7 == 128 || crsList[j].sub8 == 128 || crsList[j].sub9 == 128 || crsList[j].sub10 == 128)
+                    {
+                        count3++;
+                    }
+                }
+            }
+        }
+        activeTeacher8 = count1;
+        activeTeacher9and10 = count2;
+        activeTeacher11and12 = count3;
+    }
+
+
+
+
+    public async Task GetActiveTeacherCountBySubjects()
+    {
+
+        //class8
+        int countMath = 0;
+        int countScience = 0;
+
+        //class9&10
+        int countPhy = 0;
+        int countChem = 0;
+        int countBio = 0;
+        int countGM = 0;
+        int countHM = 0;
+        int countFin = 0;
+        int countEntre = 0;
+        int countGS = 0;
+        int countAcc = 0;
+        int countEco = 0;
+        int countGS2 = 0;
+        int countIT = 0;
+
+        //class11&12
+        int countPhy1 = 0;
+        int countPhy2 = 0;
+        int countChem1 = 0;
+        int countChem2 = 0;
+        int countBio1 = 0;
+        int countBio2 = 0;
+        int countHM1 = 0;
+        int countHM2 = 0;
+        int countAccounting = 0;
+        int countBusOrg = 0;
+        int countEcoBus = 0;
+        int countFB = 0;
+        int countLogic = 0;
+        int countEcoart = 0;
+        int countGeo = 0;
+        int countCivic = 0;
+
+
+        var tList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        var crsList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllCousrList".PostJsonAsync(new { }).ReceiveJson<List<CousrList>>();
+
+
+
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            for (int j = 0; j < crsList.Count; j++)
+            {
+
+                if (tList[i].teacherID == crsList[j].teacherID && tList[i].activeStatus == 1)
+                {
+
+                    //class8
+                    if (crsList[j].sub1 == 129 || crsList[j].sub2 == 129 || crsList[j].sub3 == 129 || crsList[j].sub4 == 129 || crsList[j].sub5 == 129 || crsList[j].sub6 == 129 || crsList[j].sub7 == 129 || crsList[j].sub8 == 129 || crsList[j].sub9 == 129 || crsList[j].sub10 == 129)
+                    {
+                        countMath++;
+                    }
+
+                    if (crsList[j].sub1 == 130 || crsList[j].sub2 == 130 || crsList[j].sub3 == 130 || crsList[j].sub4 == 130 || crsList[j].sub5 == 130 || crsList[j].sub6 == 130 || crsList[j].sub7 == 130 || crsList[j].sub8 == 130 || crsList[j].sub9 == 130 || crsList[j].sub10 == 130)
+                    {
+                        countScience++;
+                    }
+
+
+
+                    //class 9&10
+                    if (crsList[j].sub1 == 101 || crsList[j].sub2 == 101 || crsList[j].sub3 == 101 || crsList[j].sub4 == 101 || crsList[j].sub5 == 101 || crsList[j].sub6 == 101 || crsList[j].sub7 == 101 || crsList[j].sub8 == 101 || crsList[j].sub9 == 101 || crsList[j].sub10 == 101)
+                    {
+                        countPhy++;
+                    }
+
+                    if (crsList[j].sub1 == 102 || crsList[j].sub2 == 102 || crsList[j].sub3 == 102 || crsList[j].sub4 == 102 || crsList[j].sub5 == 102 || crsList[j].sub6 == 102 || crsList[j].sub7 == 102 || crsList[j].sub8 == 102 || crsList[j].sub9 == 102 || crsList[j].sub10 == 102)
+                    {
+                        countChem++;
+                    }
+
+                    if (crsList[j].sub1 == 103 || crsList[j].sub2 == 103 || crsList[j].sub3 == 103 || crsList[j].sub4 == 103 || crsList[j].sub5 == 103 || crsList[j].sub6 == 103 || crsList[j].sub7 == 103 || crsList[j].sub8 == 103 || crsList[j].sub9 == 103 || crsList[j].sub10 == 103)
+                    {
+                        countBio++;
+                    }
+
+                    if (crsList[j].sub1 == 104 || crsList[j].sub2 == 104 || crsList[j].sub3 == 104 || crsList[j].sub4 == 104 || crsList[j].sub5 == 104 || crsList[j].sub6 == 104 || crsList[j].sub7 == 104 || crsList[j].sub8 == 104 || crsList[j].sub9 == 104 || crsList[j].sub10 == 104)
+                    {
+                        countGM++;
+                    }
+
+                    if (crsList[j].sub1 == 105 || crsList[j].sub2 == 105 || crsList[j].sub3 == 105 || crsList[j].sub4 == 105 || crsList[j].sub5 == 105 || crsList[j].sub6 == 105 || crsList[j].sub7 == 105 || crsList[j].sub8 == 105 || crsList[j].sub9 == 105 || crsList[j].sub10 == 105)
+                    {
+                        countHM++;
+                    }
+
+                    if (crsList[j].sub1 == 106 || crsList[j].sub2 == 106 || crsList[j].sub3 == 106 || crsList[j].sub4 == 106 || crsList[j].sub5 == 106 || crsList[j].sub6 == 106 || crsList[j].sub7 == 106 || crsList[j].sub8 == 106 || crsList[j].sub9 == 106 || crsList[j].sub10 == 106)
+                    {
+                        countAcc++;
+                    }
+
+                    if (crsList[j].sub1 == 107 || crsList[j].sub2 == 107 || crsList[j].sub3 == 107 || crsList[j].sub4 == 107 || crsList[j].sub5 == 107 || crsList[j].sub6 == 107 || crsList[j].sub7 == 107 || crsList[j].sub8 == 107 || crsList[j].sub9 == 107 || crsList[j].sub10 == 107)
+                    {
+                        countFin++;
+                    }
+
+                    if (crsList[j].sub1 == 108 || crsList[j].sub2 == 108 || crsList[j].sub3 == 108 || crsList[j].sub4 == 108 || crsList[j].sub5 == 108 || crsList[j].sub6 == 108 || crsList[j].sub7 == 108 || crsList[j].sub8 == 108 || crsList[j].sub9 == 108 || crsList[j].sub10 == 108)
+                    {
+                        countEntre++;
+                    }
+
+                    if (crsList[j].sub1 == 109 || crsList[j].sub2 == 109 || crsList[j].sub3 == 109 || crsList[j].sub4 == 109 || crsList[j].sub5 == 109 || crsList[j].sub6 == 109 || crsList[j].sub7 == 109 || crsList[j].sub8 == 109 || crsList[j].sub9 == 109 || crsList[j].sub10 == 109)
+                    {
+                        countGS++;
+                    }
+
+                    if (crsList[j].sub1 == 110 || crsList[j].sub2 == 110 || crsList[j].sub3 == 110 || crsList[j].sub4 == 110 || crsList[j].sub5 == 110 || crsList[j].sub6 == 110 || crsList[j].sub7 == 110 || crsList[j].sub8 == 110 || crsList[j].sub9 == 110 || crsList[j].sub10 == 110)
+                    {
+                        countEco++;
+                    }
+
+                    if (crsList[j].sub1 == 111 || crsList[j].sub2 == 111 || crsList[j].sub3 == 111 || crsList[j].sub4 == 111 || crsList[j].sub5 == 111 || crsList[j].sub6 == 111 || crsList[j].sub7 == 111 || crsList[j].sub8 == 111 || crsList[j].sub9 == 111 || crsList[j].sub10 == 111)
+                    {
+                        countGS2++;
+                    }
+
+                    if (crsList[j].sub1 == 112 || crsList[j].sub2 == 112 || crsList[j].sub3 == 112 || crsList[j].sub4 == 112 || crsList[j].sub5 == 112 || crsList[j].sub6 == 112 || crsList[j].sub7 == 112 || crsList[j].sub8 == 112 || crsList[j].sub9 == 112 || crsList[j].sub10 == 112)
+                    {
+                        countIT++;
+                    }
+
+
+                    //class 11&12
+
+                    if (crsList[j].sub1 == 113 || crsList[j].sub2 == 113 || crsList[j].sub3 == 113 || crsList[j].sub4 == 113 || crsList[j].sub5 == 113 || crsList[j].sub6 == 113 || crsList[j].sub7 == 113 || crsList[j].sub8 == 113 || crsList[j].sub9 == 113 || crsList[j].sub10 == 113)
+                    {
+                        countPhy1++;
+                    }
+
+                    if (crsList[j].sub1 == 114 || crsList[j].sub2 == 114 || crsList[j].sub3 == 114 || crsList[j].sub4 == 114 || crsList[j].sub5 == 114 || crsList[j].sub6 == 114 || crsList[j].sub7 == 114 || crsList[j].sub8 == 114 || crsList[j].sub9 == 114 || crsList[j].sub10 == 114)
+                    {
+                        countChem1++;
+                    }
+
+                    if (crsList[j].sub1 == 115 || crsList[j].sub2 == 115 || crsList[j].sub3 == 115 || crsList[j].sub4 == 115 || crsList[j].sub5 == 115 || crsList[j].sub6 == 115 || crsList[j].sub7 == 115 || crsList[j].sub8 == 115 || crsList[j].sub9 == 115 || crsList[j].sub10 == 115)
+                    {
+                        countBio1++;
+                    }
+
+                    if (crsList[j].sub1 == 116 || crsList[j].sub2 == 116 || crsList[j].sub3 == 116 || crsList[j].sub4 == 116 || crsList[j].sub5 == 116 || crsList[j].sub6 == 116 || crsList[j].sub7 == 116 || crsList[j].sub8 == 116 || crsList[j].sub9 == 116 || crsList[j].sub10 == 116)
+                    {
+                        countHM1++;
+                    }
+
+                    if (crsList[j].sub1 == 117 || crsList[j].sub2 == 117 || crsList[j].sub3 == 117 || crsList[j].sub4 == 117 || crsList[j].sub5 == 117 || crsList[j].sub6 == 117 || crsList[j].sub7 == 117 || crsList[j].sub8 == 117 || crsList[j].sub9 == 117 || crsList[j].sub10 == 117)
+                    {
+                        countPhy2++;
+                    }
+
+                    if (crsList[j].sub1 == 118 || crsList[j].sub2 == 118 || crsList[j].sub3 == 118 || crsList[j].sub4 == 118 || crsList[j].sub5 == 118 || crsList[j].sub6 == 118 || crsList[j].sub7 == 118 || crsList[j].sub8 == 118 || crsList[j].sub9 == 118 || crsList[j].sub10 == 118)
+                    {
+                        countChem2++;
+                    }
+
+                    if (crsList[j].sub1 == 119 || crsList[j].sub2 == 119 || crsList[j].sub3 == 119 || crsList[j].sub4 == 119 || crsList[j].sub5 == 119 || crsList[j].sub6 == 119 || crsList[j].sub7 == 119 || crsList[j].sub8 == 119 || crsList[j].sub9 == 119 || crsList[j].sub10 == 119)
+                    {
+                        countBio2++;
+                    }
+
+                    if (crsList[j].sub1 == 120 || crsList[j].sub2 == 120 || crsList[j].sub3 == 120 || crsList[j].sub4 == 120 || crsList[j].sub5 == 120 || crsList[j].sub6 == 120 || crsList[j].sub7 == 120 || crsList[j].sub8 == 120 || crsList[j].sub9 == 120 || crsList[j].sub10 == 120)
+                    {
+                        countHM2++;
+                    }
+
+                    if (crsList[j].sub1 == 121 || crsList[j].sub2 == 121 || crsList[j].sub3 == 121 || crsList[j].sub4 == 121 || crsList[j].sub5 == 121 || crsList[j].sub6 == 121 || crsList[j].sub7 == 121 || crsList[j].sub8 == 121 || crsList[j].sub9 == 121 || crsList[j].sub10 == 121)
+                    {
+                        countAccounting++;
+                    }
+
+                    if (crsList[j].sub1 == 122 || crsList[j].sub2 == 122 || crsList[j].sub3 == 122 || crsList[j].sub4 == 122 || crsList[j].sub5 == 122 || crsList[j].sub6 == 122 || crsList[j].sub7 == 122 || crsList[j].sub8 == 122 || crsList[j].sub9 == 122 || crsList[j].sub10 == 122)
+                    {
+                        countBusOrg++;
+                    }
+
+                    if (crsList[j].sub1 == 123 || crsList[j].sub2 == 123 || crsList[j].sub3 == 123 || crsList[j].sub4 == 123 || crsList[j].sub5 == 123 || crsList[j].sub6 == 123 || crsList[j].sub7 == 123 || crsList[j].sub8 == 123 || crsList[j].sub9 == 123 || crsList[j].sub10 == 123)
+                    {
+                        countEcoBus++;
+                    }
+
+                    if (crsList[j].sub1 == 124 || crsList[j].sub2 == 124 || crsList[j].sub3 == 124 || crsList[j].sub4 == 124 || crsList[j].sub5 == 124 || crsList[j].sub6 == 124 || crsList[j].sub7 == 124 || crsList[j].sub8 == 124 || crsList[j].sub9 == 124 || crsList[j].sub10 == 124)
+                    {
+                        countFB++;
+                    }
+
+                    if (crsList[j].sub1 == 125 || crsList[j].sub2 == 125 || crsList[j].sub3 == 125 || crsList[j].sub4 == 125 || crsList[j].sub5 == 125 || crsList[j].sub6 == 125 || crsList[j].sub7 == 125 || crsList[j].sub8 == 125 || crsList[j].sub9 == 125 || crsList[j].sub10 == 125)
+                    {
+                        countLogic++;
+                    }
+
+                    if (crsList[j].sub1 == 126 || crsList[j].sub2 == 126 || crsList[j].sub3 == 126 || crsList[j].sub4 == 126 || crsList[j].sub5 == 126 || crsList[j].sub6 == 126 || crsList[j].sub7 == 126 || crsList[j].sub8 == 126 || crsList[j].sub9 == 126 || crsList[j].sub10 == 126)
+                    {
+                        countEcoart++;
+                    }
+
+                    if (crsList[j].sub1 == 127 || crsList[j].sub2 == 127 || crsList[j].sub3 == 127 || crsList[j].sub4 == 127 || crsList[j].sub5 == 127 || crsList[j].sub6 == 127 || crsList[j].sub7 == 127 || crsList[j].sub8 == 127 || crsList[j].sub9 == 127 || crsList[j].sub10 == 127)
+                    {
+                        countGeo++;
+                    }
+
+                    if (crsList[j].sub1 == 128 || crsList[j].sub2 == 128 || crsList[j].sub3 == 128 || crsList[j].sub4 == 128 || crsList[j].sub5 == 128 || crsList[j].sub6 == 128 || crsList[j].sub7 == 128 || crsList[j].sub8 == 128 || crsList[j].sub9 == 128 || crsList[j].sub10 == 128)
+                    {
+                        countCivic++;
+                    }
+                }
+            }
+        }
+        activeTeacher8Math = countMath;
+        activeTeacher8Science = countScience;
+
+
+        activeTeacher9and10Phy = countPhy;
+        activeTeacher9and10Chem = countChem;
+        activeTeacher9and10Bio = countBio;
+        activeTeacher9and10GM = countGM;
+        activeTeacher9and10HM = countHM;
+        activeTeacher9and10Acc = countAcc;
+        activeTeacher9and10Fin = countFin;
+        activeTeacher9and10Entre = countEntre;
+        activeTeacher9and10GS = countGS;
+        activeTeacher9and10Eco = countEco;
+        activeTeacher9and10GS2 = countGS2;
+        activeTeacher9and10IT = countIT;
+
+
+        acitive11and12countPhy1 = countPhy1;
+        acitive11and12countChem1 = countChem1;
+        acitive11and12countBio1 = countBio1;
+        acitive11and12countHM1 = countHM1;
+        acitive11and12countPhy2 = countPhy2;
+        acitive11and12countChem2 = countChem2;
+        acitive11and12countBio2 = countBio2;
+        acitive11and12countHM2 = countHM2;
+        acitive11and12countAccounting = countAccounting;
+        acitive11and12countEcoBus = countEcoBus;
+        acitive11and12countBusOrg = countBusOrg;
+        acitive11and12countFB = countFB;
+        acitive11and12countLogic = countLogic;
+        acitive11and12countEcoart = countEcoart;
+        acitive11and12countGeo = countGeo;
+        acitive11and12countCivic = countCivic;
+
+    }
+
+
+
+
+}
+
+
+
+

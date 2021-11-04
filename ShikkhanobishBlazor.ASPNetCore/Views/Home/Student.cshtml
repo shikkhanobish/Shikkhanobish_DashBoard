@@ -1,0 +1,292 @@
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Student</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+
+
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="assets/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> Maxine K <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- LOGO -->
+            <div class="logo-box">
+                <a href="index.html" class="logo text-center logo-dark">
+                    <span class="logo-lg">
+                        <img src="assets/images/logo1.png" alt="" height="50" />
+                    </span>
+
+                    <span class="logo-sm">
+                        <img src="assets/images/logo1.png" alt="" height="22" />
+                    </span>
+                </a>
+
+                <a href="index.html" class="logo text-center logo-light">
+                    <span class="logo-lg">
+                        <img src="assets/images/logo1.png" alt="" height="50" />
+                    </span>
+                    <span class="logo-sm">
+                        <img src="assets/images/logo1.png" alt="" height="22" />
+                    </span>
+                </a>
+            </div>
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="assets/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">Jones</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+
+                    <li>
+                        <a href="Index">
+                            <i class="ti-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Student">
+                            <i class="fas fa-user-graduate"></i>
+                            <span> Student </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Teacher">
+                            <i class="fas fa-user"></i>
+                            <span> Teacher </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Voucher">
+                            <i class="ti-paint-bucket"></i>
+                            <span> Voucher </span>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="Add">
+                            <i class="fas fa-plus-square"></i>
+                            <span> Add </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline studentCard">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>0</b></h2>
+                                                <p class="text-muted mb-0">Number Of Student In Class 8</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>0</b></h2>
+                                                <p class="text-muted mb-0">Number Of Student In Class 9</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>0</b></h2>
+                                                <p class="text-muted mb-0">Number Of Student In Class 10</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>0</b></h2>
+                                                <p class="text-muted mb-0">Number Of Student In Class 11</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-3">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>0</b></h2>
+                                                <p class="text-muted mb-0">Number Of Student In Class 12</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row -->
+                    <!-- Student -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Student</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="all_student_datatable" class="table table-bordered">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student Tuition History -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Student Tuition History</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="student_tution_history_datatable" class="table table-bordered">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student Payment History -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Student Payment History</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="student_payment_history_datatable" class="table table-bordered">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Premium Student -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Premium Student</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="premium_student_datatable" class="table table-bordered">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+
+</body>
+</html>
+<script src="~/js/student.js"></script>

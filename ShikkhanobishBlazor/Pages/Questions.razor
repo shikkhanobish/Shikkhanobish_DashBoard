@@ -1,0 +1,264 @@
+﻿@page "/Questions"
+@using ShikkhanobishBlazor.Models
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+@using Flurl.Http;
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Question</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- LOGO -->
+        <div class="logo-box mt-2 m-0 ml-0">
+            <a href="Count" class="">
+
+                <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+
+            </a>
+        </div>
+
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> @userName <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span @onclick="Logout">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+           
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">@userName</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+                    <li>
+                        <a href="https://dashboard.shikkhanobish.com/index.html">
+                            <i class="fas fa-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Count">
+                            <i class="fas fa-calculator"></i>
+                            <span> Count </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Questions">
+                            <i class="far fa-question-circle"></i>
+                            <span> Question </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherApproval">
+                            <i class="fas fa-user-alt"></i>
+                            <span> Teacher Qn. Approval </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ActiveTeacher">
+                            <i class="fas fa-lightbulb"></i>
+                            <span> Active Teacher </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherWithdraw">
+                            <i class="fas fa-money-bill-wave-alt"></i>
+                            <span> Teacher Withdraw </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="SendMessage">
+                            <i class="far fa-share-square"></i>
+                            <span> Send Message </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+
+                    <!-- Teacher -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card studentTable">
+                                <div class="card-header">
+                                    <h5>Question</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-area">
+                                        <!-- table-responsive -->
+                                        <div class="table-responsive">
+                                            <table id="all_question_datatable" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>questionID</th>
+                                                        <th>classID</th>
+                                                        <th>subjectID</th>
+                                                        <th>chapterID</th>
+                                                        <th>topicID</th>
+                                                        <th>mainQuestion</th>
+                                                        <th>option1</th>
+                                                        <th>option2</th>
+                                                        <th>option3</th>
+                                                        <th>option4</th>
+                                                        <th>rightAnswer</th>
+                                                        <th>noOfQs</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @foreach (var item in objList)
+                                                    {
+
+                                                        <tr>
+                                                            <td>@item.questionID</td>
+                                                            <td>@item.classID</td>
+                                                            <td>@item.subjectID</td>
+                                                            <td>@item.chapterID</td>
+                                                            <td>@item.topicID</td>
+                                                            <td>@item.mainQuestion</td>
+                                                            <td>@item.option1</td>
+                                                            <td>@item.option2</td>
+                                                            <td>@item.option3</td>
+                                                            <td>@item.option4</td>
+                                                            <td>@item.rightAnswer</td>
+                                                            <td>@item.review</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+
+
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Vendor js -->
+
+</body>
+</html>
+
+@code{
+
+    public string userName { get; set; }
+    public string pass { get; set; }
+    List<Models.Question> objList = new List<Models.Question>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetQuestion();
+        await GetLoginInfo();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+        pass = await oLocalStore.GetItemAsync<string>("passWord");
+    }
+    public async Task GetLoginInfo()
+    {
+        if (userName == "" && pass == "")
+        {
+            string redirectURL = "/";
+            nvi.NavigateTo(redirectURL);
+        }
+    }
+    [Inject]
+    public NavigationManager nvi { get; set; }
+    public async Task Logout()
+    {
+        await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        nvi.NavigateTo(redirectURL);
+    }
+
+    public async Task GetQuestion()
+    {
+        objList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Models.Question>>();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+
+    }
+}

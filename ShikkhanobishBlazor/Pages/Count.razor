@@ -1,0 +1,1223 @@
+﻿@using Flurl.Http;
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+@using ShikkhanobishBlazor.Models
+@page "/Count"
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- LOGO -->
+            <div class="logo-box mt-2 m-0 ml-0">
+                <a href="Count" class="">
+
+                    <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+
+                </a>
+            </div>
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> @userName <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span @onclick="Logout">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">@userName</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+                    <li>
+                        <a href="https://dashboard.shikkhanobish.com/index.html">
+                            <i class="fas fa-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Count">
+                            <i class="fas fa-calculator"></i>
+                            <span> Count </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Questions">
+                            <i class="far fa-question-circle"></i>
+                            <span> Question </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherApproval">
+                            <i class="fas fa-user-alt"></i>
+                            <span> Teacher Qn. Approval </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ActiveTeacher">
+                            <i class="fas fa-lightbulb"></i>
+                            <span> Active Teacher </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherWithdraw">
+                            <i class="fas fa-money-bill-wave-alt"></i>
+                            <span> Teacher Withdraw </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="SendMessage">
+                            <i class="far fa-share-square"></i>
+                            <span> Send Message </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                            <div class="text-center p-3">
+
+                                                <h2 class="mt-2"><i class="fas fa-lira-sign text-success mr-2"></i> <b>@countTotalEarn</b></h2>
+                                                <p class="text-muted mb-0">Total Income</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i> <b>@countStudent</b></h2>
+                                                <p class="text-muted mb-0">Total Student</p>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countTeacher</b></h2>
+                                                <p class="text-muted mb-0">Total Teacher</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-sm-6">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-equals text-primary mr-2"></i><b>@countTuition</b></h2>
+                                                <p class="text-muted mb-0">Total Tuition</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row -->
+
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline studentCard">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>@countClassEightTuition</b></h2>
+                                                <p class="text-muted mb-0">Number Of Tuitions In Class 8</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>@countClass9and10Tution</b></h2>
+                                                <p class="text-muted mb-0">Number Of Tuitions In Class 9&10</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-4 ">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user-graduate text-teal mr-2"></i><b>@countClass11and12Tution</b></h2>
+                                                <p class="text-muted mb-0">Number Of Tuitions In Class 11&12</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row -->
+
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countScienceNineAndTen</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Science of 9 & 10
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countCommerceNineAndTen</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Commerce of 9 & 10
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-4">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countArtsNineAndTen</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Arts of 9 & 10
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countScienceElevenAndTwelve</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Science of 11 & 12
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-sm-6 col-md-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countCommerceElevenAndTwelve</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Commerce of 11 & 12
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-md-4">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <i class="fas fa-user text-info mr-2"></i><b>@countArtsElevenAndTwelve</b></h2>
+                                                <p class="text-muted mb-0">
+                                                    No Of
+                                                    Teachers For
+                                                    Arts of 11 & 12
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row -->
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-sm-6 widget-inline-box">
+                                            <div class="text-center p-3">
+
+                                                <h2 class="mt-2"><i class="fas fa-user text-info mr-2"></i> <b>@countMonetized</b></h2>
+                                                <p class="text-muted mb-0">Monetized Teacher</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-sm-6 ">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><i class="fas fa-user text-info mr-2"></i> <b>@countOnlySelected</b></h2>
+                                                <p class="text-muted mb-0">Only Selected Teacher</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end row -->
+
+
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <div class="form-group row">
+                        <div class="col-12 align-content-center">
+                            <label style="color:blueviolet;font-size:30px;">Question Counting section</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-sm-4 widget-inline-box">
+                                            <div class="text-center p-3">
+
+                                                <h2 class="mt-2"><b>@numQuestion8</b></h2>
+                                                <p class="text-muted mb-0">No of Questions from Class 8</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-sm-4 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"> <b>@numQuestion9and10</b></h2>
+                                                <p class="text-muted mb-0">No of Questions from Class 9&10</p>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-sm-4 ">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@numQuestion11and12</b></h2>
+                                                <p class="text-muted mb-0">No of Questions from Class 11&12</p>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+                    <!--end row -->
+                    <!-- Group and Class Based Table for Question-->
+                    <!--11&12 Question by group and class-->
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 8</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Science</th>
+                                        <th>Math</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@class8Science</td>
+                                        <td>@class8Math</td>
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+
+                    <!--9&10 Question by group and class-->
+
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 9&10 of Science</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+
+
+                                        <th>Physics</th>
+                                        <th>Chemistry</th>
+                                        <th>Biology</th>
+                                        <th>GeneralMath</th>
+                                        <th>HigherMath</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@countClass9and10Physics</td>
+                                        <td>@countClass9and10Chemistry</td>
+                                        <td>@countClass9and10Biology</td>
+                                        <td>@countClass9and10GeneralMath</td>
+                                        <td>@countClass9and10HigherMath</td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 9&10 of Commerce</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Accounting</th>
+                                        <th>Finance</th>
+                                        <th>Business Entrepreneurship</th>
+                                        <th>General Science</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@countClass9and10Accounting</td>
+                                        <td>@countClass9and10Finance</td>
+                                        <td>@countClass9and10Entre</td>
+                                        <td>@countClass9and10Science</td>
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+
+
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 9&10 of Arts</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Economics</th>
+                                        <th>GeneralScience</th>
+                                        <th>IT</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>@countClass9and10Eco</td>
+                                        <td>@countClass9and10GS2</td>
+                                        <td>@countClass9and10IT</td>
+                                    </tr>
+
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+                    <!--11&12 Question by group and class-->
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 11&12 of Science</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Physics1st</th>
+                                        <th>Physics2nd</th>
+                                        <th>Chemistry1st</th>
+                                        <th>Chemistry2nd</th>
+                                        <th>Biology1st</th>
+                                        <th>Biology2nd</th>
+                                        <th>HigherMath1st</th>
+                                        <th>HigherMath2nd</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@countClass11and12Physics1</td>
+                                        <td>@countClass11and12Physics2</td>
+                                        <td>@countClass11and12Chemistry1</td>
+                                        <td>@countClass11and12Chemistry2</td>
+                                        <td>@countClass11and12Biology1</td>
+                                        <td>@countClass11and12Biology2</td>
+                                        <td>@countClass11and12HigherMath1</td>
+                                        <td>@countClass11and12HigherMath2</td>
+
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 11&12 of Commerce</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Accounting</th>
+                                        <th>Business Organization</th>
+                                        <th>Economics</th>
+                                        <th>Finance & Banking</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@countClass11and12Accounting</td>
+                                        <td>@countClass11and12Business</td>
+                                        <td>@countClass11and12Eco</td>
+                                        <td>@countClass11and12Finance</td>
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+
+
+                    <div class="row">
+                        <h5 style="color:blueviolet">Question from Class 11&12 of Arts</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Logic</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@countClass11and12Logic</td>
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <hr style="background-color:blueviolet; height:1px;" />
+                    <hr style="background-color: blueviolet; height:1px;" />
+                    <br />
+
+
+
+
+                </div>
+
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Vendor js -->
+</body>
+</html>
+
+
+@code{
+
+    int countStudent;
+    int countTeacher;
+    int countTuition;
+    double countTotalEarn;
+
+    int countClassEightTuition;
+    int countClass9and10Tution;
+    int countClass11and12Tution;
+
+    int countScienceNineAndTen;
+    int countCommerceNineAndTen;
+    int countArtsNineAndTen;
+    int countScienceElevenAndTwelve;
+    int countCommerceElevenAndTwelve;
+    int countArtsElevenAndTwelve;
+
+    int countMonetized;
+    int countOnlySelected;
+
+
+    int numQuestion8;
+    int numQuestion9and10;
+    int numQuestion11and12;
+
+
+    List<StudentTuitionHistory> sthLList;
+
+    int class8Science;
+    int class8Math;
+
+
+
+    int countClass9and10Physics;
+    int countClass9and10Chemistry;
+    int countClass9and10Biology;
+    int countClass9and10GeneralMath;
+    int countClass9and10HigherMath;
+
+    int countClass9and10Accounting;
+    int countClass9and10Entre;
+    int countClass9and10Finance;
+    int countClass9and10Science;
+
+
+    int countClass9and10Eco;
+    int countClass9and10GS2;
+    int countClass9and10IT;
+
+
+
+
+
+
+    int countClass11and12Physics1;
+    int countClass11and12Physics2;
+    int countClass11and12Chemistry1;
+    int countClass11and12Chemistry2;
+    int countClass11and12Biology1;
+    int countClass11and12Biology2;
+    int countClass11and12HigherMath1;
+    int countClass11and12HigherMath2;
+
+    int countClass11and12Accounting;
+    int countClass11and12Business;
+    int countClass11and12Eco;
+    int countClass11and12Finance;
+
+
+
+    int countClass11and12Logic;
+
+
+
+
+
+    string userName { get; set; }
+    string pass { get; set; }
+
+    List<TeacherWithdrawHistory> twh = new List<TeacherWithdrawHistory>();
+
+    List<TeacherQuestionStatusCount> tqscResult = new List<TeacherQuestionStatusCount>();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        sthLList = new List<StudentTuitionHistory>();
+        await GetStudentCount();
+        await GetTeacherCount();
+        await GetTuitionCount();
+        await GetTutionCountClasses();
+        await GetTotalEarn();
+        await GetTeacherByGroup();
+        await GetMonetizedTeacher();
+        await GetQuestionCountByClass();
+        await GetQuestionByGroupAndClass();
+        await GetLoginInfo();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+        pass = await oLocalStore.GetItemAsync<string>("passWord");
+    }
+
+    public async Task GetLoginInfo()
+    {
+        if (userName=="" && pass=="")
+        {
+           
+            string redirectURL = "/";
+            nvi.NavigateTo(redirectURL);
+        }
+    }
+
+    [Inject]
+    public NavigationManager nvi { get; set; }
+    public async Task Logout()
+    {
+        await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        nvi.NavigateTo(redirectURL);
+    }
+
+    public async Task<int> GetStudentCount()
+    {
+        var studentList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getStudent".GetJsonAsync<List<Student>>();
+        countStudent = studentList.Count();
+
+        return countStudent;
+    }
+
+
+    public async Task<int> GetTeacherCount()
+    {
+        var teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        countTeacher = teacherList.Count();
+        return countTeacher;
+
+    }
+
+    public async Task<int> GetTuitionCount()
+    {
+
+        sthLList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getStudentTuitionHistory".PostJsonAsync(new { }).ReceiveJson<List<StudentTuitionHistory>>();
+        countTuition = sthLList.Count();
+        return countTuition;
+    }
+
+    public async Task GetTutionCountClasses()
+    {
+        int eightTuition = 0;
+        int nineTenTuiton = 0;
+        int elevenTwelveTution = 0;
+        for (int i = 0; i < sthLList.Count; i++)
+        {
+            if (sthLList[i].secondChoiceID == "103")
+            {
+                eightTuition++;
+            }
+            if (sthLList[i].secondChoiceID == "101")
+            {
+                nineTenTuiton++;
+            }
+            if (sthLList[i].secondChoiceID == "102")
+            {
+                elevenTwelveTution++;
+            }
+        }
+        countClassEightTuition = eightTuition;
+        countClass9and10Tution = nineTenTuiton;
+        countClass11and12Tution = elevenTwelveTution;
+    }
+
+    public async Task GetTotalEarn()
+    {
+        double totalEarn = 0;
+
+        var totalPayList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getStudentTuitionHistory".GetJsonAsync<List<StudentTuitionHistory>>();
+        for (int i = 0; i < totalPayList.Count; i++)
+        {
+            totalEarn += (double)totalPayList[i].cost - totalPayList[i].teacherEarn;
+        }
+        countTotalEarn = totalEarn;
+    }
+
+    public async Task GetTeacherByGroup()
+    {
+        int totalScience = 0;
+        int totalCommerce = 0;
+        int totalArts = 0;
+
+        var teacherInfoList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllCousrList".PostJsonAsync(new { }).ReceiveJson<List<CousrList>>();
+        var groupInfoList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
+
+
+        for (int i = 0; i < teacherInfoList.Count; i++)
+        {
+
+            for (int j = 0; j < groupInfoList.Count; j++)
+            {
+                if (teacherInfoList[i].sub1 == groupInfoList[j].subjectID)
+                {
+                    if (groupInfoList[j].groupName == "Science")
+                    {
+                        totalScience++;
+                        break;
+                    }
+                    else if (groupInfoList[j].groupName == "Commerce")
+                    {
+                        totalCommerce++;
+                        break;
+                    }
+                    else if (groupInfoList[j].groupName == "Arts")
+                    {
+                        totalArts++;
+                        break;
+                    }
+                }
+            }
+            countScienceNineAndTen = totalScience;
+            countCommerceNineAndTen = totalCommerce;
+            countArtsNineAndTen = totalArts;
+
+        }
+
+        for (int i = 0; i < teacherInfoList.Count; i++)
+        {
+
+            for (int j = 0; j < groupInfoList.Count; j++)
+            {
+                if (teacherInfoList[i].sub4 == groupInfoList[j].subjectID)
+                {
+                    if (groupInfoList[j].groupName == "Science")
+                    {
+                        totalScience++;
+                        break;
+                    }
+                    else if (groupInfoList[j].groupName == "Commerce")
+                    {
+                        totalCommerce++;
+                        break;
+                    }
+                    else if (groupInfoList[j].groupName == "Arts")
+                    {
+                        totalArts++;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        countScienceElevenAndTwelve = totalScience;
+        countCommerceElevenAndTwelve = totalCommerce;
+        countArtsElevenAndTwelve = totalArts;
+
+    }
+
+    public async Task GetMonetizedTeacher()
+    {
+        int count1 = 0;
+        int count2 = 0;
+        var tList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].monetizetionStatus == 1)
+            {
+                count1++;
+            }
+            else if (tList[i].selectionStatus == 1)
+            {
+                count2++;
+            }
+        }
+        countMonetized = count1;
+        countOnlySelected = count2;
+
+    }
+
+    public async Task GetQuestionCountByClass()
+    {
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+
+        var qList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+
+        for (int i = 0; i < qList.Count; i++)
+        {
+            if (qList[i].classID == 103)
+            {
+                count1++;
+            }
+            numQuestion8 = count1;
+
+            if (qList[i].classID == 101)
+            {
+                count2++;
+            }
+            numQuestion9and10 = count2;
+
+            if (qList[i].classID == 102)
+            {
+                count3++;
+            }
+            numQuestion11and12 = count3;
+        }
+    }
+
+    public async Task GetQuestionByGroupAndClass()
+    {
+        var groupInfoList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
+        var classInfoList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getClassInfo".GetJsonAsync<List<ClassInfo>>();
+        var quesInfoList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+
+        int counte1 = 0;
+        int counte2 = 0;
+
+        //class8
+        for (int k = 0; k < quesInfoList.Count; k++)
+        {
+
+
+            if (quesInfoList[k].classID == 103 && quesInfoList[k].subjectID == 129)
+            {
+
+                counte1++;
+            }
+
+
+            else if (quesInfoList[k].classID == 103 && quesInfoList[k].subjectID == 130)
+            {
+
+                counte2++;
+            }
+
+        }
+        class8Science = counte1;
+        class8Math = counte2;
+
+
+        //class 9&10
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+        int count4 = 0;
+
+
+        int count11 = 0;
+        int count22 = 0;
+        int count33 = 0;
+        int count44 = 0;
+
+        int count111 = 0;
+        int count222 = 0;
+        int count333 = 0;
+
+
+
+
+        for (int i = 0; i < quesInfoList.Count; i++)
+        {
+
+            for (int j = 0; j < groupInfoList.Count; j++)
+            {
+                //Science
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 101)
+                {
+                    count1++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 102)
+                {
+                    count2++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 103)
+                {
+                    count3++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 104)
+                {
+                    count4++;
+                }
+
+
+
+                //Commerce
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 107)
+                {
+                    count11++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 108)
+                {
+                    count22++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 109)
+                {
+                    count33++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 121)
+                {
+                    count44++;
+                }
+
+
+                //Arts
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 110)
+                {
+                    count111++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 111)
+                {
+                    count222++;
+                }
+
+
+                if (quesInfoList[i].classID == 101 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 112)
+                {
+                    count333++;
+                }
+
+
+
+
+
+            }
+
+
+
+
+        }
+
+
+        countClass9and10Physics = count1;
+        countClass9and10Chemistry = count2;
+        countClass9and10Biology = count3;
+        countClass9and10HigherMath = count4;
+
+
+        countClass9and10Finance = count11;
+        countClass9and10Entre = count22;
+        countClass9and10Science = count33;
+        countClass9and10Accounting = count44;
+
+        countClass9and10Eco = count111;
+        countClass9and10GS2 = count222;
+        countClass9and10IT = count333;
+
+
+
+
+        //class 11&12
+        int ccount1 = 0;
+        int ccount2 = 0;
+        int ccount3 = 0;
+        int ccount4 = 0;
+        int ccount5 = 0;
+        int ccount6 = 0;
+        int ccount7 = 0;
+        int ccount8 = 0;
+
+
+        int ccount11 = 0;
+        int ccount22 = 0;
+        int ccount33 = 0;
+        int ccount44 = 0;
+
+        int ccount111 = 0;
+
+
+        for (int i = 0; i < quesInfoList.Count; i++)
+        {
+
+            for (int j = 0; j < groupInfoList.Count; j++)
+            {
+                //Science
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 113)
+                {
+                    ccount1++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 117)
+                {
+                    ccount2++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 114)
+                {
+                    ccount3++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 118)
+                {
+                    ccount4++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 115)
+                {
+                    ccount5++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 119)
+                {
+                    ccount6++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 116)
+                {
+                    ccount7++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 120)
+                {
+                    ccount8++;
+                }
+
+
+                //Commerce
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 121)
+                {
+                    ccount11++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 122)
+                {
+                    ccount22++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 123)
+                {
+                    ccount33++;
+                }
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 124)
+                {
+                    ccount44++;
+                }
+
+
+                //Arts
+                if (quesInfoList[i].classID == 102 && quesInfoList[i].subjectID == groupInfoList[j].subjectID && groupInfoList[j].subjectID == 125)
+                {
+                    ccount111++;
+                }
+            }
+        }
+
+        countClass11and12Physics1 = ccount1;
+        countClass11and12Physics2 = ccount2;
+        countClass11and12Chemistry1 = ccount33;
+        countClass11and12Chemistry2 = ccount4;
+        countClass11and12Biology1 = ccount5;
+        countClass11and12Biology2 = ccount6;
+        countClass11and12HigherMath1 = ccount7;
+        countClass11and12HigherMath2 = ccount8;
+
+
+        countClass11and12Accounting = ccount11;
+        countClass11and12Business = ccount22;
+        countClass11and12Eco = ccount33;
+        countClass11and12Finance = ccount44;
+
+        countClass11and12Logic = ccount111;
+
+
+
+    }
+
+
+
+
+
+}
+
+
+
+

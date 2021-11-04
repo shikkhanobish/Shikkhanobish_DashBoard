@@ -1,0 +1,268 @@
+﻿@using ShikkhanobishBlazor.Models
+@using Flurl.Http
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+@page "/TeacherWithdraw"
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>TeacherWithdraw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="~/css/makeQues.css" />
+</head>
+<body>
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- LOGO -->
+        <div class="logo-box mt-2 m-0 ml-0">
+            <a href="Count" class="">
+                <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+            </a>
+        </div>
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> @userName <i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span @onclick="Logout">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">@userName</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+                    <li>
+                        <a href="https://dashboard.shikkhanobish.com/index.html">
+                            <i class="fas fa-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Count">
+                            <i class="fas fa-calculator"></i>
+                            <span> Count </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Questions">
+                            <i class="far fa-question-circle"></i>
+                            <span> Question </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherApproval">
+                            <i class="fas fa-user-alt"></i>
+                            <span> Teacher Qn. Approval </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ActiveTeacher">
+                            <i class="fas fa-lightbulb"></i>
+                            <span> Active Teacher </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherWithdraw">
+                            <i class="fas fa-money-bill-wave-alt"></i>
+                            <span> Teacher Withdraw </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="SendMessage">
+                            <i class="far fa-share-square"></i>
+                            <span> Send Message </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered" style="text-align:center">
+                                <thead>
+                                    <tr>
+                                        <th>WithdrawID</th>
+                                        <th>Date</th>
+                                        <th>TrxID</th>
+                                        <th>AmountTaka</th>
+                                        <th>Medium</th>
+                                        <th>TeacherID</th>
+                                        <th>PhoneNumber</th>
+                                        <th>Status</th>
+                                        <th>InputTrxID</th>
+                                        <th>Response</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var thList in twh)
+                                    {
+                                        <tr>
+                                            <td>@thList.withdrawID</td>
+                                            <td>@thList.date</td>
+                                            <td>@thList.trxID</td>
+                                            <td>@thList.amountTaka</td>
+                                            <td>@thList.medium</td>
+                                            <td>@thList.teacherID</td>
+                                            <td>@thList.phoneNumber</td>
+                                            <td>@thList.status</td>
+                                            <td><input type="text" @bind="thList.inputTrx" class="border border-purple" style="width:100px; padding:1px;margin-top:7px" /></td>
+                                            <td>
+                                                <button style="width:100px;" class="btn btn-outline-purple" @onclick="@( async () => await acceptWithdraw(thList))">Accept</button>
+                                            </td>
+
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                        <br />
+                        <hr style="background-color:blueviolet; height:1px;" />
+                        <hr style="background-color: blueviolet; height:1px;" />
+                        <br />
+                    </div>
+                    <!--end row -->
+
+                </div>
+                <br />
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Vendor js -->
+
+</body>
+</html>
+
+@code{
+    List<TeacherWithdrawHistory> twh = new List<TeacherWithdrawHistory>();
+    TeacherWithdrawHistory TeacherWithdrawHis = new TeacherWithdrawHistory();
+
+    public string userName { get; set; }
+    public string pass { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await GetWithdrawHistory();
+        await GetLoginInfo();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+        pass = await oLocalStore.GetItemAsync<string>("passWord");
+
+    }
+
+    public async Task GetLoginInfo()
+    {
+        if (userName == "" && pass == "")
+        {
+            string redirectURL = "/";
+            nvi.NavigateTo(redirectURL);
+        }
+    }
+
+    [Inject]
+    public NavigationManager nvi { get; set; }
+    public async Task Logout()
+    {
+        await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        nvi.NavigateTo(redirectURL);
+    }
+
+    public async Task acceptWithdraw(TeacherWithdrawHistory teacher)
+    {
+        if (teacher.inputTrx != null || teacher.inputTrx != "")
+        {
+            var withdrawList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacherWithdrawHistory".PostJsonAsync(new
+            {
+                withdrawID = teacher.withdrawID,
+                trxID = teacher.inputTrx,
+                amountTaka = teacher.amountTaka,
+                teacherID = teacher.teacherID,
+                status = teacher.status
+
+            }).ReceiveJson<List<TeacherWithdrawHistory>>();
+        }
+
+        await GetWithdrawHistory();
+    }
+
+    public async Task GetWithdrawHistory()
+    {
+        var withdrawList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacherWithdrawHistory".PostJsonAsync(new { }).ReceiveJson<List<TeacherWithdrawHistory>>();
+        twh = withdrawList;
+    }
+}
+
+
+

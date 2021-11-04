@@ -1,0 +1,741 @@
+﻿@using Flurl.Http;
+@using ShikkhanobishBlazor.Models
+@inject Blazored.LocalStorage.ILocalStorageService oLocalStore
+@page "/TeacherApproval"
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- LOGO -->
+        <div class="logo-box mt-2 m-0 ml-0">
+            <a href="Count" class="">
+
+                <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+
+            </a>
+        </div>
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="/images/images.png" alt="user-image" class="rounded-circle" />
+                        <span class="pro-user-name ml-1"> @userName<i class="mdi mdi-chevron-down"></i> </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <i class="mdi mdi-logout-variant"></i>
+                            <span @onclick="Logout">Logout</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- end Topbar -->
+        <!-- Left Sidebar Start  -->
+        <div class="left-side-menu">
+            <div class="user-box">
+                <div class="float-left">
+                    <img src="/images/images.png" alt="" class="avatar-md rounded-circle" />
+                </div>
+                <div class="user-info">
+                    <a href="#">@userName</a>
+                </div>
+            </div>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul class="metismenu" id="side-menu">
+                    <li class="menu-title">Navigation</li>
+                    <li>
+                        <a href="https://dashboard.shikkhanobish.com/index.html">
+                            <i class="fas fa-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Count">
+                            <i class="fas fa-calculator"></i>
+                            <span> Count </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Questions">
+                            <i class="far fa-question-circle"></i>
+                            <span> Question </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherApproval">
+                            <i class="fas fa-user-alt"></i>
+                            <span> Teacher Qn. Approval </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ActiveTeacher">
+                            <i class="fas fa-lightbulb"></i>
+                            <span> Active Teacher </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TeacherWithdraw">
+                            <i class="fas fa-money-bill-wave-alt"></i>
+                            <span> Teacher Withdraw </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="SendMessage">
+                            <i class="far fa-share-square"></i>
+                            <span> Send Message </span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start container-fluid -->
+                <div class="container-fluid">
+
+
+
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Approval of Questions </label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-box widget-inline">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-sm-3 widget-inline-box">
+                                            <div class="text-center p-3">
+
+                                                <h2 class="mt-2"> <b>@totalQues</b></h2>
+                                                <p class="text-muted mb-0">Total Question</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-sm-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@approvedQues</b></h2>
+                                                <p class="text-muted mb-0">Approved</p>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-sm-3 widget-inline-box">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@notapprovedQues</b></h2>
+                                                <p class="text-muted mb-0">Not Approved</p>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-sm-3 ">
+                                            <div class="text-center p-3">
+                                                <h2 class="mt-2"><b>@pendingQues</b></h2>
+                                                <p class="text-muted mb-0">Pending</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Pending Questions </label>
+                        <br />
+                        <label>@showInfoPQTLoading</label>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-10">
+
+                            <div class="table-responsive">
+                                <table id="" class="table table-bordered" style="text-align:center; ">
+                                    <thead style="color: black; font-weight: bold;font-size:10px;">
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>Option1</th>
+                                            <th>Option2</th>
+                                            <th>Option3</th>
+                                            <th>Option4</th>
+                                            <th>Response</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size: 10px; ">
+                                        @foreach (var item in qList)
+                                        {
+                                            <tr style="height: 150px; ">
+                                                <td style="padding-top:20px">@item.mainQuestion</td>
+                                                <td style="padding-top: 30px; color: @item.option1Color; font-weight: bold;">@item.option1</td>
+                                                <td style="padding-top: 30px; color: @item.option2Color; font-weight: bold">@item.option2</td>
+                                                <td style="padding-top: 30px; color: @item.option3Color; font-weight: bold">@item.option3</td>
+                                                <td style="padding-top: 30px; color: @item.option4Color; font-weight: bold">@item.option4</td>
+
+                                                <td style="padding-top: 30px;">
+                                                    <button style="width:100px; background-color:@item.appBackColor; color: black;font-weight:bold" class="btn btn-outline-success" @onclick="@( async () => await acceptPendingQues(item))">Accept</button>&nbsp;
+                                                    <button style="width:100px; background-color:@item.decBackColor; color: black;font-weight:bold" class=" btn btn-outline-danger" @onclick="@( async () => await declinePendingQues(item))">Decline</button>
+                                                </td>
+                                            </tr>
+
+                                        }
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                          
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered" style="text-align:center; ">
+                                    <thead style="color: black; font-weight: bold; font-size: 10px;">
+                                        <tr>
+                                            <th>Matching</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size: 12px;font-weight:bold;">
+                                        @foreach (var item in allMatchRate)
+                                        {
+                                            <tr style="height: 150px;margin-top:30px;">
+                                                <td style="padding-top: 30px;color:@item.colorMatchRate">
+                                                    @item.MatchRate
+                                                </td>
+
+                                            </tr>
+
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="align-items-md-center">
+                        <button style="width:200px; height:50px;  color: white;font-weight:bold" class=" btn btn-primary " @onclick="@SubmitPendingQues">Submit</button>
+                        <label>@showInfoSubmitLoading</label>
+                        <br />
+                    </div>
+                    
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+
+                    <br />
+                    <h5 style="color:blueviolet">Question Approval Count</h5>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered" style="text-align:center; ">
+                            <thead style="color: black; font-weight: bold">
+                                <tr>
+                                    <th>TeacherId</th>
+                                    <th>Approved</th>
+                                    <th>NotApproved</th>
+                                    <th>Pending</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < tqscResult.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@tqscResult[i].teacherID</td>
+                                        <td>@tqscResult[i].approved</td>
+                                        <td>@tqscResult[i].notApproved</td>
+                                        <td>@tqscResult[i].pending</td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
+                </div>
+
+                <!-- end container-fluid -->
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                2021 &copy; shikkhanobish
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+            </div>
+            <!-- end content -->
+
+        </div>
+        <!-- END content-page -->
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Vendor js -->
+</body>
+</html>
+
+
+@code{
+
+
+
+
+
+    int countApproved;
+    int countNotApproved;
+    int countPending;
+    int teachID;
+
+
+    int totalQues;
+    int approvedQues;
+    int notapprovedQues;
+    int pendingQues;
+    string showInfoPQTLoading { get; set; }
+    string showInfoSubmitLoading { get; set; }
+    string showPercentCheckLoading { get; set; }
+    List<int> acceptedQS = new List<int>();
+    List<int> declineQS = new List<int>();
+    public string userName { get; set; }
+    public string pass { get; set; }
+    List<Question> quesList = new List<Question>();
+    List<TecaherQuestionHistory> tqhl = new List<TecaherQuestionHistory>();
+
+    List<MatchingRate> allMatchRate = new List<MatchingRate>();
+
+
+    List<TeacherQuestionStatusCount> tqscResult = new List<TeacherQuestionStatusCount>();
+    List<Question> qList = new List<Question>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+
+        await InvokeAsync(StateHasChanged);
+
+        CheckEverySungleQS();
+
+    }
+    public async Task Refresh()
+    {
+        showInfoPQTLoading = "Loading Pending QS...";
+        await GetTeacherQuestionHistory();
+        await GetLoginInfo();
+        userName = await oLocalStore.GetItemAsync<string>("name");
+        pass = await oLocalStore.GetItemAsync<string>("passWord");
+
+    }
+
+    public async Task GetLoginInfo()
+    {
+        //if (userName == "" && pass == "")
+        //{
+        //    string redirectURL = "/";
+        //    nvi.NavigateTo(redirectURL);
+        //}
+    }
+    [Inject]
+    public NavigationManager nvi { get; set; }
+    public async Task Logout()
+    {
+        await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        nvi.NavigateTo(redirectURL);
+    }
+
+
+    public async Task acceptPendingQues(Question ques)
+    {
+        List<Question> newqs = new List<Question>();
+        for(int i =0; i < qList.Count; i++)
+        {
+            if(ques.questionID == qList[i].questionID)
+            {
+                qList[i].review = 1;
+                qList[i].appBackColor = "#0BD47A";
+                qList[i].decBackColor = "#FFFFFF";
+
+                //acceptedQS.Add(ques.questionID);
+            }
+            newqs.Add(qList[i]);
+        }
+        qList.Clear();
+        qList = newqs;
+    }
+    public async Task declinePendingQues(Question ques)
+    {
+        List<Question> newqs = new List<Question>();
+        for (int i = 0; i < qList.Count; i++)
+        {
+            if (ques.questionID == qList[i].questionID)
+            {
+                qList[i].review = 2;
+                qList[i].appBackColor = "#FFFFFF";
+                qList[i].decBackColor = "#F40A26";
+
+                //acceptedQS.Add(ques.questionID);
+            }
+            newqs.Add(qList[i]);
+        }
+        qList.Clear();
+        qList = newqs;
+    }
+
+    public async Task GetTeacherQuestionHistory()
+    {
+
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
+
+        var thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
+        quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+
+        tqhl = thList;
+
+        for(int i =0; i < quesList.Count; i++)
+        {
+            if(quesList[i].review == 0)
+            {
+                quesList[i].appBackColor = "#FFFFFF";
+                quesList[i].decBackColor = "#FFFFFF";
+
+                quesList[i].option1Color = "#606060";
+                quesList[i].option2Color = "#606060";
+                quesList[i].option3Color = "#606060";
+                quesList[i].option4Color = "#606060";
+
+                showInfoPQTLoading = "Loading " + i + " pending question";
+                if (quesList[i].rightAnswer == 1)
+                {
+                    quesList[i].option1Color = "#0BD47A ";
+                }
+                if (quesList[i].rightAnswer == 2)
+                {
+                    quesList[i].option2Color = "#0BD47A ";
+                }
+                if (quesList[i].rightAnswer == 3)
+                {
+                    quesList[i].option3Color = "#0BD47A ";
+                }
+                if (quesList[i].rightAnswer == 4)
+                {
+                    quesList[i].option4Color = "#0BD47A ";
+                }
+                qList.Add(quesList[i]);
+            }
+        }
+        showInfoPQTLoading = "Pending question done!";
+        //qList = quesList;
+
+        List<int> teacherIDList = new List<int>();
+        List<int> uniqueTeacherID = new List<int>();
+        List<int> countList = new List<int>();
+
+        for (int i = 0; i < thList.Count; i++)
+        {
+            teacherIDList.Add(thList[i].teacherID);
+        }
+
+        for (int i = 0; i < teacherIDList.Count; i++)
+        {
+            bool isDone = false;
+
+            //check already counted
+            if (uniqueTeacherID.Count != 0)
+            {
+                for (int k = 0; k < uniqueTeacherID.Count; k++)
+                {
+                    if (uniqueTeacherID[k] == teacherIDList[i])
+                    {
+
+                        isDone = true;
+                    }
+                }
+            }
+
+
+
+            if (!isDone)
+            {
+                uniqueTeacherID.Add(teacherIDList[i]);
+                int num = 0;
+                for (int j = 0; j < teacherIDList.Count; j++)
+                {
+                    if (teacherIDList[i] == teacherIDList[j])
+                    {
+                        num++;
+                    }
+
+                }
+                countList.Add(num);
+
+
+            }
+
+        }
+        List<TeacherQuestionStatusCount> tqsc = new List<TeacherQuestionStatusCount>();
+        for (int i = 0; i < uniqueTeacherID.Count; i++)
+        {
+            TeacherQuestionStatusCount newtqsc = new TeacherQuestionStatusCount();
+            for (int j = 0; j < thList.Count; j++)
+            {
+                if (uniqueTeacherID[i] == thList[j].teacherID)
+                {
+                    newtqsc.teacherID = uniqueTeacherID[i];
+                    for (int k = 0; k < quesList.Count; k++)
+                    {
+                        if (thList[j].questionID == quesList[k].questionID)
+                        {
+                            if (quesList[k].review == 0)
+                            {
+                                newtqsc.pending++;
+                            }
+                            if (quesList[k].review == 1)
+                            {
+                                newtqsc.approved++;
+                            }
+                            if (quesList[k].review == 2)
+                            {
+                                newtqsc.notApproved++;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            tqsc.Add(newtqsc);
+        }
+        countApproved = count1;
+        tqscResult = tqsc;
+        for (int i = 0; i < tqsc.Count; i++)
+        {
+            count1 += tqsc[i].approved;
+            count2 += tqsc[i].notApproved;
+            count3 += tqsc[i].pending;
+        }
+        approvedQues = count1;
+        notapprovedQues = count2;
+        pendingQues = count3;
+        totalQues = count1 + count2 + count3;
+
+
+    }
+
+    public async Task MakeAcceptQuestion(Question qs)
+    {
+        for (int i = 0; i < tqhl.Count; i++)
+        {
+            if (tqhl[i].questionID == qs.questionID)
+            {
+                var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/approveOrDisapprovedQuestino".PostUrlEncodedAsync(new
+                {
+                    questionID = qs.questionID,
+                    review = 1
+                })
+         .ReceiveJson<Response>();
+                var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/addTeacherAmountPerqs".PostUrlEncodedAsync(new
+                {
+                    teacherID = tqhl[i].teacherID
+                })
+         .ReceiveJson<Response>();
+
+                break;
+            }
+        }
+
+    }
+    public async Task MakeDeclineQuestion(Question qs)
+    {
+        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/approveOrDisapprovedQuestino".PostUrlEncodedAsync(new
+        {
+            questionID = qs.questionID,
+            review = 2
+        })
+      .ReceiveJson<Response>();
+    }
+
+    public void SubmitPendingQues()
+    {
+        showInfoSubmitLoading = "Loading...";
+        Submit();
+    }
+
+
+    public async Task Submit()
+    {
+        int acqsCount = 0;
+        for (int i = 0; i < qList.Count; i++)
+        {
+            if (qList[i].review == 1)
+            {
+                await MakeAcceptQuestion(qList[i]);
+                acqsCount++;
+                showInfoSubmitLoading = "Submitting accepted question: " + acqsCount;
+                await InvokeAsync(StateHasChanged);
+            }
+            if (qList[i].review == 2)
+            {
+                await MakeDeclineQuestion(qList[i]);
+            }
+        }
+        qList.Clear();
+        await Refresh();
+        await InvokeAsync(StateHasChanged);
+    }
+    public void CheckEverySungleQS()
+    {
+
+        for (int i  =0; i < qList.Count; i++)
+        {
+            List<double> parcentList = new List<double>();
+            for (int j = 0; j < quesList.Count; j++)
+            {
+              
+                if (qList[i].questionID != quesList[j].questionID)
+                {
+                    var sm = CalculateSimilarity(qList[i].mainQuestion, quesList[j].mainQuestion);
+                    parcentList.Add(sm);
+                }
+
+            }
+            double max = 0;
+            for (int k = 0; k < parcentList.Count; k++)
+            {
+
+                if (max < parcentList[k])
+                {
+                    max = parcentList[k];
+                }
+            }
+            max = Math.Round(max, 2);
+            max = max * 100;
+            int matchingRate = (int)max;
+            MatchingRate mr = new MatchingRate();
+            mr.MatchRate = matchingRate;
+            if (matchingRate >= 90)
+            {
+                mr.colorMatchRate = "#E20822";
+            }
+            else
+            {
+                mr.colorMatchRate = "black";
+            }
+            allMatchRate.Add(mr);
+
+        }
+
+    }
+
+    double CalculateSimilarity(string source, string target)
+    {
+        if ((source == null) || (target == null)) return 0.0;
+        if ((source.Length == 0) || (target.Length == 0)) return 0.0;
+        if (source == target) return 1.0;
+
+        int stepsToSame = ComputeLevenshteinDistance(source, target);
+        return (1.0 - ((double)stepsToSame / (double)Math.Max(source.Length, target.Length)));
+    }
+    int ComputeLevenshteinDistance(string source, string target)
+    {
+        if ((source == null) || (target == null)) return 0;
+        if ((source.Length == 0) || (target.Length == 0)) return 0;
+        if (source == target) return source.Length;
+
+        int sourceWordCount = source.Length;
+        int targetWordCount = target.Length;
+
+        // Step 1
+        if (sourceWordCount == 0)
+            return targetWordCount;
+
+        if (targetWordCount == 0)
+            return sourceWordCount;
+
+        int[,] distance = new int[sourceWordCount + 1, targetWordCount + 1];
+
+        // Step 2
+        for (int i = 0; i <= sourceWordCount; distance[i, 0] = i++) ;
+        for (int j = 0; j <= targetWordCount; distance[0, j] = j++) ;
+
+        for (int i = 1; i <= sourceWordCount; i++)
+        {
+            for (int j = 1; j <= targetWordCount; j++)
+            {
+                // Step 3
+                int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+
+                // Step 4
+                distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
+            }
+        }
+
+        return distance[sourceWordCount, targetWordCount];
+    }
+
+
+}
+
+
+
+
+
+
