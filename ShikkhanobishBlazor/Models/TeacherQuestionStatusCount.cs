@@ -11,7 +11,6 @@ namespace ShikkhanobishBlazor.Models
         public int pending { get; set; }
         public int approved { get; set; }
         public int notApproved { get; set; }
-        //New Commit 1
         //abid commit
         //Abid commit 2
         //Abid commit 3
