@@ -1,27 +1,34 @@
-﻿@using ShikkhanobishBlazor.Models
-@using Flurl.Http
+﻿@using Flurl.Http;
+@using ShikkhanobishBlazor.Models
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
-@page "/TeacherWithdraw"
+@page "/RndNumGenerator"
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <title>TeacherWithdraw</title>
+    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Responsive bootstrap 4 admin template" name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link href="~/css/makeQues.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
 </head>
+
 <body>
+
     <!-- Begin page -->
     <div id="wrapper">
         <!-- LOGO -->
         <div class="logo-box mt-2 m-0 ml-0">
             <a href="Count" class="">
+
                 <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
+
             </a>
         </div>
         <!-- Topbar Start -->
@@ -30,7 +37,7 @@
                 <li class="dropdown notification-list">
                     <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <img src="/images/images.png" alt="user-image" class="rounded-circle" />
-                        <span class="pro-user-name ml-1"> @userName <i class="mdi mdi-chevron-down"></i> </span>
+                        <span class="pro-user-name ml-1"> <i class="mdi mdi-chevron-down"></i> @userName</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown">
                         <!-- item-->
@@ -114,7 +121,9 @@
                             <span> RndNum Generator </span>
                         </a>
                     </li>
+
                 </ul>
+
             </div>
             <!-- End Sidebar -->
 
@@ -131,60 +140,39 @@
 
                 <!-- Start container-fluid -->
                 <div class="container-fluid">
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-3">
+                                <input class="form-control" placeholder="Enter Total Chapter Ques. Num" @bind="totalChapQues" />
+                            </div>
+                            <div class="col-3">
+                                <input class="form-control" placeholder="Enter Your Required Number" @bind="limit" />
+                            </div>
+                            <div class="col-2">
+                                <button class="form-control btn btn-outline-teal" @onclick="GenerateNum">Generate</button>
+                            </div>
 
-                    <div class="row">
-                        <div class="table-responsive">
-                            <table id="" class="table table-bordered" style="text-align:center">
-                                <thead>
-                                    <tr>
-                                        <th>WithdrawID</th>
-                                        <th>Date</th>
-                                        <th>TrxID</th>
-                                        <th>AmountTaka</th>
-                                        <th>Medium</th>
-                                        <th>TeacherID</th>
-                                        <th>PhoneNumber</th>
-                                        <th>Status</th>
-                                        <th>InputTrxID</th>
-                                        <th>Response</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var thList in twh)
-                                    {
-                                        <tr>
-                                            <td>@thList.withdrawID</td>
-                                            <td>@thList.date</td>
-                                            <td>@thList.trxID</td>
-                                            <td>@thList.amountTaka</td>
-                                            <td>@thList.medium</td>
-                                            <td>@thList.teacherID</td>
-                                            <td>@thList.phoneNumber</td>
-                                            <td>@thList.status</td>
-                                            <td><input type="text" @bind="thList.inputTrx" class="border border-purple" style="width:100px; padding:1px;margin-top:7px" /></td>
-                                            <td>
-                                                <button style="width:100px;" class="btn btn-outline-purple" @onclick="@( async () => await acceptWithdraw(thList))">Accept</button>
-                                            </td>
-
-
-                                        </tr>
-                                    }
-
-                                </tbody>
-
-
-                            </table>
                         </div>
-                        <br />
-                        <hr style="background-color:blueviolet; height:1px;" />
-                        <hr style="background-color: blueviolet; height:1px;" />
-                        <br />
+                        <div class="form-group row">
+                            <div class="col-1">
+
+                            </div>
+                            <div class="col-10" style="background-color: #FAFAFA">
+                                @foreach (var item in numList)
+                                {
+                                    <label style="font-size: 20px"> @item, </label>
+                                }
+
+                            </div>
+                            <div class="col-2">
+
+                            </div>
+                        </div>
                     </div>
-                    <!--end row -->
+
 
                 </div>
-                <br />
+
                 <!-- end container-fluid -->
                 <!-- Footer Start -->
                 <footer class="footer">
@@ -206,38 +194,35 @@
     </div>
     <!-- END wrapper -->
     <!-- Vendor js -->
-
 </body>
 </html>
 
+
 @code{
-    List<TeacherWithdrawHistory> twh = new List<TeacherWithdrawHistory>();
-    TeacherWithdrawHistory TeacherWithdrawHis = new TeacherWithdrawHistory();
 
     public string userName { get; set; }
     public string pass { get; set; }
 
+    string totalChapQues;
+    string limit;
+
+
+    List<int> numList = new List<int>();
+
     protected override async Task OnInitializedAsync()
     {
 
-        await GetWithdrawHistory();
-        await GetLoginInfo();
-        userName = await oLocalStore.GetItemAsync<string>("name");
-        pass = await oLocalStore.GetItemAsync<string>("passWord");
+        userName = StaticClassToPassData.thisAdmin.name;
+        pass = StaticClassToPassData.thisAdmin.passWord;
+
 
     }
 
-    public async Task GetLoginInfo()
-    {
-        if (userName == "" && pass == "")
-        {
-            string redirectURL = "/";
-            nvi.NavigateTo(redirectURL);
-        }
-    }
+
 
     [Inject]
     public NavigationManager nvi { get; set; }
+
     public async Task Logout()
     {
         await oLocalStore.ClearAsync();
@@ -245,30 +230,47 @@
         nvi.NavigateTo(redirectURL);
     }
 
-    public async Task acceptWithdraw(TeacherWithdrawHistory teacher)
+    public void GenerateNum()
     {
-        if (teacher.inputTrx != null || teacher.inputTrx != "")
+        Random rn = new Random();
+
+        List<int> list = new List<int>();
+
+        int totalChQNum = Convert.ToInt32(totalChapQues);
+        int reqNum = Convert.ToInt32(limit);
+        for (int i = 0; i < reqNum; i++)
         {
-            var withdrawList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacherWithdrawHistory".PostJsonAsync(new
-            {
-                withdrawID = teacher.withdrawID,
-                trxID = teacher.inputTrx,
-                amountTaka = teacher.amountTaka,
-                teacherID = teacher.teacherID,
-                status = teacher.status
-
-            }).ReceiveJson<List<TeacherWithdrawHistory>>();
+            list.Add(rn.Next(1, totalChQNum));
         }
+        numList = list;
 
-        await GetWithdrawHistory();
-    }
 
-    public async Task GetWithdrawHistory()
-    {
-        var withdrawList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacherWithdrawHistory".PostJsonAsync(new { }).ReceiveJson<List<TeacherWithdrawHistory>>();
-        twh = withdrawList;
+        //List<int> list = new List<int>();
+
+        //int maxNum = Convert.ToInt32(Num);
+        //for (int i = 1; i <= maxNum; i++)
+        //{
+        //    list.Add(i);
+        //}
+        //numList = list;
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

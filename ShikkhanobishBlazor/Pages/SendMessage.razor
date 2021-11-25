@@ -115,6 +115,12 @@
                             <span> Send Message </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="RndNumGenerator">
+                            <i class="fas fa-sort-numeric-up-alt"></i>
+                            <span> RndNum Generator </span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>
@@ -140,22 +146,25 @@
                         <br />
                         <div class="form-group row">
                             <div class="col-3">
-                                <input class="form-control" type="text" placeholder="Enter Phone Number" />
+                                <input class="form-control" type="text" placeholder="Enter Phone Number" @bind="sendMsg.number" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="m-0" style="color:black;font-size:14px">Message</label>
-                                <textarea class="form-control " style="height:250px"></textarea>
+                                <textarea class="form-control " style="height:250px" @bind="@sendMsg.msg"></textarea>
                             </div>
                         </div>
                         <br />
                         <div class="form-group row">
+
                             <div class="col-10" style="text-align:right">
-                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;">Test</button>
+                                <labe>@confirmationTest</labe>
+                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;" @onclick="SendRandomTestMsg">Test</button>
                             </div>
                             <div class="col-2" style="text-align:right">
-                                <button class="btn btn-outline-success " style="height:40px;width:160px;">Send</button>
+                                <label style="color:forestgreen">@confirmationMsg</label>
+                                <button class="btn btn-outline-success " style="height:40px;width:160px; display:@rendomSendVsisibility" @onclick="SendSMSType1">Send</button>
                             </div>
                         </div>
                         <br />
@@ -163,16 +172,15 @@
 
                         <br />
                         <hr style="height: 5px; background-color: #E2089C " />
-                        
+
 
                         <label style="color:black;font-size:25px">Send  Message To Student</label>
                         <br />
                         <br />
-
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="m-0" style="color:black;font-size:14px">Message</label>
-                                <textarea class="form-control " style="height:250px"></textarea>
+                                <textarea class="form-control " style="height:250px" @bind=sendMsg.msg></textarea>
                             </div>
                         </div>
                         <br />
@@ -181,28 +189,30 @@
                             <div class="col-2 pr-0">
                                 <input style=" border-color: mediumpurple; font-size: 11px" class="form-control mdi-tooltip-outline " title="Enter Name or PhoneNumber" type="text" placeholder="Enter Info" @bind="student.namephoneStudent" />
                             </div>
-                            <div class="">
-                                <button class="btn btn-default p-0 pt-1" style="display:inline-block;" @onclick="SearchStudentInfo"><i style="color:crimson;font-size:25px;" class="fas fa-search"></i></button>&nbsp;&nbsp;&nbsp;
+                            <div class="" style="padding-top:1px">
+                                <button class="btn btn-default p-0 pt-1" style="display:inline-block;" @onclick="SearchStudentInfo"><i style="color:black;font-size:22px;" class="fas fa-search"></i></button>&nbsp;&nbsp;&nbsp;
 
                             </div>&nbsp;&nbsp;
 
                             <div class="col-2 ">
-                                <button style="width: 140px; font-size:10px" class="btn btn-outline-purple mdi-tooltip-text-outline" title="Click to Select">@searchedValueStudent</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @sButton1color" class="btn btn-outline-purple mdi-tooltip-text-outline" title="Click to Select" @onclick="Sbutton1">@searchedValueStudent</button>
 
                             </div>&nbsp;&nbsp;&nbsp;
 
                             <label class="m-0" style="color:mediumpurple;font-size:24px;">/</label>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class=" col-2 m-0">
-                                <button style="width: 140px; font-size:10px" class="btn btn-outline-purple ">All Student</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @sButton2color" class="btn btn-outline-purple " @onclick="Sbutton2">All Student</button>
                             </div>
                         </div>
                         <br />
                         <div class="form-group row">
                             <div class="col-10" style="text-align:right">
-                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;">Test</button>
+                                <labe>@confirmationTest</labe>
+                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;" @onclick="SendStudentTestMsg">Test</button>
                             </div>
                             <div class="col-2" style="text-align:right">
-                                <button class="btn btn-outline-success " style="height:40px;width:160px;">Send</button>
+                                <label style="color:forestgreen">@confirmationMsg</label>
+                                <button class="btn btn-outline-success " style="height:40px;width:160px;display:@rendomSendVsisibility " @onclick="SendSMSType2">Send</button>
                             </div>
                         </div>
                         <br />
@@ -213,7 +223,7 @@
 
                     <br />
                     <hr style="height: 5px; background-color: #E2089C " />
-                    
+
 
                     <div class="">
                         <label style="color:black;font-size:25px">Send  Message To Teacher</label>
@@ -222,7 +232,7 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="m-0" style="color:black;font-size:14px">Message</label>
-                                <textarea class="form-control " style="height:250px"></textarea>
+                                <textarea class="form-control " style="height:250px" @bind=sendMsg.msg></textarea>
                             </div>
                         </div>
                         <br />
@@ -231,45 +241,47 @@
                             <div class="col-2 pr-0">
                                 <input style=" border-color: mediumpurple; font-size: 11px" class="form-control mdi-tooltip-text-outline" title="Enter Name or PhoneNumber" type="text" placeholder="Enter Info" @bind="teacher.namephoneTeacher" />
                             </div>
-                            <div class="">
-                                <button class="btn btn-default p-0 pt-1" style="display:inline-block;" @onclick="SearchTeacherInfo"><i style="color:crimson;font-size:25px;" class="fas fa-search"></i></button>&nbsp;&nbsp;&nbsp;
+                            <div class="" style="padding-top:2px">
+                                <button class="btn btn-default p-0 pt-1" style="display:inline-block;" @onclick="SearchTeacherInfo"><i style="color:black;font-size:22px;" class="fas fa-search"></i></button>&nbsp;&nbsp;&nbsp;
 
                             </div>&nbsp;&nbsp;
 
                             <div class="col-2 ">
-                                <button style="width: 140px; font-size:10px" class="btn btn-outline-purple mdi-tooltip-text-outline" title="Click to Select">@searchedValueTeacher</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @tButton1color" class="btn btn-outline-purple mdi-tooltip-text-outline" @onclick="Tbutton1" title="Click to Select">@searchedValueTeacher</button>
                             </div>&nbsp;&nbsp;&nbsp;
 
                             <label class="m-0" style="color:mediumpurple;font-size:24px;">/</label>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class=" col-2 m-0">
-                                <button style="width: 140px; font-size:10px" class="btn btn-outline-purple ">Only Selected</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @tButton2color" class="btn btn-outline-purple " @onclick="Tbutton2">Only Selected</button>
                             </div>
                             <label class="m-0" style="color:mediumpurple;font-size:24px;">/</label>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class=" col-2">
-                                <button style="width: 140px; font-size: 10px" class="btn btn-outline-purple ">Monetized</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @tButton3color" class="btn btn-outline-purple " @onclick="Tbutton3">Monetized</button>
                             </div>
                             <label class="m-0" style="color:mediumpurple;font-size:24px;">/</label>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class=" col-2">
-                                <button style="width: 140px;font-size:10px" class="btn btn-outline-purple ">Not Monetized</button>
+                                <button style="width: 140px; font-size: 10px; color: black; background-color: @tButton4color" class="btn btn-outline-purple " @onclick="Tbutton4">Not Monetized</button>
                             </div>
                             <label class="m-0" style="color:mediumpurple;font-size:24px;">/</label>&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class=" col-2 mt-3 ">
-                                <button style="width: 140px;font-size:10px" class="btn btn-outline-purple ">All Teacher</button>
+                                <button style="width: 140px;font-size:10px;color:black; background-color:@tButton5color" class="btn btn-outline-purple " @onclick="Tbutton5">All Teacher</button>
                             </div>
                         </div>
                         <br />
                         <div class="form-group row">
                             <div class="col-10" style="text-align:right">
-                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;">Test</button>
+                                <labe>@confirmationTest</labe>
+                                <button class="btn btn-outline-secondary " style="height:40px;width:100px;" @onclick="SendTeacherTestMsg">Test</button>
                             </div>
                             <div class="col-2" style="text-align:right">
-                                <button class="btn btn-outline-success " style="height:40px;width:160px;">Send</button>
+                                <label style="color:forestgreen">@confirmationMsg</label>
+                                <button class="btn btn-outline-success " style="height:40px;width:160px;display:@rendomSendVsisibility " @onclick="SendSMSType3">Send</button>
                             </div>
                         </div>
                         <br />
 
 
-                        
+
                     </div>
 
 
@@ -305,23 +317,55 @@
     public string userName { get; set; }
     public string pass { get; set; }
     List<string> name = new List<string>();
+    string confirmationTest { get; set; }
+    string confirmationMsg { get; set; }
+    SendMsg sendMsg = new SendMsg();
 
-    //new changed
+    string searchedNameS;
+    string searchedNumberS;
+    string searchedNameT;
+    string searchedNumberT;
+    string rendomSendVsisibility { get; set; }
+
+    string studentButtonNumber;
+    string teacherButtonNumber;
+
+
     Student student = new Student();
     List<Student> studentList = new List<Student>();
-    string searchedValueStudent= "No Info Yet";
+    string searchedValueStudent = "No Info Yet";
 
     Teachers teacher = new Teachers();
     List<Teachers> teacherList = new List<Teachers>();
     string searchedValueTeacher = "No Info Yet";
 
+    string sButton1color;
+    string sButton2color;
+
+    string tButton1color;
+    string tButton2color;
+    string tButton3color;
+    string tButton4color;
+    string tButton5color;
+
+
     protected override async Task OnInitializedAsync()
     {
-        userName = await oLocalStore.GetItemAsync<string>("name");
-        pass = await oLocalStore.GetItemAsync<string>("passWord");
+        sButton1color = "white";
+        sButton2color = "white";
+
+        tButton1color = "white ";
+        tButton2color = "white";
+        tButton3color = "white";
+        tButton4color = "white";
+        tButton5color = "white";
+        rendomSendVsisibility = "None";
+        confirmationTest = "";
+        confirmationMsg = "";
+        userName = StaticClassToPassData.thisAdmin.name;
+        pass = StaticClassToPassData.thisAdmin.passWord;
 
         await GetTeacherInfo();
-        //new changed
         await GetStudentInfo();
     }
 
@@ -337,7 +381,7 @@
         nvi.NavigateTo(redirectURL);
     }
 
-    //new changed
+
     public async Task GetStudentInfo()
     {
         var sList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getStudent".GetJsonAsync<List<Student>>();
@@ -350,15 +394,17 @@
         teacherList = tList;
     }
 
-    //new changed
     public void SearchStudentInfo()
     {
 
         for (int i = 0; i < studentList.Count; i++)
         {
-            if (student.namephoneStudent == studentList[i].phonenumber || student.namephoneStudent==studentList[i].name)
+
+            if (student.namephoneStudent == studentList[i].phonenumber || student.namephoneStudent == studentList[i].name)
             {
                 searchedValueStudent = studentList[i].name + " " + studentList[i].phonenumber;
+                searchedNameS = studentList[i].name;
+                searchedNumberS = studentList[i].phonenumber;
             }
         }
 
@@ -367,17 +413,184 @@
     public void SearchTeacherInfo()
     {
 
-        for(int i = 0; i < teacherList.Count; i++)
+        for (int i = 0; i < teacherList.Count; i++)
         {
-            if (teacher.namephoneTeacher==teacherList[i].phonenumber || teacher.namephoneTeacher==teacherList[i].name)
+
+            if (teacher.namephoneTeacher == teacherList[i].phonenumber || teacher.namephoneTeacher == teacherList[i].name)
             {
-                searchedValueTeacher = teacherList[i].name + " "+teacherList[i].phonenumber;
+                searchedValueTeacher = teacherList[i].name + " " + teacherList[i].phonenumber;
+                searchedNameT = studentList[i].name;
+                searchedNumberT = studentList[i].phonenumber;
             }
         }
 
     }
 
 
+    public async Task SendRandomTestMsg()
+    {
+
+        confirmationTest = "Sending. Please Wait...";
+        var thisAdmin = StaticClassToPassData.thisAdmin;
+        var rtest = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+880" + thisAdmin.userID }).ReceiveJson<SendMsg>();
+        confirmationTest = "Test Completed";
+        await Task.Delay(1000);
+        confirmationTest = "";
+        rendomSendVsisibility = "Block";
+
+    }
+    public async Task SendSMSType1()
+    {
+        ///
+        //Test Method
+        var thisAdmin = StaticClassToPassData.thisAdmin;
+        var ss1 = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+88" + sendMsg.number }).ReceiveJson<SendMsg>();
+        confirmationMsg = "SMS Sent";
+        await Task.Delay(1000);
+        confirmationMsg = "";
+    }
+
+
+    public async Task SendStudentTestMsg()
+    {
+
+        confirmationTest = "Sending. Please Wait...";
+        var thisAdmin = StaticClassToPassData.thisAdmin;
+        var stest = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+880" + thisAdmin.userID }).ReceiveJson<SendMsg>();
+        confirmationTest = "Test Completed";
+        await Task.Delay(1000);
+        confirmationTest = "";
+        rendomSendVsisibility = "Block";
+
+    }
+
+    public async Task SendSMSType2()
+    {
+        confirmationMsg = "Processing";
+        var ss2 = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+88" + studentButtonNumber }).ReceiveJson<SendMsg>();
+        confirmationMsg = "SMS Sent";
+        await Task.Delay(1000);
+        confirmationMsg = "";
+    }
+
+
+    public async Task SendTeacherTestMsg()
+    {
+
+        confirmationTest = "Sending. Please Wait...";
+        var thisAdmin = StaticClassToPassData.thisAdmin;
+        var ttest = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+880" + thisAdmin.userID }).ReceiveJson<SendMsg>();
+        confirmationTest = "Test Completed";
+        await Task.Delay(1000);
+        confirmationTest = "";
+        rendomSendVsisibility = "Block";
+
+    }
+    public async Task SendSMSType3()
+    {
+        confirmationMsg = "Processing";
+        var ss3 = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/SendSmsAsync".PostUrlEncodedAsync(new { msg = sendMsg.msg, number = "+88" + teacherButtonNumber }).ReceiveJson<SendMsg>();
+        confirmationMsg = "SMS Sent";
+        await Task.Delay(1000);
+        confirmationMsg = "";
+    }
+
+    public void Sbutton1()
+    {
+        sButton1color = "#AC3AF9 ";
+        sButton2color = "white";
+
+        studentButtonNumber = searchedNumberS;
+
+    }
+    public void Sbutton2()
+    {
+        sButton1color = "white ";
+        sButton2color = "#AC3AF9";
+        for (int i = 0; i < studentList.Count; i++)
+        {
+            studentButtonNumber = studentList[i].phonenumber;
+        }
+
+    }
+
+    public void Tbutton1()
+    {
+        tButton1color = "#AC3AF9 ";
+        tButton2color = "white";
+        tButton3color = "white";
+        tButton4color = "white";
+        tButton5color = "white";
+
+        teacherButtonNumber = searchedNumberT;
+    }
+    public void Tbutton2()
+    {
+        tButton1color = "white";
+        tButton2color = "#AC3AF9";
+        tButton3color = "white";
+        tButton4color = "white";
+        tButton5color = "white";
+        for (int i = 0; i < teacherList.Count; i++)
+        {
+            if (teacherList[i].selectionStatus == 1)
+            {
+                teacherButtonNumber = teacherList[i].phonenumber;
+            }
+
+        }
+
+    }
+
+    public void Tbutton3()
+    {
+
+        tButton1color = "white ";
+        tButton2color = "white";
+        tButton3color = "#AC3AF9 ";
+        tButton4color = "white ";
+        tButton5color = "white ";
+
+        for (int i = 0; i < teacherList.Count; i++)
+        {
+            if (teacherList[i].monetizetionStatus == 1)
+            {
+                teacherButtonNumber = teacherList[i].phonenumber;
+            }
+
+        }
+    }
+
+    public void Tbutton4()
+    {
+        tButton1color = "white ";
+        tButton2color = "white ";
+        tButton3color = "white ";
+        tButton4color = "#AC3AF9";
+        tButton5color = "white  ";
+
+        for (int i = 0; i < teacherList.Count; i++)
+        {
+            if (teacherList[i].monetizetionStatus != 1)
+            {
+                teacherButtonNumber = teacherList[i].phonenumber;
+            }
+        }
+
+    }
+    public void Tbutton5()
+    {
+        tButton1color = "white ";
+        tButton2color = "white ";
+        tButton3color = "white ";
+        tButton4color = "white ";
+        tButton5color = "#AC3AF9";
+
+        for (int i = 0; i < studentList.Count; i++)
+        {
+            teacherButtonNumber = studentList[i].phonenumber;
+        }
+    }
 }
 
 
