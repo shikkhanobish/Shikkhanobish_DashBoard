@@ -79,12 +79,19 @@
     }
     public async Task GetSavedInfo()
     {
-        var n = await oLocalStore.GetItemAsync<string>("name");
-        var p = await oLocalStore.GetItemAsync<string>("passWord");
-        if(n != null && p != null)
+        var id = await oLocalStore.GetItemAsync<string>("ID");
+        var userList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/GetDashBoardUser".GetJsonAsync<List<UserLogin>>();
+        if (id != "0")
         {
-            string redirectURL = "/Count";
-            nvi.NavigateTo(redirectURL);
+            for (int i = 0; i < userList.Count; i++)
+            {
+                if (int.Parse(id) == userList[i].userID)
+                {
+                    StaticClassToPassData.thisAdmin = userList[i];
+                    string redirectURL = "/Count";
+                    nvi.NavigateTo(redirectURL);
+                }
+            }
         }
 
     }
@@ -92,13 +99,13 @@
     {
         var userList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/GetDashBoardUser".GetJsonAsync<List<UserLogin>>();
         ul = userList;
-        for (int i=0;i<userList.Count;i++)
+        for (int i = 0; i < userList.Count; i++)
         {
 
-            if (user.name==userList[i].name && user.passWord==userList[i].passWord)
+            if (user.name == userList[i].name && user.passWord == userList[i].passWord)
             {
                 await oLocalStore.SetItemAsync("name", userList[i].name);
-                
+                StaticClassToPassData.thisAdmin = userList[i];
                 string redirectURL = "/Count";
                 nvi.NavigateTo(redirectURL);
 
@@ -116,12 +123,13 @@
     {
         var userList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/GetDashBoardUser".GetJsonAsync<List<UserLogin>>();
 
-        for (int i=0;i<userList.Count;i++)
+        for (int i = 0; i < userList.Count; i++)
         {
             if (user.name == userList[i].name && user.passWord == userList[i].passWord)
             {
                 await oLocalStore.SetItemAsync("name", userList[i].name);
                 await oLocalStore.SetItemAsync("passWord", userList[i].passWord);
+                await oLocalStore.SetItemAsync("ID", userList[i].userID);
 
             }
         }
