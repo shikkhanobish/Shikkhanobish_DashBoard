@@ -192,10 +192,116 @@
                     </div>
                     <br />
 
-
                     <br />
                     <hr style="background-color:crimson; height:10px;" />
                     <br />
+
+
+                    <!-- Data Entry Operator -->
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Data Entry Operator </label>
+                        <br />
+                    </div>
+                    <div>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered" style="text-align:center; ">
+                                <thead style="color: black; font-weight: bold;font-size:10px;">
+                                    <tr>
+                                        <th>TeacherID</th>
+                                        <th>Approved</th>
+                                        <th>NotApproved</th>
+                                        <th>Pending</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 10px; ">
+                                    @foreach (var op in deop)
+                                    {
+                                        <tr>
+                                            <td>@op.teacherID</td>
+                                            <td>@op.approved</td>
+                                            <td>@op.notApproved</td>
+                                            <td>@op.pending</td>
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
+
+                    <!-- Date Wise -->
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Date Wise </label>
+                        <br />
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-10"></div>
+
+                        <div class="col-2">
+                            <select class="form-control btn btn-purple" id="class" style="text-align:right">
+                                <option style="" value="">-- Select Date --</option>
+                                <option>Day1</option>
+                                <option>Day2</option>
+                                <option>Day3</option>
+                                <option>Day4</option>
+                                <option>Day5</option>
+                                <option>Day6</option>
+                                <option>Day7</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered" style="text-align:center; ">
+                                <thead style="color: black; font-weight: bold;font-size:10px;">
+                                    <tr>
+                                        <th>TeacherID</th>
+                                        <th>Name</th>
+                                        
+                                        <th>TotalUploaded</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 10px; ">
+                                    @foreach (var op in deop)
+                                    {
+
+
+                                        @foreach (var teacher in teacherList)
+                                        {
+                                            if (op.teacherID == teacher.teacherID)
+                                            {
+
+                                                <tr>
+                                                    <td>@op.teacherID</td>
+                                                    <td>@teacher.name</td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    }
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <hr style="background-color:crimson; height:10px;" />
+                    <br />
+
                     <div class="">
                         <label style="color:blueviolet;font-size:30px;">Pending Questions </label>
                         <br />
@@ -241,7 +347,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                          
+
                             <div class="table-responsive">
 
                                 <table class="table table-bordered" style="text-align:center; ">
@@ -267,13 +373,13 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="align-items-md-center">
                         <button style="width:200px; height:50px;  color: white;font-weight:bold" class=" btn btn-primary " @onclick="@SubmitPendingQues">Submit</button>
                         <label>@showInfoSubmitLoading</label>
                         <br />
                     </div>
-                    
+
                     <br />
                     <hr style="background-color:crimson; height:10px;" />
 
@@ -342,7 +448,9 @@
 @code{
 
 
-
+    int dEOCount1;
+    int dEOCount2;
+    int dEOCount3;
 
 
     int countApproved;
@@ -367,19 +475,29 @@
 
     List<MatchingRate> allMatchRate = new List<MatchingRate>();
 
-
+    List<TeacherQuestionStatusCount> deop = new List<TeacherQuestionStatusCount>();
     List<TeacherQuestionStatusCount> tqscResult = new List<TeacherQuestionStatusCount>();
     List<Question> qList = new List<Question>();
 
+    List<Teachers> teacherList = new List<Teachers>();
+    string DateDropdownBackColor;
+    string DateDropdownColor;
+
     protected override async Task OnInitializedAsync()
     {
+        teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+
         await Refresh();
 
         await InvokeAsync(StateHasChanged);
 
         CheckEverySungleQS();
 
+
     }
+
+ 
+
     public async Task Refresh()
     {
         showInfoPQTLoading = "Loading Pending QS...";
@@ -398,6 +516,8 @@
         //    nvi.NavigateTo(redirectURL);
         //}
     }
+
+
     [Inject]
     public NavigationManager nvi { get; set; }
     public async Task Logout()
@@ -447,6 +567,9 @@
 
     public async Task GetTeacherQuestionHistory()
     {
+        int DEOCount1 = 0;
+        int DEOCount2 = 0;
+        int DEOCount3 = 0;
 
         int count1 = 0;
         int count2 = 0;
@@ -537,6 +660,8 @@
 
             }
 
+
+
         }
         List<TeacherQuestionStatusCount> tqsc = new List<TeacherQuestionStatusCount>();
         for (int i = 0; i < uniqueTeacherID.Count; i++)
@@ -569,9 +694,22 @@
                 }
             }
             tqsc.Add(newtqsc);
+
+
+
         }
+
+
         countApproved = count1;
         tqscResult = tqsc;
+        for(int i = 0; i < tqsc.Count; i++)
+        {
+            if(tqsc[i].teacherID == 1000001|| tqsc[i].teacherID == 1000004|| tqsc[i].teacherID == 1000005 || tqsc[i].teacherID == 1000006 || tqsc[i].teacherID == 1000007 || tqsc[i].teacherID == 1000008)
+            {
+                deop.Add(tqsc[i]);
+            }
+
+        }
         for (int i = 0; i < tqsc.Count; i++)
         {
             count1 += tqsc[i].approved;
@@ -655,7 +793,7 @@
             List<double> parcentList = new List<double>();
             for (int j = 0; j < quesList.Count; j++)
             {
-              
+
                 if (qList[i].questionID != quesList[j].questionID)
                 {
                     var sm = CalculateSimilarity(qList[i].mainQuestion, quesList[j].mainQuestion);
