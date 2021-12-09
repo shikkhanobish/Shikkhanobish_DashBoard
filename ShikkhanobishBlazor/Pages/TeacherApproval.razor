@@ -1,5 +1,6 @@
 ﻿@using Flurl.Http;
 @using ShikkhanobishBlazor.Models
+@using System.Globalization
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
 @page "/TeacherApproval"
 
@@ -240,22 +241,19 @@
 
                     <!-- Date Wise -->
                     <div class="">
-                        <label style="color:blueviolet;font-size:30px;">Date Wise </label>
+                        <label style="color:blueviolet;font-size:30px;">Date Wise Submission</label>
                         <br />
                     </div>
                     <div class="form-group row">
-                        <div class="col-10"></div>
+                        <div class="col-8"></div>
 
-                        <div class="col-2">
-                            <select class="form-control btn btn-purple" id="class" style="text-align:right">
-                                <option style="" value="">-- Select Date --</option>
-                                <option>Day1</option>
-                                <option>Day2</option>
-                                <option>Day3</option>
-                                <option>Day4</option>
-                                <option>Day5</option>
-                                <option>Day6</option>
-                                <option>Day7</option>
+                        <div class="col-4">
+                            <select class="form-control btn btn-purple" id="class" @onchange="ClassChanged">
+                              
+                                @foreach (var item in dateList)
+                                {
+                                    <option value="@item">@item</option>
+                                }
                             </select>
                         </div>
                     </div>
@@ -266,8 +264,10 @@
                                     <tr>
                                         <th>TeacherID</th>
                                         <th>Name</th>
-                                        
+
                                         <th>TotalUploaded</th>
+                                        <th>Approved</th>
+                                        <th>NotApproved</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size: 10px; ">
@@ -280,11 +280,13 @@
                                             if (op.teacherID == teacher.teacherID)
                                             {
 
-                                                <tr>
-                                                    <td>@op.teacherID</td>
-                                                    <td>@teacher.name</td>
-                                                    <td></td>
-                                                </tr>
+                                    <tr>
+                                        <td>@op.teacherID</td>
+                                        <td>@teacher.name</td>
+                                        <td>@op.totaluploaded</td>
+                                        <td>@op.specificApproved</td>
+                                        <td>@op.specificNotApproved</td>
+                                    </tr>
                                             }
                                         }
 
@@ -472,9 +474,9 @@
     public string pass { get; set; }
     List<Question> quesList = new List<Question>();
     List<TecaherQuestionHistory> tqhl = new List<TecaherQuestionHistory>();
-
+    List<string> dateList = new List<string>();
     List<MatchingRate> allMatchRate = new List<MatchingRate>();
-
+    List<int> doneQSList = new List<int>();
     List<TeacherQuestionStatusCount> deop = new List<TeacherQuestionStatusCount>();
     List<TeacherQuestionStatusCount> tqscResult = new List<TeacherQuestionStatusCount>();
     List<Question> qList = new List<Question>();
@@ -485,18 +487,32 @@
 
     protected override async Task OnInitializedAsync()
     {
+        poputaeDateList();
         teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
 
         await Refresh();
 
         await InvokeAsync(StateHasChanged);
-
-        CheckEverySungleQS();
-
+        //CheckEverySungleQS();
+        showPerDayInfo(DateTime.Now.ToString("dddd, dd MMMM yyyy"));
 
     }
 
- 
+    public void poputaeDateList()
+    {
+        List<string> thisDate = new List<string>();
+        thisDate.Add(DateTime.Now.ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-1).ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-2).ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-3).ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-4).ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-5).ToString("dddd, dd MMMM yyyy"));
+        thisDate.Add(DateTime.Now.AddDays(-6).ToString("dddd, dd MMMM yyyy"));
+
+        dateList = thisDate;
+
+
+    }
 
     public async Task Refresh()
     {
@@ -516,8 +532,52 @@
         //    nvi.NavigateTo(redirectURL);
         //}
     }
+    private void ClassChanged(ChangeEventArgs dateEvent)
+    {
+        string thisDate = dateEvent.Value.ToString();
+        showPerDayInfo(thisDate);
+    }
+    public void showPerDayInfo(string thisDate)
+    {
+        for (int k = 0; k < deop.Count; k++)
+        {
+            deop[k].totaluploaded = 0;
+            deop[k].specificApproved = 0;
+            deop[k].specificNotApproved = 0;
+        }
 
-
+        DateTime thisDateTimeFormat = Convert.ToDateTime(thisDate);
+        for (int i = 0; i < deop.Count; i++)
+        {
+            for (int j = 0; j < tqhl.Count; j++)
+            {
+                if (deop[i].teacherID == tqhl[j].teacherID)
+                {
+                    CultureInfo culture = new CultureInfo("en-US");
+                    DateTime serverDateTimeFormat = DateTime.ParseExact(tqhl[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                    if (thisDateTimeFormat.Date == serverDateTimeFormat.Date)
+                    {
+                        deop[i].totaluploaded++;
+                        for(int l = 0; l < quesList.Count; l++)
+                        {
+                            if(tqhl[j].questionID == quesList[l].questionID)
+                            {
+                                if (quesList[l].review == 1)
+                                {
+                                    deop[i].specificApproved++;
+                                }
+                                if (quesList[l].review == 2)
+                                {
+                                    deop[i].specificNotApproved++;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     [Inject]
     public NavigationManager nvi { get; set; }
     public async Task Logout()
@@ -527,13 +587,12 @@
         nvi.NavigateTo(redirectURL);
     }
 
-
     public async Task acceptPendingQues(Question ques)
     {
         List<Question> newqs = new List<Question>();
-        for(int i =0; i < qList.Count; i++)
+        for (int i = 0; i < qList.Count; i++)
         {
-            if(ques.questionID == qList[i].questionID)
+            if (ques.questionID == qList[i].questionID)
             {
                 qList[i].review = 1;
                 qList[i].appBackColor = "#0BD47A";
@@ -545,6 +604,8 @@
         }
         qList.Clear();
         qList = newqs;
+
+        checkSimilarity(ques);
     }
     public async Task declinePendingQues(Question ques)
     {
@@ -563,8 +624,24 @@
         }
         qList.Clear();
         qList = newqs;
+        checkSimilarity(ques);
     }
-
+    public void checkSimilarity(Question ques)
+    {
+        bool ismatch = false;
+        foreach (var qid in doneQSList)
+        {
+            if (qid == ques.questionID)
+            {
+                ismatch = true;
+                break;
+            }
+        }
+        if (!ismatch)
+        {
+            CheckEverySungleQS(ques);
+        }
+    }
     public async Task GetTeacherQuestionHistory()
     {
         int DEOCount1 = 0;
@@ -580,9 +657,9 @@
 
         tqhl = thList;
 
-        for(int i =0; i < quesList.Count; i++)
+        for (int i = 0; i < quesList.Count; i++)
         {
-            if(quesList[i].review == 0)
+            if (quesList[i].review == 0)
             {
                 quesList[i].appBackColor = "#FFFFFF";
                 quesList[i].decBackColor = "#FFFFFF";
@@ -702,9 +779,9 @@
 
         countApproved = count1;
         tqscResult = tqsc;
-        for(int i = 0; i < tqsc.Count; i++)
+        for (int i = 0; i < tqsc.Count; i++)
         {
-            if(tqsc[i].teacherID == 1000001|| tqsc[i].teacherID == 1000004|| tqsc[i].teacherID == 1000005 || tqsc[i].teacherID == 1000006 || tqsc[i].teacherID == 1000007 || tqsc[i].teacherID == 1000008)
+            if (tqsc[i].teacherID == 1000001 || tqsc[i].teacherID == 1000004 || tqsc[i].teacherID == 1000005 || tqsc[i].teacherID == 1000006 || tqsc[i].teacherID == 1000007 || tqsc[i].teacherID == 1000008)
             {
                 deop.Add(tqsc[i]);
             }
@@ -755,6 +832,7 @@
             review = 2
         })
       .ReceiveJson<Response>();
+
     }
 
     public void SubmitPendingQues()
@@ -785,47 +863,44 @@
         await Refresh();
         await InvokeAsync(StateHasChanged);
     }
-    public void CheckEverySungleQS()
+    public void CheckEverySungleQS(Question qs)
     {
 
-        for (int i  =0; i < qList.Count; i++)
+        List<double> parcentList = new List<double>();
+        for (int j = 0; j < quesList.Count; j++)
         {
-            List<double> parcentList = new List<double>();
-            for (int j = 0; j < quesList.Count; j++)
-            {
 
-                if (qList[i].questionID != quesList[j].questionID)
-                {
-                    var sm = CalculateSimilarity(qList[i].mainQuestion, quesList[j].mainQuestion);
-                    parcentList.Add(sm);
-                }
-
-            }
-            double max = 0;
-            for (int k = 0; k < parcentList.Count; k++)
+            if (qs.questionID != quesList[j].questionID)
             {
-
-                if (max < parcentList[k])
-                {
-                    max = parcentList[k];
-                }
+                var sm = CalculateSimilarity(qs.mainQuestion, quesList[j].mainQuestion);
+                parcentList.Add(sm);
             }
-            max = Math.Round(max, 2);
-            max = max * 100;
-            int matchingRate = (int)max;
-            MatchingRate mr = new MatchingRate();
-            mr.MatchRate = matchingRate;
-            if (matchingRate >= 90)
-            {
-                mr.colorMatchRate = "#E20822";
-            }
-            else
-            {
-                mr.colorMatchRate = "black";
-            }
-            allMatchRate.Add(mr);
 
         }
+        double max = 0;
+        for (int k = 0; k < parcentList.Count; k++)
+        {
+
+            if (max < parcentList[k])
+            {
+                max = parcentList[k];
+            }
+        }
+        max = Math.Round(max, 2);
+        max = max * 100;
+        int matchingRate = (int)max;
+        MatchingRate mr = new MatchingRate();
+        mr.MatchRate = matchingRate;
+        if (matchingRate >= 90)
+        {
+            mr.colorMatchRate = "#E20822";
+        }
+        else
+        {
+            mr.colorMatchRate = "black";
+        }
+        allMatchRate.Add(mr);
+        doneQSList.Add(qs.questionID);
 
     }
 

@@ -10,6 +10,6 @@ namespace ShikkhanobishBlazor.Models
         public int tqID { get; set; }
         public int teacherID { get; set; }
         public int questionID { get; set; }
-        public string date { get; set; }
+        public string review { get; set; }
     }
 }
