@@ -625,6 +625,7 @@
                                     <tr>
                                         <th>ChapterID</th>
                                         <th>ChapterName</th>
+                                        <th>Subject</th>
                                         <th>Approved Question</th>
                                         <th>IsDone</th>
                                     </tr>
@@ -635,6 +636,7 @@
                                     <tr>
                                         <td>@ch.chapterID</td>
                                         <td>@ch.name</td>
+                                        <td>@ch.subjectName</td>
                                         <td>@ch.approvedQS</td>
                                         <td style="color:@ch.doneColor"><b>@ch.doneLbl</b></td>
                                     </tr>
@@ -793,32 +795,36 @@
     public async Task GetALlChapter()
     {
         var allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
-        for(int k = 0; k < allc.Count; k++)
+        var allSub = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
+        for (int k = 0; k < allc.Count; k++)
         {
-            if(allc[k].name != null)
-            {
-                allChapter.Add(allc[k]) ;
-                
-            }
-            
+            allChapter.Add(allc[k]);
+
         }
 
         for(int i = 0; i < allChapter.Count; i++)
         {
             Chapter thisChapter = new Chapter();
+            thisChapter = allChapter[i];
             for (int j = 0; j < qList.Count; j++)
             {
                 if(qList[j].chapterID == allChapter[i].chapterID)
                 {
 
-                    thisChapter = allChapter[i];
                     if(qList[j].review == 1)
                     {
                         thisChapter.approvedQS++;
                     }
                 }
             }
-            if(thisChapter.approvedQS >= 100)
+            for(int l = 0; l < allSub.Count; l++)
+            {
+                if(allChapter[i].subjectID == allSub[l].subjectID)
+                {
+                    thisChapter.subjectName = allSub[l].name;
+                }
+            }
+            if(thisChapter.approvedQS >= 150)
             {
                 thisChapter.doneLbl = "Done";
                 thisChapter.doneColor = "#30CA86";
@@ -832,7 +838,9 @@
         }
 
         List<Chapter> SortedList = new List<Chapter>();
-        SortedList = showChapter.OrderBy(x => x.doneLbl).ToList();
+        SortedList = showChapter.OrderBy(x => x.approvedQS).ToList();
+        SortedList.Reverse();
+        SortedList = SortedList.OrderBy(x => x.doneLbl).ToList();
         showChapter = SortedList;
     }
     [Inject]

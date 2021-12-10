@@ -13,6 +13,7 @@ namespace ShikkhanobishBlazor.Models
         public string title { get; set; }
         public string name { get; set; }
         public int tuitionRequest { get; set; }
+        public string subjectName { get; set; }
         public double avgRatting { get; set; }
         public int indexNo { get; set; }
         public int approvedQS { get; set; }

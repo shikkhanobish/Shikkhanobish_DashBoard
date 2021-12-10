@@ -238,9 +238,22 @@
 
         int totalChQNum = Convert.ToInt32(totalChapQues);
         int reqNum = Convert.ToInt32(limit);
-        for (int i = 0; i < reqNum; i++)
+        while (list.Count <= reqNum)
         {
-            list.Add(rn.Next(1, totalChQNum));
+            int thisNum = rn.Next(1, totalChQNum);
+            bool match = false;
+            for (int j = 0; j < list.Count; j++)
+            {
+                if (list[j] == thisNum)
+                {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match)
+            {
+                list.Add(thisNum);
+            }
         }
         numList = list;
 
