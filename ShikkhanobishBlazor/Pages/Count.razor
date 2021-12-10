@@ -617,7 +617,35 @@
                     <hr style="background-color: blueviolet; height:1px;" />
                     <br />
 
+                    <div class="row">
+                        <h5 style="color:blueviolet">Chapter Done</h5>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ChapterID</th>
+                                        <th>ChapterName</th>
+                                        <th>Approved Question</th>
+                                        <th>IsDone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ch in showChapter)
+                                    {
+                                    <tr>
+                                        <td>@ch.chapterID</td>
+                                        <td>@ch.name</td>
+                                        <td>@ch.approvedQS</td>
+                                        <td style="color:@ch.doneColor"><b>@ch.doneLbl</b></td>
+                                    </tr>
+                                    }
 
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -728,9 +756,11 @@
     string pass { get; set; }
 
     List<TeacherWithdrawHistory> twh = new List<TeacherWithdrawHistory>();
+    List<Chapter> allChapter = new List<Chapter>();
+    List<Question> qList = new List<Question>();
 
     List<TeacherQuestionStatusCount> tqscResult = new List<TeacherQuestionStatusCount>();
-
+    List<Chapter> showChapter = new List<Chapter>();
 
 
     protected override async Task OnInitializedAsync()
@@ -746,6 +776,7 @@
         await GetQuestionCountByClass();
         await GetQuestionByGroupAndClass();
         await GetLoginInfo();
+        await GetALlChapter();
         userName = await oLocalStore.GetItemAsync<string>("name");
         pass = await oLocalStore.GetItemAsync<string>("passWord");
     }
@@ -754,12 +785,56 @@
     {
         if (userName=="" && pass=="")
         {
-           
+
             string redirectURL = "/";
             nvi.NavigateTo(redirectURL);
         }
     }
+    public async Task GetALlChapter()
+    {
+        var allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
+        for(int k = 0; k < allc.Count; k++)
+        {
+            if(allc[k].name != null)
+            {
+                allChapter.Add(allc[k]) ;
+                
+            }
+            
+        }
 
+        for(int i = 0; i < allChapter.Count; i++)
+        {
+            Chapter thisChapter = new Chapter();
+            for (int j = 0; j < qList.Count; j++)
+            {
+                if(qList[j].chapterID == allChapter[i].chapterID)
+                {
+
+                    thisChapter = allChapter[i];
+                    if(qList[j].review == 1)
+                    {
+                        thisChapter.approvedQS++;
+                    }
+                }
+            }
+            if(thisChapter.approvedQS >= 100)
+            {
+                thisChapter.doneLbl = "Done";
+                thisChapter.doneColor = "#30CA86";
+            }
+            else
+            {
+                thisChapter.doneLbl = "Not Done";
+                thisChapter.doneColor = "#C8C8C8";
+            }
+            showChapter.Add(thisChapter);
+        }
+
+        List<Chapter> SortedList = new List<Chapter>();
+        SortedList = showChapter.OrderBy(x => x.doneLbl).ToList();
+        showChapter = SortedList;
+    }
     [Inject]
     public NavigationManager nvi { get; set; }
     public async Task Logout()
@@ -931,7 +1006,7 @@
         int count2 = 0;
         int count3 = 0;
 
-        var qList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+        qList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
 
         for (int i = 0; i < qList.Count; i++)
         {

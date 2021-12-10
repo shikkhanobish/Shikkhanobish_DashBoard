@@ -245,14 +245,9 @@
         numList = list;
 
 
-        //List<int> list = new List<int>();
-
-        //int maxNum = Convert.ToInt32(Num);
-        //for (int i = 1; i <= maxNum; i++)
-        //{
-        //    list.Add(i);
-        //}
-        //numList = list;
+        List<int> SortedList = new List<int>();
+        SortedList = numList.OrderBy(x => x).ToList();
+        numList = SortedList;
 
     }
 }
