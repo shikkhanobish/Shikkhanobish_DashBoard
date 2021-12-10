@@ -1,5 +1,6 @@
 ﻿@using Flurl.Http;
 @using ShikkhanobishBlazor.Models
+@using System.Globalization
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
 @page "/RndNumGenerator"
 
@@ -169,7 +170,116 @@
                             </div>
                         </div>
                     </div>
+                   
+                    <br />
 
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Assign Task  </label>
+                        <br />
+                    </div>
+                    <div class="form-group row">
+                        <div >
+                            <table style="text-align:center; ">
+                                <thead style="color: black; font-weight: bold;font-size:12px;">
+                                    <tr>
+                                        <th>Operator Name</th>
+                                        <th>Subject Name</th>
+                                        <th>Chapter Name</th>
+                                        <th>List Of MCQ Number</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 12px; ">
+                                    <tr>
+                                        <td>
+                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedOperator">
+                                                <option>Select Operator</option>
+                                                @foreach (var item in operatorListSelect)
+                                                {
+
+                                                    <option value="@item">@item</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedSubject">
+                                                <option>Select Subject</option>
+                                                @foreach (var item in subjectList)
+                                                {
+
+                                                    <option value="@item">@item</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedChapter">
+                                                <option>Select Chapter</option>
+                                                @foreach (var item in chapterList)
+                                                {
+
+                                                    <option value="@item">@item</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td width="500px"><textarea class="form-control " @bind="@selectedMCQList"></textarea></td>
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+                            <button class="form-control btn btn-outline-success">Assign Task</button>
+                        </div>
+
+                    </div>
+                    
+                    <br />
+
+                    <div class="">
+                        <label style="color:blueviolet;font-size:30px;">Task  History</label>
+                        <br />
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-10">
+
+                            <div class="table-responsive">
+                                <table id="" class="table table-bordered" style="text-align:center; ">
+                                    <thead style="color: black; font-weight: bold;font-size:10px;">
+                                        <tr>
+                                            <th>Operator ID</th>
+                                            <th>Name</th>
+                                            <th>Assigned Number</th>
+                                            <th>Chapter ID</th>
+                                            <th>Chapter Name</th>
+                                            <th>IS Task Submitted</th>
+                                            <th>IS Task Approved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size: 10px; ">
+                                        @foreach (var item in showInfo)
+                                        {
+                                            <tr>
+                                                <td>@item.userID</td>
+                                                <td>@item.userName</td>
+                                                <td>@item.MCQNumbers</td>
+                                                <td>@item.chapterID</td>
+                                                <td>@item.chapterName</td>
+                                                <td style="@item.isTaskSubColor; font-weight: bold">@item.isTaskSub</td>
+                                                <td style="@item.isTaskAppColor; font-weight: bold">@item.isTaskApp</td>
+
+
+                                            </tr>
+
+                                        }
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -205,7 +315,16 @@
 
     string totalChapQues;
     string limit;
-
+    int selecteOPID;
+    int SelectedChapterID;
+    string selectedMCQList;
+    List<string> operatorListSelect = new List<string>();
+    List<string> subjectList = new List<string>();
+    List<string> chapterList = new List<string>();
+    List<dataentryOperatorTask> showInfo = new List<dataentryOperatorTask>();
+    List<Chapter> allc = new List<Chapter>();
+    List<Subject> allsub = new List<Subject>();
+    List<Teachers> teacherList = new List<Teachers>();
 
     List<int> numList = new List<int>();
 
@@ -215,11 +334,141 @@
         userName = StaticClassToPassData.thisAdmin.name;
         pass = StaticClassToPassData.thisAdmin.passWord;
 
+        await GetOperatorInfo();
 
     }
 
+    public async Task GetOperatorInfo()
+    {
+        allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
+        allsub = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
+        var operatorList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getdataentryOperatorTask".PostJsonAsync(new { }).ReceiveJson<List<dataentryOperatorTask>>();
+        teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        var thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
+        var quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+        List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
+        for(int t = 0; t < allsub.Count; t++)
+        {
+            subjectList.Add(allsub[t].name) ;
+        }
+
+        for (int z = 0; z < teacherList.Count; z++)
+        {
+            if (teacherList[z].teacherID == 1000001 || teacherList[z].teacherID == 1000002 || teacherList[z].teacherID == 1000003 || teacherList[z].teacherID == 1000004 ||
+                teacherList[z].teacherID == 1000005 || teacherList[z].teacherID == 1000006 || teacherList[z].teacherID == 1000007 || teacherList[z].teacherID == 1000008 ||
+                teacherList[z].teacherID == 1000009 || teacherList[z].teacherID == 1000010 || teacherList[z].teacherID == 1000011 || teacherList[z].teacherID == 1000012)
+            {
+                operatorListSelect.Add(teacherList[z].name);
+            }
+        }
+        for (int i = 0; i < operatorList.Count; i++)
+        {
+
+            int submitted = 0;
+            dataentryOperatorTask thisOp = new dataentryOperatorTask();
+            thisOp = operatorList[i];
+            for (int z = 0; z < teacherList.Count; z++)
+            {
+                if(teacherList[z].teacherID == 1000001|| teacherList[z].teacherID == 1000002 || teacherList[z].teacherID == 1000003 || teacherList[z].teacherID == 1000004 ||
+                    teacherList[z].teacherID == 1000005 || teacherList[z].teacherID == 1000006 || teacherList[z].teacherID == 1000007 || teacherList[z].teacherID == 1000008 ||
+                    teacherList[z].teacherID == 1000009 || teacherList[z].teacherID == 1000010 || teacherList[z].teacherID == 1000011 || teacherList[z].teacherID == 1000012)
+                {
+                    thisOp.userName = teacherList[z].name;
+                    break;
+                }
+            }
+
+            for (int j = 0; j < thList.Count; j++)
+            {
+
+                CultureInfo culture = new CultureInfo("en-US");
+                DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                DateTime TaskDateFormat = DateTime.ParseExact(operatorList[i].date, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                if(operatorList[i].userID == thList[j].teacherID && HistoryDateFormat.Date == TaskDateFormat.Date)
+                {
+                    submitted++;
+                    int pending = 0;
+                    for(int k = 0; k < quesList.Count; k++)
+                    {
+                        if(thList[j].questionID == quesList[k].questionID)
+                        {
+                            if(quesList[k].review == 0)
+                            {
+                                pending++;
+                            }
+                        }
+                    }
+                    if(submitted >= 150)
+                    {
+                        thisOp.isTaskSub = "Submitted";
+                        thisOp.isTaskSubColor = "#30CA86";
+                    }
+                    else
+                    {
+                        thisOp.isTaskSub = "Not Submitted";
+                        thisOp.isTaskSubColor = "#30CA86";
+                    }
+                    if (pending > 0)
+                    {
+                        thisOp.isTaskApp = "Not Approved";
+                        thisOp.isTaskAppColor = "#30CA86";
+                    }
+                    else
+                    {
+                        thisOp.isTaskApp = "Approved";
+                        thisOp.isTaskAppColor = "#C8C8C8";
+                    }
+                }
+
+            }
+            thisOpList.Add(thisOp);
+        }
+        showInfo = thisOpList;
 
 
+
+    }
+    private void SelectedOperator(ChangeEventArgs dateEvent)
+    {
+        for (int i = 0; i < allc.Count; i++)
+        {
+            if (teacherList[i].name == dateEvent.Value.ToString())
+            {
+                selecteOPID = teacherList[i].teacherID;
+                break;
+            }
+        }
+    }
+    private void SelectedChapter(ChangeEventArgs dateEvent)
+    {
+        for(int i = 0; i < allc.Count; i++)
+        {
+            if(allc[i].name == dateEvent.Value.ToString())
+            {
+                SelectedChapterID = allc[i].chapterID;
+                break;
+            }
+        }
+    }
+    private void SelectedSubject(ChangeEventArgs dateEvent)
+    {
+        string thisSubName = dateEvent.Value.ToString();
+        chapterList = new List<string>();
+        for (int i = 0; i < allsub.Count; i++)
+        {
+            if(allsub[i].name == thisSubName)
+            {
+                for (int j = 0; j < allc.Count; j++)
+                {
+                    if (allc[j].subjectID == allsub[i].subjectID)
+                    {
+                        chapterList.Add(allc[j].name);
+                    }
+                }
+
+            }
+        }
+    }
     [Inject]
     public NavigationManager nvi { get; set; }
 
