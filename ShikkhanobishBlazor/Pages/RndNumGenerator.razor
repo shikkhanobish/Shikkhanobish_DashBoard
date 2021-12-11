@@ -150,25 +150,11 @@
                                 <input class="form-control" placeholder="Enter Your Required Number" @bind="limit" />
                             </div>
                             <div class="col-2">
-                                <button class="form-control btn btn-outline-teal" @onclick="GenerateNum">Generate</button>
+                                <button class="form-control btn btn-outline-teal" @onclick="CopyNum">Select For Task</button>
                             </div>
 
                         </div>
-                        <div class="form-group row">
-                            <div class="col-1">
-
-                            </div>
-                            <div class="col-10" style="background-color: #FAFAFA">
-                                @foreach (var item in numList)
-                                {
-                                    <label style="font-size: 20px"> @item, </label>
-                                }
-
-                            </div>
-                            <div class="col-2">
-
-                            </div>
-                        </div>
+                       
                     </div>
                    
                     <br />
@@ -220,7 +206,7 @@
                                                     <option value="@item">@item</option>
                                                 }
                                             </select>
-                                        </td>
+                                        </td> 
                                         <td width="500px"><textarea class="form-control " @bind="@selectedMCQList"></textarea></td>
                                     </tr>
 
@@ -454,6 +440,7 @@
     {
         string thisSubName = dateEvent.Value.ToString();
         chapterList = new List<string>();
+        List<string> thisch = new List<string>();
         for (int i = 0; i < allsub.Count; i++)
         {
             if(allsub[i].name == thisSubName)
@@ -462,12 +449,13 @@
                 {
                     if (allc[j].subjectID == allsub[i].subjectID)
                     {
-                        chapterList.Add(allc[j].name);
+                        thisch.Add(allc[j].name);
                     }
                 }
 
             }
         }
+        chapterList = thisch;
     }
     [Inject]
     public NavigationManager nvi { get; set; }
@@ -478,9 +466,10 @@
         string redirectURL = "/";
         nvi.NavigateTo(redirectURL);
     }
-
-    public void GenerateNum()
+    public void CopyNum()
     {
+        selectedMCQList = "";
+        numList = new List<int>();
         Random rn = new Random();
 
         List<int> list = new List<int>();
@@ -510,8 +499,20 @@
         List<int> SortedList = new List<int>();
         SortedList = numList.OrderBy(x => x).ToList();
         numList = SortedList;
+        for (int i = 0; i < numList.Count; i++)
+        {
+            if(i == numList.Count - 1)
+            {
+                selectedMCQList = selectedMCQList + numList[i];
+            }
+            else
+            {
+                selectedMCQList = selectedMCQList + numList[i] + " , ";
+            }
 
+        }
     }
+
 }
 
 
