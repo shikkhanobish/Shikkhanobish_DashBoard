@@ -149,7 +149,7 @@
                             <div class="col-3">
                                 <input class="form-control" placeholder="Enter Your Required Number" @bind="limit" />
                             </div>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <button class="form-control btn btn-outline-teal" @onclick="CopyNum">Select For Task</button>
                             </div>
 
@@ -214,7 +214,7 @@
 
 
                             </table>
-                            <button class="form-control btn btn-outline-success">Assign Task</button>
+                            <button class="form-control btn btn-outline-success" @onclick="assignTask">Assign Task</button>
                         </div>
 
                     </div>
@@ -226,7 +226,7 @@
                         <br />
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-10">
+                        <div class="col-md-12">
 
                             <div class="table-responsive">
                                 <table id="" class="table table-bordered" style="text-align:center; ">
@@ -237,6 +237,9 @@
                                             <th>Assigned Number</th>
                                             <th>Chapter ID</th>
                                             <th>Chapter Name</th>
+                                            <th>Task Date</th>
+                                            <th>Start Time</th>
+                                            <th>End Time</th>
                                             <th>IS Task Submitted</th>
                                             <th>IS Task Approved</th>
                                         </tr>
@@ -244,17 +247,20 @@
                                     <tbody style="font-size: 10px; ">
                                         @foreach (var item in showInfo)
                                         {
-                                            <tr>
-                                                <td>@item.userID</td>
-                                                <td>@item.userName</td>
-                                                <td>@item.MCQNumbers</td>
-                                                <td>@item.chapterID</td>
-                                                <td>@item.chapterName</td>
-                                                <td style="@item.isTaskSubColor; font-weight: bold">@item.isTaskSub</td>
-                                                <td style="@item.isTaskAppColor; font-weight: bold">@item.isTaskApp</td>
+                                        <tr>
+                                            <td style="color: #2E2E2E">@item.userID</td>
+                                            <td style="color: #2E2E2E">@item.userName</td>
+                                            <td style="color: #2E2E2E">@item.MCQNumbers</td>
+                                            <td style="color: #2E2E2E">@item.chapterID</td>
+                                            <td style="color: #2E2E2E">@item.chapterName</td>
+                                            <td style="color: #2E2E2E">@item.date</td>
+                                            <td style="color: #2E2E2E">@item.startTime</td>
+                                            <td style="color: #2E2E2E">@item.endTime</td>
+                                            <td style="color: @item.isTaskSubColor; font-weight: bold">@item.isTaskSub</td>
+                                            <td style="color: @item.isTaskAppColor; font-weight: bold">@item.isTaskApp</td>
 
 
-                                            </tr>
+                                        </tr>
 
                                         }
 
@@ -303,6 +309,7 @@
     string limit;
     int selecteOPID;
     int SelectedChapterID;
+    string selectedChapterName;
     string selectedMCQList;
     List<string> operatorListSelect = new List<string>();
     List<string> subjectList = new List<string>();
@@ -363,17 +370,24 @@
                     break;
                 }
             }
-
+            for (int e = 0; e < allc.Count; e++)
+            {
+                if (allc[e].chapterID == thisOp.chapterID)
+                {
+                    thisOp.chapterName = allc[e].name;
+                    break;
+                }
+            }
+            int pending = 0;
             for (int j = 0; j < thList.Count; j++)
             {
-
                 CultureInfo culture = new CultureInfo("en-US");
                 DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                DateTime TaskDateFormat = DateTime.ParseExact(operatorList[i].date, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                if(operatorList[i].userID == thList[j].teacherID && HistoryDateFormat.Date == TaskDateFormat.Date)
+                DateTime TaskDateFormat = DateTime.ParseExact(operatorList[i].date, "dddd, dd MMMM yyyy", culture);
+                if(operatorList[i].userID == thList[j].teacherID & HistoryDateFormat.Date == TaskDateFormat.Date)
                 {
                     submitted++;
-                    int pending = 0;
+
                     for(int k = 0; k < quesList.Count; k++)
                     {
                         if(thList[j].questionID == quesList[k].questionID)
@@ -384,45 +398,48 @@
                             }
                         }
                     }
-                    if(submitted >= 150)
-                    {
-                        thisOp.isTaskSub = "Submitted";
-                        thisOp.isTaskSubColor = "#30CA86";
-                    }
-                    else
-                    {
-                        thisOp.isTaskSub = "Not Submitted";
-                        thisOp.isTaskSubColor = "#30CA86";
-                    }
-                    if (pending > 0)
-                    {
-                        thisOp.isTaskApp = "Not Approved";
-                        thisOp.isTaskAppColor = "#30CA86";
-                    }
-                    else
-                    {
-                        thisOp.isTaskApp = "Approved";
-                        thisOp.isTaskAppColor = "#C8C8C8";
-                    }
-                }
 
+                }
+            }
+            if (submitted >= 150)
+            {
+                thisOp.isTaskSub = "Submitted";
+                thisOp.isTaskSubColor = "#0CA05F";
+            }
+            else
+            {
+                thisOp.isTaskSub = "Not Submitted";
+                thisOp.isTaskSubColor = "#979797";
+            }
+            if (pending > 0 )
+            {
+                thisOp.isTaskApp = "Not Approved";
+                thisOp.isTaskAppColor = "#979797";
+            }
+            else if(pending == 0 && submitted >= 150)
+            {
+                thisOp.isTaskApp = "Approved";
+                thisOp.isTaskAppColor = "#0CA05F";
+            }
+            else if(pending == 0 && submitted < 150)
+            {
+                thisOp.isTaskApp = "Not Approved";
+                thisOp.isTaskAppColor = "#979797";
             }
             thisOpList.Add(thisOp);
         }
         showInfo = thisOpList;
-
-
-
     }
     private void SelectedOperator(ChangeEventArgs dateEvent)
     {
-        for (int i = 0; i < allc.Count; i++)
+        for (int i = 0; i < teacherList.Count; i++)
         {
             if (teacherList[i].name == dateEvent.Value.ToString())
             {
                 selecteOPID = teacherList[i].teacherID;
                 break;
             }
+
         }
     }
     private void SelectedChapter(ChangeEventArgs dateEvent)
@@ -431,6 +448,7 @@
         {
             if(allc[i].name == dateEvent.Value.ToString())
             {
+                selectedChapterName = allc[i].name;
                 SelectedChapterID = allc[i].chapterID;
                 break;
             }
@@ -511,6 +529,34 @@
             }
 
         }
+    }
+    public async Task assignTask()
+    {
+        Random random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var id = RandomString(50);
+        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+
+        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+        {
+            userID = selecteOPID,
+            MCQNumbers = selectedMCQList,
+            date = thisd,
+            chapterID = SelectedChapterID,
+            taskID = id,
+            startTime = sd,
+            endTime = ed
+        })
+.ReceiveJson<Response>();
+    }
+    private  Random random = new Random();
+    public string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
 }

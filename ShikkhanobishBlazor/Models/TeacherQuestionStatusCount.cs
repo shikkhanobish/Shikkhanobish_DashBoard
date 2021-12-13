@@ -14,9 +14,6 @@ namespace ShikkhanobishBlazor.Models
         public int totaluploaded { get; set; }
         public int specificApproved { get; set; }
         public int specificNotApproved { get; set; }
-        //abid commit
-        //Abid commit 2
-        //Abid commit 3
 
     }
 }
