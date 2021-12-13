@@ -20,6 +20,8 @@ namespace ShikkhanobishBlazor.Models
         public string isTaskSubColor { get; set; }
         public string isTaskApp { get; set; }
         public string isTaskAppColor { get; set; }
+        public int reMain { get; set; }
+        public int submitted { get; set; }
         public string Response { get; set; }
     }
 }
