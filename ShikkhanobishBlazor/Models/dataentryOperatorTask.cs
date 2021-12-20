@@ -16,12 +16,16 @@ namespace ShikkhanobishBlazor.Models
         public string endTime { get; set; }
         public string date { get; set; }
         public string chapterName { get; set; }
-        public string isTaskSub { get; set; }
+        public string isTaskSubDone { get; set; }
+        public string isTaskSubPending { get; set; }
+        public string isTaskSubNootDone { get; set; }
         public string isTaskSubColor { get; set; }
         public string isTaskApp { get; set; }
         public string isTaskAppColor { get; set; }
         public int reMain { get; set; }
         public int submitted { get; set; }
+        public string status { get; set; }
+        public string statusColor { get; set;}
         public string Response { get; set; }
     }
 }
