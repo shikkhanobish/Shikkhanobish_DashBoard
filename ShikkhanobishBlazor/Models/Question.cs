@@ -8,6 +8,7 @@ namespace ShikkhanobishBlazor.Models
     public class Question
     {
         public int questionID { get; set; }
+        public int index { get; set; }
         public int classID { get; set; }
         public string className { get; set; }
         public int subjectID { get; set; }

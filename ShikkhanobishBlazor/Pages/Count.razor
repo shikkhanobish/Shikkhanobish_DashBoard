@@ -119,11 +119,19 @@
                     </li>
                     <li>
                         <a href="RndNumGenerator">
-                            <i class="fas fa-sort-numeric-up-alt"></i>
-                            <span> RndNum Generator </span>
+                            <i class="fas fa-pen-nib"></i>
+                            <span> Data Operator </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="ApiCodeGenaretor">
+                            <i class="fas fa-code"></i>
+                            <span> Code Genaretor</span>
+                        </a>
+                    </li>
+
                 </ul>
+
             </div>
             <!-- End Sidebar -->
 
@@ -619,6 +627,7 @@
 
                     <div class="row">
                         <h5 style="color:blueviolet">Chapter Done</h5>
+                        <h6>@doneLbl</h6>
                         <div class="table-responsive">
                             <table id="" class="table table-bordered">
                                 <thead>
@@ -634,10 +643,10 @@
                                     @foreach (var ch in showChapter)
                                     {
                                     <tr>
-                                        <td>@ch.chapterID</td>
-                                        <td>@ch.name</td>
-                                        <td>@ch.subjectName</td>
-                                        <td>@ch.approvedQS</td>
+                                        <td style="color:@ch.thisUpdateColor"><b>@ch.chapterID</b></td>
+                                        <td style="color:@ch.thisUpdateColor"><b>@ch.name</b></td>
+                                        <td style="color:@ch.thisUpdateColor"><b>@ch.subjectName</b></td>
+                                        <td style="color:@ch.thisUpdateColor"><b>@ch.approvedQS</b></td>
                                         <td style="color:@ch.doneColor"><b>@ch.doneLbl</b></td>
                                     </tr>
                                     }
@@ -683,7 +692,7 @@
     int countTeacher;
     int countTuition;
     double countTotalEarn;
-
+    string doneLbl;
     int countClassEightTuition;
     int countClass9and10Tution;
     int countClass11and12Tution;
@@ -801,8 +810,8 @@
             allChapter.Add(allc[k]);
 
         }
-
-        for(int i = 0; i < allChapter.Count; i++)
+        int done = 0, allreq = 0;
+        for (int i = 0; i < allChapter.Count; i++)
         {
             Chapter thisChapter = new Chapter();
             thisChapter = allChapter[i];
@@ -824,8 +833,10 @@
                     thisChapter.subjectName = allSub[l].name;
                 }
             }
-            if(thisChapter.approvedQS >= 100)
+
+            if (thisChapter.approvedQS >= 100)
             {
+                done++;
                 thisChapter.doneLbl = "Done";
                 thisChapter.doneColor = "#30CA86";
             }
@@ -834,6 +845,21 @@
                 thisChapter.doneLbl = "Not Done";
                 thisChapter.doneColor = "#C8C8C8";
             }
+
+            foreach(var sub in allSub)
+            {
+                if(sub.subjectID == thisChapter.subjectID)
+                {
+                    if(sub.groupName == "Science")
+                    {
+                        allreq++;
+                        thisChapter.thisUpdateColor = "Purple";
+                        break;
+                    }
+
+                }
+            }
+            doneLbl = done + " / " + allreq;
             showChapter.Add(thisChapter);
         }
 

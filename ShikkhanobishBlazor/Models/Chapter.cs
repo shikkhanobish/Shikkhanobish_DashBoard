@@ -18,6 +18,7 @@ namespace ShikkhanobishBlazor.Models
         public int indexNo { get; set; }
         public int approvedQS { get; set; }
         public string doneLbl { get; set; }
+        public string thisUpdateColor { get; set; }
         public string doneColor { get; set; }
         public string Response { get; set; }
     }

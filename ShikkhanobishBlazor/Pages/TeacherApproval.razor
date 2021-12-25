@@ -118,10 +118,17 @@
                     </li>
                     <li>
                         <a href="RndNumGenerator">
-                            <i class="fas fa-sort-numeric-up-alt"></i>
-                            <span> RndNum Generator </span>
+                            <i class="fas fa-pen-nib"></i>
+                            <span> Data Operator </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="ApiCodeGenaretor">
+                            <i class="fas fa-code"></i>
+                            <span> Code Genaretor</span>
+                        </a>
+                    </li>
+
                 </ul>
 
             </div>
@@ -316,6 +323,8 @@
                                 <table id="" class="table table-bordered" style="text-align:center; ">
                                     <thead style="color: black; font-weight: bold;font-size:10px;">
                                         <tr>
+                                            <th>#</th>
+                                            <th>QuestionID</th>
                                             <th>Question</th>
                                             <th>Option1</th>
                                             <th>Option2</th>
@@ -327,18 +336,20 @@
                                     <tbody style="font-size: 10px; ">
                                         @foreach (var item in qList)
                                         {
-                                            <tr style="height: 150px; ">
-                                                <td style="padding-top:20px">@item.mainQuestion</td>
-                                                <td style="padding-top: 30px; color: @item.option1Color; font-weight: bold;">@item.option1</td>
-                                                <td style="padding-top: 30px; color: @item.option2Color; font-weight: bold">@item.option2</td>
-                                                <td style="padding-top: 30px; color: @item.option3Color; font-weight: bold">@item.option3</td>
-                                                <td style="padding-top: 30px; color: @item.option4Color; font-weight: bold">@item.option4</td>
+                                        <tr style="height: 150px; ">
+                                            <td style="padding-top:20px">@item.index</td>
+                                            <td style="padding-top:20px">@item.questionID</td>
+                                            <td style="padding-top:20px">@item.mainQuestion</td>
+                                            <td style="padding-top: 30px; color: @item.option1Color; font-weight: bold;">@item.option1</td>
+                                            <td style="padding-top: 30px; color: @item.option2Color; font-weight: bold">@item.option2</td>
+                                            <td style="padding-top: 30px; color: @item.option3Color; font-weight: bold">@item.option3</td>
+                                            <td style="padding-top: 30px; color: @item.option4Color; font-weight: bold">@item.option4</td>
 
-                                                <td style="padding-top: 30px;">
-                                                    <button style="width:100px; background-color:@item.appBackColor; color: black;font-weight:bold" class="btn btn-outline-success" @onclick="@( async () => await acceptPendingQues(item))">Accept</button>&nbsp;
-                                                    <button style="width:100px; background-color:@item.decBackColor; color: black;font-weight:bold" class=" btn btn-outline-danger" @onclick="@( async () => await declinePendingQues(item))">Decline</button>
-                                                </td>
-                                            </tr>
+                                            <td style="padding-top: 30px;">
+                                                <button style="width:100px; background-color:@item.appBackColor; color: black;font-weight:bold" class="btn btn-outline-success" @onclick="@( async () => await acceptPendingQues(item))">Accept</button>&nbsp;
+                                                <button style="width:100px; background-color:@item.decBackColor; color: black;font-weight:bold" class=" btn btn-outline-danger" @onclick="@( async () => await declinePendingQues(item))">Decline</button>
+                                            </td>
+                                        </tr>
 
                                         }
 
@@ -364,6 +375,7 @@
                                             <tr style="height: 150px;margin-top:30px;">
                                                 <td style="padding-top: 30px;color:@item.colorMatchRate">
                                                     @item.MatchRate
+                                                    <label style="font-size: 15px">@item.MatchLbl</label>
                                                 </td>
 
                                             </tr>
@@ -519,6 +531,7 @@
         showInfoPQTLoading = "Loading Pending QS...";
         await GetTeacherQuestionHistory();
         await GetLoginInfo();
+        allMatchRate = new List<MatchingRate>();
         userName = await oLocalStore.GetItemAsync<string>("name");
         pass = await oLocalStore.GetItemAsync<string>("passWord");
 
@@ -589,6 +602,7 @@
 
     public async Task acceptPendingQues(Question ques)
     {
+
         List<Question> newqs = new List<Question>();
         for (int i = 0; i < qList.Count; i++)
         {
@@ -604,11 +618,12 @@
         }
         qList.Clear();
         qList = newqs;
-
         checkSimilarity(ques);
+
     }
     public async Task declinePendingQues(Question ques)
     {
+
         List<Question> newqs = new List<Question>();
         for (int i = 0; i < qList.Count; i++)
         {
@@ -656,7 +671,7 @@
         quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
 
         tqhl = thList;
-
+        int count=0;
         for (int i = 0; i < quesList.Count; i++)
         {
             if (quesList[i].review == 0)
@@ -686,6 +701,8 @@
                 {
                     quesList[i].option4Color = "#0BD47A ";
                 }
+                count++;
+                quesList[i].index = count;
                 qList.Add(quesList[i]);
             }
         }
@@ -867,20 +884,131 @@
     {
 
         List<double> parcentList = new List<double>();
+        List<int> matListqsId = new List<int>();
+        List<int> FullmatListqsId = new List<int>();
+        bool isMAtchqs = false;
+        bool isFullMAtchqs = false;
         for (int j = 0; j < quesList.Count; j++)
         {
-
             if (qs.questionID != quesList[j].questionID)
             {
                 var sm = CalculateSimilarity(qs.mainQuestion, quesList[j].mainQuestion);
+                if(sm >= .90 && sm <= .99)
+                {
+                    isMAtchqs = true;
+                    matListqsId.Add(quesList[j].questionID);
+                }
+                if(sm == 1 || sm == 1.0)
+                {
+                    isFullMAtchqs = true;
+                    FullmatListqsId.Add(quesList[j].questionID);
+                }
                 parcentList.Add(sm);
             }
 
         }
+        MatchingRate mr = new MatchingRate();
+        bool anotherOne = false;
+        if (isMAtchqs)
+        {
+            mr.MatchLbl = "Partial match between " + qs.questionID;
+            for(int j = 0; j < quesList.Count; j++)
+            {
+                if(qs.questionID == quesList[j].questionID)
+                {
+                    if(quesList[j].review == 0)
+                    {
+                        mr.MatchLbl += " (P)";
+                    }
+                    if (quesList[j].review == 1)
+                    {
+                        mr.MatchLbl += " (A)";
+                    }
+                    if (quesList[j].review == 2)
+                    {
+                        mr.MatchLbl += " (D)";
+                    }
+                }
+            }
+            for (int i = 0; i < matListqsId.Count; i++)
+            {
+                mr.MatchLbl += " == " + matListqsId[i];
+                for (int j = 0; j < quesList.Count; j++)
+                {
+                    if (matListqsId[i] == quesList[j].questionID)
+                    {
+                        if (quesList[j].review == 0)
+                        {
+                            anotherOne = true;
+                            mr.MatchLbl += " (P)";
+                        }
+                        if (quesList[j].review == 1)
+                        {
+                            mr.MatchLbl += " (A)";
+                        }
+                        if (quesList[j].review == 2)
+                        {
+                            mr.MatchLbl += " (D)";
+                        }
+                    }
+                }
+
+            }
+        }
+        else if (isFullMAtchqs)
+        {
+            mr.MatchLbl = "Full match between " + qs.questionID;
+            for (int j = 0; j < quesList.Count; j++)
+            {
+                if (qs.questionID == quesList[j].questionID)
+                {
+                    if (quesList[j].review == 0)
+                    {
+                        mr.MatchLbl += " (P)";
+                    }
+                    if (quesList[j].review == 1)
+                    {
+                        mr.MatchLbl += " (A)";
+                    }
+                    if (quesList[j].review == 2)
+                    {
+                        mr.MatchLbl += " (D)";
+                    }
+                }
+            }
+            for (int i = 0; i < FullmatListqsId.Count; i++)
+            {
+                mr.MatchLbl += " == " + FullmatListqsId[i];
+                for (int j = 0; j < quesList.Count; j++)
+                {
+                    if (FullmatListqsId[i] == quesList[j].questionID)
+                    {
+                        if (quesList[j].review == 0)
+                        {
+                            anotherOne = true;
+                            mr.MatchLbl += " (P)";
+                        }
+                        if (quesList[j].review == 1)
+                        {
+                            mr.MatchLbl += " (A)";
+                        }
+                        if (quesList[j].review == 2)
+                        {
+                            mr.MatchLbl += " (D)";
+                        }
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            mr.MatchLbl = "";
+        }
         double max = 0;
+
         for (int k = 0; k < parcentList.Count; k++)
         {
-
             if (max < parcentList[k])
             {
                 max = parcentList[k];
@@ -889,11 +1017,19 @@
         max = Math.Round(max, 2);
         max = max * 100;
         int matchingRate = (int)max;
-        MatchingRate mr = new MatchingRate();
+
         mr.MatchRate = matchingRate;
         if (matchingRate >= 90)
         {
-            mr.colorMatchRate = "#E20822";
+            if (anotherOne)
+            {
+                mr.colorMatchRate = "#BEB60D";
+            }
+            else
+            {
+                mr.colorMatchRate = "#E20822";
+            }
+
         }
         else
         {

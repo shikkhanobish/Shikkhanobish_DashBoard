@@ -8,6 +8,7 @@ namespace ShikkhanobishBlazor.Models
     public class MatchingRate
     {
         public int MatchRate { get; set; }
+        public string MatchLbl { get; set; }
         public string colorMatchRate { get; set; }
     }
 }

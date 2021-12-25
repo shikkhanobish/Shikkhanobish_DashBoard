@@ -25,12 +25,9 @@
         <!-- LOGO -->
         <div class="logo-box mt-2 m-0 ml-0">
             <a href="Count" class="">
-
                 <img src="/images/snImg.jpg" style="display: block; margin-left: auto; margin-right: auto; width: 50px;height:50px;">
-
             </a>
         </div>
-
         <!-- Topbar Start -->
         <div class="navbar-custom">
             <ul class="list-unstyled topnav-menu float-right mb-0">
@@ -48,8 +45,6 @@
                     </div>
                 </li>
             </ul>
-
-           
 
             <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
                 <li>
@@ -119,11 +114,19 @@
                     </li>
                     <li>
                         <a href="RndNumGenerator">
-                            <i class="fas fa-sort-numeric-up-alt"></i>
-                            <span> RndNum Generator </span>
+                            <i class="fas fa-pen-nib"></i>
+                            <span> Data Operator </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="ApiCodeGenaretor">
+                            <i class="fas fa-code"></i>
+                            <span> Code Genaretor</span>
+                        </a>
+                    </li>
+
                 </ul>
+
             </div>
             <!-- End Sidebar -->
 
@@ -133,6 +136,7 @@
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
         <!-- ============================================================== -->
+
 
         <div class="content-page">
             <div class="content">
@@ -148,6 +152,9 @@
                                     <h5>Question</h5>
                                 </div>
                                 <div class="card-body">
+                                    <input placeholder="Search Question ID" @bind="searchID" />
+                                    <button class="btn-success" @onclick="Search">Search</button>
+                                    <button class="btn-success" @onclick="Refresh">See All</button>
                                     <div class="table-area">
                                         <!-- table-responsive -->
                                         <div class="table-responsive">
@@ -165,7 +172,7 @@
                                                         <th>option3</th>
                                                         <th>option4</th>
                                                         <th>rightAnswer</th>
-                                                        <th>noOfQs</th>
+                                                        <th>Review</th>
                                                     </tr>
                                                 </thead>
 
@@ -197,6 +204,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn mb-2 mb-md-0 btn-secondary btn-block btn-round" style="display: @showseemoreBtn" @onclick="seeMoreClick">See More</button>
                             </div>
                         </div>
                     </div>
@@ -222,6 +230,9 @@
             <!-- end content -->
 
         </div>
+       
+
+        
         <!-- END content-page -->
 
     </div>
@@ -236,13 +247,21 @@
     public string userName { get; set; }
     public string pass { get; set; }
     List<Models.Question> objList = new List<Models.Question>();
-
+    List<Models.Question> BackUpobjList = new List<Models.Question>();
+    List<Models.Question> allQs = new List<Models.Question>();
+    int showindeex = 0;
+    int nextIdex = 0;
+    int searchID;
+    string showseemoreBtn = "";
     protected override async Task OnInitializedAsync()
     {
+        showseemoreBtn = "Block";
+        nextIdex = 20;
         await GetQuestion();
         await GetLoginInfo();
         userName = await oLocalStore.GetItemAsync<string>("name");
         pass = await oLocalStore.GetItemAsync<string>("passWord");
+        seeMoreClick();
     }
     public async Task GetLoginInfo()
     {
@@ -252,6 +271,21 @@
             nvi.NavigateTo(redirectURL);
         }
     }
+    public void Refresh()
+    {
+        showseemoreBtn = "Block";
+        searchID = 0;
+        nextIdex = 20;
+        showindeex = 0;
+        BackUpobjList = new List<Question>();
+        for (int i = 0; i < nextIdex; i++)
+        {
+            BackUpobjList.Add(allQs[showindeex]);
+            showindeex++;
+        }
+        nextIdex += 20;
+        objList = BackUpobjList;
+    }
     [Inject]
     public NavigationManager nvi { get; set; }
     public async Task Logout()
@@ -260,10 +294,32 @@
         string redirectURL = "/";
         nvi.NavigateTo(redirectURL);
     }
-
+    public void seeMoreClick()
+    {
+        for(int i = 0; i < nextIdex; i++)
+        {
+            BackUpobjList.Add(allQs[showindeex]);
+            showindeex++;
+        }
+        nextIdex += 20;
+        objList = BackUpobjList;
+    }
+    public void Search()
+    {
+        showseemoreBtn = "None";
+        objList = new List<Question>();
+        for (int i = 0; i < allQs.Count; i++)
+        {
+            if(searchID == allQs[i].questionID)
+            {
+                objList.Add(allQs[i]);
+                break;
+            }
+        }
+    }
     public async Task GetQuestion()
     {
-        objList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Models.Question>>();
+        allQs = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Models.Question>>();
         userName = await oLocalStore.GetItemAsync<string>("name");
 
     }

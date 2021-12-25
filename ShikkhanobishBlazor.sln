@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShikkhanobishBlazor", "ShikkhanobishBlazor\ShikkhanobishBlazor.csproj", "{D6627C4B-AEC1-4EDD-BCD4-A5AB2636EA27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShikkhanobishBlazor.ASPNetCore", "ShikkhanobishBlazor.ASPNetCore\ShikkhanobishBlazor.ASPNetCore.csproj", "{ED49169E-AB14-423A-A055-DB8E63B75AEB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{D6627C4B-AEC1-4EDD-BCD4-A5AB2636EA27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6627C4B-AEC1-4EDD-BCD4-A5AB2636EA27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6627C4B-AEC1-4EDD-BCD4-A5AB2636EA27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED49169E-AB14-423A-A055-DB8E63B75AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED49169E-AB14-423A-A055-DB8E63B75AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED49169E-AB14-423A-A055-DB8E63B75AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED49169E-AB14-423A-A055-DB8E63B75AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

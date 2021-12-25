@@ -2,7 +2,7 @@
 @using ShikkhanobishBlazor.Models
 @using System.Globalization
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
-@page "/RndNumGenerator"
+@page "/ApiCodeGenaretor"
 
 
 
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    
+
     <!-- Begin page -->
     <div id="wrapper" style="background-color: #F7F7F7; ">
         <!-- LOGO -->
@@ -145,227 +145,65 @@
         <div class="content-page">
 
             <div class="content">
-
-                <div class="card">
-                    <div class="card-body">
-                        <label style="font-size:30px;" class="card-title">Add New Operator</label>
-                        <div class="form-group row">
-                            <div class="col-3">
-                                <input class="form-control " placeholder="Name" @bind="addName" />
-                            </div>
-                            <div class="col-3">
-                                <input class="form-control" placeholder="Phone Number" @bind="addNumber" />
-                            </div>
-
-                            <div class="col-3">
-                                <button class="btn btn-outline-success" @onclick="addNewOperator">Add</button>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <label style="font-size:30px;" class="card-title">Operators</label>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Operator ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Phone Number</th>
-                                        <th scope="col">Work Link</th>
-                                        <th scope="col">Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in shiEMList)
-                                    {
-                                        <tr>
-                                            <th scope="row">@item.employeeID</th>
-                                            <td>@item.name</td>
-                                            <td>@item.phonenumber</td>
-                                            <td>http://makequestion.shikkhanobish.com/@item.employeeID</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm px-3" @onclick="@( async () => await RemoveOperator(item.employeeID))">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-
-
-
-                                    }
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-                </div>
-                <!-- Start container-fluid -->
-                <div class="container-fluid">
-                    <div class="card ">
-                        <div class="card-body">
-                            <label style="font-size:30px;" class="card-title">Assign Task  </label>
-                            <div class="form-group row">
-                                <div class="col-4">
-                                    <input class="form-control" placeholder="Enter Total Chapter Ques. Num" @bind="totalChapQues" />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <label style="font-size:30px;" class="card-title">Add New Class</label>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <input class="form-control" placeholder="Class Name" @bind="clsName" />
+                                    </div>
                                 </div>
-                                <div class="col-4">
-                                    <input class="form-control" placeholder="Enter Your Required Number" @onchange="@onChange" />
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-9">
+                                                <input class="form-control" placeholder="Parameter"  />
+                                                <br />
+                                                <div class="form-group row">
+                                                    <div class="col-3">
+                                                        <button class="btn btn-primary btn-sm">int</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn btn-primary btn-sm">string</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn btn-primary btn-sm">Double</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn btn-primary btn-sm">Float</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <button class="btn mb-2 mb-md-0 btn-success btn-block btn-round">Add</button>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
                                 </div>
 
-                                <div class="col-4">
-                                    <input class="form-control" placeholder="Link" @bind="Link" />
-                                </div>
+
                             </div>
-
-
-
-                        </div>
-
-
-                        <div class="card-body">
-                            <table style="text-align:center; ">
-                                <thead style="color: black; font-weight: bold;font-size:12px;">
-                                    <tr>
-                                        <th>Operator Name</th>
-                                        <th>Class Name</th>
-                                        <th>Subject Name</th>
-                                        <th>Chapter Name</th>
-                                        <th>List Of MCQ Number</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody style="font-size: 12px; ">
-                                    <tr>
-                                        <td>                                          
-                                            <select class="form-control btn btn-purple" style="" id="class" @onchange="SelectedOperator">                                               
-                                                <option class="">Select Operator</option>
-                                                @foreach (var item in operatorListSelect)
-                                                {
-
-                                                    <option  value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedClass">
-                                                <option>Select Class</option>
-                                                @foreach (var item in classList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedSubject">
-                                                <option>Select Subject</option>
-                                                @foreach (var item in subjectList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedChapter">
-                                                <option>Select Chapter</option>
-                                                @foreach (var item in chapterList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <button class="btn btn-primary" type="button" @onclick="assignTask">
-
-                                                @BtnString
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
 
 
                         </div>
                     </div>
-
-
-                    <div class="card">
-                        <div class="card-body">
-                            <label style="color:blueviolet;font-size:30px;" class="card-title">Task  History</label>
-                            <div class="table-responsive">
-                                <table id="" class="table table-bordered" style="text-align:center; ">
-                                    <thead style="color: black; font-weight: bold;font-size:10px;">
-                                        <tr>
-                                            <th>Operator ID</th>
-                                            <th>Name</th>
-                                            <th>Assigned Number</th>
-                                            <th>Chapter ID</th>
-                                            <th>Chapter Name</th>
-                                            <th>Task Date</th>
-                                            <th>Assign Time (DD/MM/YYYY)</th>
-                      
-                                            <th>Submitted</th>
-                                            <th>Remaining</th>
-                                            <th>IS Task Submitted</th>
-                                            <th>Status</th>
-                                            <th>Delete Task</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody style="font-size: 10px; ">
-                                        @foreach (var item in showInfo)
-                                        {
-                                            <tr>
-                                                <td style="color: #2E2E2E">@item.userID</td>
-                                                <td style="color: #2E2E2E">@item.userName</td>
-                                                <td style="color: #2E2E2E">@item.MCQNumbers</td>
-                                                <td style="color: #2E2E2E">@item.chapterID</td>
-                                                <td style="color: #2E2E2E">@item.chapterName</td>
-                                                <td style="color: #2E2E2E">@item.date</td>
-                                                <td style="color: #2E2E2E">@item.startTime</td>
-                       
-                                                <td style="color: green" >@item.submitted</td>
-                                                <td style="color: red">@item.reMain</td>
-                                                <td style="color: @item.isTaskSubColor; font-weight: bold"> <i class="fas fa-times" style="display:@item.isTaskSubNootDone"></i>
-                                                                                                            <i class="fas fa-check-double" style="display:@item.isTaskSubDone"></i>
-                                                                                                            <i style="display:@item.isTaskSubPending">---</i></td>
-                                                <td style="color: @item.statusColor; font-weight: bold">@item.status</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm px-3" @onclick="@( async () => await RemoveTask(item.taskID))">
-                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="display:@showLoadingRemoveTask"></span>
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </td>
-
-
-                                            </tr>
-
-                                        }
-
-                                    </tbody>
-
-
-                                </table>
+                    <div class="col-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <label class="card-title" >Preview</label><br />
+                                <label style="font-size: 12px">Class Name: <b>@clsName</b></label>
+                                
                             </div>
                         </div>
-
                     </div>
-
                 </div>
+               
+
+              
 
                 <!-- end container-fluid -->
                 <!-- Footer Start -->
@@ -397,7 +235,7 @@
 
     public string userName { get; set; }
     public string pass { get; set; }
-
+string clsName {get;set;}
     string totalChapQues;
     string limit1;
     string limit;
@@ -445,13 +283,15 @@
         shiEmployee ne = new shiEmployee();
         ne.name = addName;
         ne.phonenumber = addNumber;
-        ne.employeeID = rd.Next(100000,999999);
+        ne.employeeID = rd.Next(100000, 999999);
         ne.employeeType = 1;
-        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/setshiEmployee".PostJsonAsync(new {
+        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/setshiEmployee".PostJsonAsync(new
+        {
             name = ne.name,
             phonenumber = ne.phonenumber,
             employeeID = ne.employeeID,
-            employeeType = ne.employeeType}).
+            employeeType = ne.employeeType
+        }).
             ReceiveJson<Response>();
         await getOpe();
     }
@@ -531,157 +371,119 @@
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
         for (int t = 0; t < allClass.Count; t++)
         {
-            classList.Add(allClass[t].name) ;
+            classList.Add(allClass[t].name);
         }
 
-        CultureInfo culturen = new CultureInfo("en-US");
-        thisOpList = operatorList;
-        List<string> activeTaskList = new List<string>();
-        List<int> doneOP = new List<int>();
-        List<dataentryOperatorTask> thisopTask = new List<dataentryOperatorTask>();
-        for (int i = 0; i < thisOpList.Count; i++)
+
+        for (int i = 0; i < operatorList.Count; i++)
         {
-            thisOpList[i] = operatorList[i];
+
+            int submitted = 0;
+            dataentryOperatorTask thisOp = new dataentryOperatorTask();
+
+            thisOp = operatorList[i];
             for (int z = 0; z < teacherList.Count; z++)
             {
-                if (thisOpList[i].userID == teacherList[z].teacherID)
+                if (thisOp.userID == teacherList[z].teacherID)
                 {
-                    thisOpList[i].userName = teacherList[z].name;
+                    thisOp.userName = teacherList[z].name;
                     break;
                 }
             }
             for (int e = 0; e < allc.Count; e++)
             {
-                if (allc[e].chapterID == thisOpList[i].chapterID)
+                if (allc[e].chapterID == thisOp.chapterID)
                 {
-                    thisOpList[i].chapterName = allc[e].name;
+                    thisOp.chapterName = allc[e].name;
                     break;
                 }
             }
-            //indivisual TAsk
-            thisopTask = new List<dataentryOperatorTask>();
-            bool shouldCheck = true;
-            for(int j = 0; j < doneOP.Count; j++)
+            int pending = 0;
+            for (int j = 0; j < thList.Count; j++)
             {
-                if (doneOP[j] == thisOpList[i].userID)
+                CultureInfo culture = new CultureInfo("en-US");
+                DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                DateTime TaskDateFormatSt = DateTime.ParseExact(operatorList[i].startTime, "MM/dd/yyyy hh:mm tt", culture);
+                DateTime TaskDateFormatEnd = DateTime.ParseExact(operatorList[i].endTime, "MM/dd/yyyy hh:mm tt", culture);
+                if (operatorList[i].userID == thList[j].teacherID & TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
                 {
-                    shouldCheck = false ;
-                }
-            }
+                    submitted++;
 
-            if (shouldCheck)
-            {
-                doneOP.Add(thisOpList[i].userID);
-                for (int k = 0; k < thisOpList.Count; k++)
-                {
-                    if(thisOpList[i].userID == thisOpList[k].userID)
+                    for (int k = 0; k < quesList.Count; k++)
                     {
-                        thisopTask.Add(thisOpList[k]);
-                    }
-                }
-                ////// submit count
-                List<dataentryOperatorTask> SortedListN = new List<dataentryOperatorTask>();
-                SortedListN = thisopTask.OrderBy(x => x.startTime).ToList();
-                thisopTask = SortedListN;
-                int submitted = 0;
-                for (int k = 0; k < thisopTask.Count; k++)
-                {
-                    for (int j = 0; j < thList.Count; j++)
-                    {
-                        if (thisopTask[k].userID == thList[j].teacherID)
+                        if (thList[j].questionID == quesList[k].questionID)
                         {
-                            CultureInfo culture = new CultureInfo("en-US");
-                            DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                            DateTime TaskDateFormatSt = DateTime.ParseExact(thisopTask[k].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            DateTime TaskDateFormatEnd = new DateTime();
-                            if (k == thisopTask.Count - 1)
+                            if (quesList[k].review == 0)
                             {
-                                TaskDateFormatEnd = DateTime.Now;
+                                pending++;
                             }
-                            else
-                            {
-                                TaskDateFormatEnd = DateTime.ParseExact(thisopTask[k + 1].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            }
-
-                            if ( TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
-                            {
-                                thisopTask[k].submitted++;
-                            }
-                        }
-
-                    }
-                    for (int l = 0; l < thisOpList.Count; l++)
-                    {
-                        if (thisOpList[l].taskID == thisopTask[k].taskID)
-                        {
-                            thisOpList[l].submitted = thisopTask[k].submitted;
                         }
                     }
 
                 }
-
-                
-                ////// Active Define
-                var lastActive = DateTime.ParseExact(thisopTask[0].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-                int indexID = 0;
-                for (int l = 0; l < thisopTask.Count; l++)
-                {
-                    var thisDatetime = DateTime.ParseExact(thisopTask[l].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-                    if(lastActive < thisDatetime)
-                    {
-                        indexID = l;
-                        lastActive = thisDatetime;
-                    }
-                }
-                activeTaskList.Add(thisopTask[indexID].taskID);
             }
+            thisOp.reMain = 100 - submitted;
+            thisOp.submitted = submitted;
 
-        }
-        for(int i = 0; i < thisOpList.Count; i++)
-        {
-
-            if (thisOpList[i].reMain < 0)
+            if (pending > 0)
             {
-                thisOpList[i].reMain = 0;
+                thisOp.isTaskApp = "Not Approved";
+                thisOp.isTaskAppColor = "#979797";
             }
-            thisOpList[i].statusColor = "#979797";
-            if (thisOpList[i].submitted >= 100)
+            else if (pending == 0 && submitted >= 150)
             {
-                thisOpList[i].isTaskSubDone = "Block";
-                thisOpList[i].isTaskSubPending = "None";
-                thisOpList[i].isTaskSubNootDone = "None";
-                thisOpList[i].isTaskSubColor = "#08B483";
+                thisOp.isTaskApp = "Approved";
+                thisOp.isTaskAppColor = "#B590FD";
+            }
+            else if (pending == 0 && submitted < 150)
+            {
+                thisOp.isTaskApp = "Not Approved";
+                thisOp.isTaskAppColor = "#979797";
+            }
+            CultureInfo culturen = new CultureInfo("en-US");
+            var taskTime = DateTime.ParseExact(thisOp.endTime, "MM/dd/yyyy hh:mm tt", culturen);
+            if (taskTime > DateTime.Now)
+            {
+                thisOp.statusColor = "#541BD7";
+                thisOp.isTaskSubPending = "Block";
+                thisOp.isTaskSubDone = "None";
+                thisOp.isTaskSubNootDone = "None";
+                thisOp.isTaskSubColor = "#BFB10C";
+                thisOp.status = "Active";
             }
             else
             {
-                thisOpList[i].isTaskSubNootDone = "Block";
-                thisOpList[i].isTaskSubDone = "None";
-                thisOpList[i].isTaskSubPending = "None";
-                thisOpList[i].isTaskSubColor = "#CE0C0C";
-            }
-            thisOpList[i].status = "Inactive";
-            ////
-            for (int j = 0; j < activeTaskList.Count; j++)
-            {
-                if (activeTaskList[j] == thisOpList[i].taskID)
+                thisOp.statusColor = "#979797";
+                if (submitted >= 100)
                 {
-                    thisOpList[i].statusColor = "#541BD7";
-                    thisOpList[i].isTaskSubPending = "Block";
-                    thisOpList[i].isTaskSubDone = "None";
-                    thisOpList[i].isTaskSubNootDone = "None";
-                    thisOpList[i].isTaskSubColor = "#BFB10C";
-                    thisOpList[i].status = "Active";
+                    thisOp.isTaskSubDone = "Block";
+                    thisOp.isTaskSubPending = "None";
+                    thisOp.isTaskSubNootDone = "None";
+                    thisOp.isTaskSubColor = "#08B483";
                 }
+                else
+                {
+                    thisOp.isTaskSubNootDone = "Block";
+                    thisOp.isTaskSubDone = "None";
+                    thisOp.isTaskSubPending = "None";
+                    thisOp.isTaskSubColor = "#979797";
+                }
+                thisOp.status = "Inactive";
             }
-            ///
-            var nt = DateTime.ParseExact(thisOpList[i].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOpList[i].startTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            nt = DateTime.ParseExact(thisOpList[i].endTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOpList[i].endTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            thisOpList[i].MCQNumbers = thisOpList[i].MCQNumbers?[0..Math.Min(thisOpList[i].MCQNumbers.Length, 50)];
+            if (thisOp.reMain < 0)
+            {
+                thisOp.reMain = 0;
+            }
+            var nt = DateTime.ParseExact(thisOp.startTime, "MM/dd/yyyy hh:mm tt", culturen);
+            thisOp.startTime = nt.ToString("dd/MM/yyyy hh:mm tt");
+            nt = DateTime.ParseExact(thisOp.endTime, "MM/dd/yyyy hh:mm tt", culturen);
+            thisOp.endTime = nt.ToString("dd/MM/yyyy hh:mm tt");
+            thisOp.MCQNumbers = thisOp.MCQNumbers?[0..Math.Min(thisOp.MCQNumbers.Length, 50)];
+            thisOpList.Add(thisOp);
+
         }
         List<dataentryOperatorTask> SortedList = new List<dataentryOperatorTask>();
-        SortedList = thisOpList.OrderBy(x => x.startTime).ToList();
+        SortedList = thisOpList.OrderBy(x => x.endTime).ToList();
         SortedList.Reverse();
         thisOpList = SortedList;
         showInfo = thisOpList;
@@ -695,9 +497,9 @@
         {
             if (teacherList[i].name == dateEvent.Value.ToString())
             {
-                for(int j = 0; j < shiEMList.Count; j++)
+                for (int j = 0; j < shiEMList.Count; j++)
                 {
-                    if(shiEMList[j].employeeID == teacherList[i].teacherID)
+                    if (shiEMList[j].employeeID == teacherList[i].teacherID)
                     {
                         selecteOPID = teacherList[i].teacherID;
                         break;
@@ -711,7 +513,7 @@
     }
     private void SelectedChapter(ChangeEventArgs dateEvent)
     {
-        for(int i = 0; i < allc.Count; i++)
+        for (int i = 0; i < allc.Count; i++)
         {
             string cchp = "";
             foreach (var ch in dateEvent.Value.ToString())
@@ -761,7 +563,7 @@
     {
         string thisSubName = dateEvent.Value.ToString();
         string cleanSub = "";
-        foreach(var ch in thisSubName)
+        foreach (var ch in thisSubName)
         {
             if (ch == '-')
             {
@@ -780,7 +582,7 @@
 
         for (int i = 0; i < allsub.Count; i++)
         {
-            if(allsub[i].name == thisSubName)
+            if (allsub[i].name == thisSubName)
             {
                 for (int j = 0; j < allc.Count; j++)
                 {
@@ -838,7 +640,7 @@
         numList = SortedList;
         for (int i = 0; i < numList.Count; i++)
         {
-            if(i == numList.Count - 1)
+            if (i == numList.Count - 1)
             {
                 selectedMCQList = selectedMCQList + numList[i];
             }
@@ -887,7 +689,7 @@
         }
         showLoading = "None";
     }
-    private  Random random = new Random();
+    private Random random = new Random();
     public string RandomString(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
