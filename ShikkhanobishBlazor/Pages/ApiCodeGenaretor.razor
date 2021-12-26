@@ -152,36 +152,49 @@
                                 <label style="font-size:30px;" class="card-title">Add New Class</label>
                                 <div class="form-group row">
                                     <div class="col-12">
-                                        <input class="form-control" placeholder="Class Name" @bind="clsName" />
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">Class Name</span>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" @bind="clsName">
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <div class="col-9">
-                                                <input class="form-control" placeholder="Parameter"  />
+                                                <input class="form-control" placeholder="Parameter" @bind="@singleTableItemTextBox" />
                                                 <br />
                                                 <div class="form-group row">
                                                     <div class="col-3">
-                                                        <button class="btn btn-primary btn-sm">int</button>
+                                                        <button class="btn @intbtnColor btn-sm" @onclick="makeThisparameterInt">int</button>
                                                     </div>
                                                     <div class="col-3">
-                                                        <button class="btn btn-primary btn-sm">string</button>
+                                                        <button class="btn @stringbtnColor btn-sm" @onclick="makeThisparameterString">string</button>
                                                     </div>
                                                     <div class="col-3">
-                                                        <button class="btn btn-primary btn-sm">Double</button>
+                                                        <button class="btn @doublebtnColor btn-sm" @onclick="makeThisparameterDouble">Double</button>
                                                     </div>
                                                     <div class="col-3">
-                                                        <button class="btn btn-primary btn-sm">Float</button>
+                                                        <button class="btn  @floatbtnColor btn-sm" @onclick="makeThisparameterFloat">Float</button>
                                                     </div>
 
                                                 </div>
                                             </div>
                                             <div class="col-3">
-                                                <button class="btn mb-2 mb-md-0 btn-success btn-block btn-round">Add</button>
+                                                <button class="btn mb-2 mb-md-0 btn-primary btn-block btn-round" @onclick="AddTableItem_Click">Add</button>
                                             </div>
                                         </div>
-                                       
+                                        <div>
+                                            <div class="input-group input-group-sm mb-3" style="display: @showNvarchar">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nvarchar Count</span>
+                                                </div>
+                                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" @bind="nvarcharChount">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -190,20 +203,135 @@
 
 
                         </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <label style="color: red; font-size: 11px">@errorTxt</label>
+                                <label class="card-title">Class Preview</label><br />
+                                <label style="font-size: 14px">Name: <b style="font-size: 16px">@clsName</b></label>
+                                <br />
+                                @foreach (var item in ShowParameter)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-6">
+                                            <label style="font-size: 14px"><b>@item</b></label>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-outline-danger btn-sm" @onclick="@(  () =>  RemoveParameter(item))">Remove</button><br />
+                                        </div>
+                                    </div>
+
+                                }
+
+                                <div style="align-items: end">
+                                    <button class="btn btn-success btn-block btn-round" @onclick="Button_Click_2">Generate Code & Save</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-8">
                         <div class="card">
                             <div class="card-body">
-                                <label class="card-title" >Preview</label><br />
-                                <label style="font-size: 12px">Class Name: <b>@clsName</b></label>
-                                
+                                <div class="card-title">
+                                    <label>Code Preview</label>
+                                    <div class="form-group row">
+                                        <div class="col-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="card-title">
+                                                        <label>Api Code</label>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Class Code</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpMakecls</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Get Api</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpgetapi</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Get Api With ID</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpgetapiwid</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="card-title">
+                                                        <label>SQL Code</label>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">SQL Table Code</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpMakesql</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Get Procedure</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpgetPro</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Get Procedure With ID</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpgetPrpwid</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card" style="background-color: #424242">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <label style="color: #46E897">Set Procedure</label>
+                                                            </div>
+                                                            <div class="card-text">
+                                                                <label style="text-align: center"><code style=" color: white">@cpsetPro</code></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-               
 
-              
+
 
                 <!-- end container-fluid -->
                 <!-- Footer Start -->
@@ -235,21 +363,30 @@
 
     public string userName { get; set; }
     public string pass { get; set; }
-string clsName {get;set;}
+    string clsName = "";
     string totalChapQues;
     string limit1;
     string limit;
+
     int selecteOPID;
+    string intbtnColor { get; set; }
+    string floatbtnColor { get; set; }
+    string stringbtnColor { get; set; }
+    string doublebtnColor { get; set; }
     string Link;
     int SelectedChapterID;
     string BtnString;
     string addName;
+    string errorTxt;
     string addNumber;
+    string showNvarchar { get; set; }
     string showLoading;
     string selectedChapterName;
     string showLoadingRemoveTask;
     string selectedMCQList;
+    string singleTableItemTextBox;
     List<string> classList = new List<string>();
+    List<string> ShowParameter = new List<string>();
     List<string> operatorListSelect = new List<string>();
     List<string> subjectList = new List<string>();
     List<string> chapterList = new List<string>();
@@ -257,445 +394,723 @@ string clsName {get;set;}
     List<dataentryOperatorTask> LiveshowInfo = new List<dataentryOperatorTask>();
     List<Chapter> allc = new List<Chapter>();
     List<Subject> allsub = new List<Subject>();
-    List<ClassInfo> allClass = new List<ClassInfo>();
+    int thisParameter { get; set; }
     List<Teachers> teacherList = new List<Teachers>();
     List<shiEmployee> shiEMList = new List<shiEmployee>();
     List<dataentryOperatorTask> operatorList = new List<dataentryOperatorTask>();
     List<int> numList = new List<int>();
+    string inactiveColor = "btn-dark";
+    string nvarcharChount { get; set; }
+    string activeColor = "btn-success";
 
-
+    string cpMakecls;
+    string cpMakesql;
+    string cpgetPro;
+    string cpgetPrpwid;
+    string cpgetapi;
+    string cpgetapiwid;
+    string cpsetPro;
+    public async Task Logout()
+    {
+        // await oLocalStore.ClearAsync();
+        string redirectURL = "/";
+        //nvi.NavigateTo(redirectURL);
+    }
     protected override async Task OnInitializedAsync()
     {
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
+        showNvarchar = "None";
         showLoadingRemoveTask = "None";
         showLoading = "None";
         BtnString = "Assign Task";
         userName = StaticClassToPassData.thisAdmin.name;
         pass = StaticClassToPassData.thisAdmin.passWord;
+        getData();
 
-        await GetOperatorInfo();
 
 
     }
-    public async Task addNewOperator()
-    {
 
-        Random rd = new Random();
-        shiEmployee ne = new shiEmployee();
-        ne.name = addName;
-        ne.phonenumber = addNumber;
-        ne.employeeID = rd.Next(100000, 999999);
-        ne.employeeType = 1;
-        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/setshiEmployee".PostJsonAsync(new
+    List<string> tblItemList = new List<string>();
+    List<ClassGen> allClass = new List<ClassGen>();
+    List<ClassGen> allClassForCal = new List<ClassGen>();
+    public void RemoveParameter(string thispara)
+    {
+        for (int i = 0; i < ShowParameter.Count; i++)
         {
-            name = ne.name,
-            phonenumber = ne.phonenumber,
-            employeeID = ne.employeeID,
-            employeeType = ne.employeeType
-        }).
-            ReceiveJson<Response>();
-        await getOpe();
-    }
-    public async Task RemoveOperator(int opID)
-    {
-        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/deleteShiEmployee".PostJsonAsync(new
-        {
-            employeeID = opID
-        }).
-            ReceiveJson<Response>();
-        await getOpe();
-    }
-
-    private void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        limit = (string)args.Value;
-        CopyNum();
-    }
-    public void RefreshList()
-    {
-        totalChapQues = "";
-        selecteOPID = 0;
-        Link = "";
-        limit = "";
-        SelectedChapterID = 0;
-        selectedChapterName = "";
-        selectedMCQList = "";
-        classList = new List<string>();
-        operatorListSelect = new List<string>();
-        subjectList = new List<string>();
-        chapterList = new List<string>();
-        showInfo = new List<dataentryOperatorTask>();
-        LiveshowInfo = new List<dataentryOperatorTask>();
-        allc = new List<Chapter>();
-        allsub = new List<Subject>();
-        allClass = new List<ClassInfo>();
-        teacherList = new List<Teachers>();
-    }
-    public async Task RemoveTask(string taskID)
-    {
-        showLoadingRemoveTask = "Block";
-        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/deleteTask".PostJsonAsync(new
-        {
-            taskID = taskID
-        }).
-       ReceiveJson<Response>();
-        await GetOperatorInfo();
-        showLoadingRemoveTask = "None";
-    }
-    public async Task getOpe()
-    {
-        operatorListSelect = new List<string>();
-        teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
-        shiEMList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getshiEmployee".GetJsonAsync<List<shiEmployee>>();
-        for (int z = 0; z < teacherList.Count; z++)
-        {
-            for (int k = 0; k < shiEMList.Count; k++)
+            if (ShowParameter[i] == thispara)
             {
-                if (shiEMList[k].employeeID == teacherList[z].teacherID)
-                {
-                    operatorListSelect.Add(teacherList[z].name);
-                }
+                tblItemList.RemoveAt(i);
+                ShowParameter.RemoveAt(i);
             }
-
         }
     }
-    public async Task GetOperatorInfo()
+    public async Task GetAllClass()
     {
-        await getOpe();
-        allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
-        allsub = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
-        allClass = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getClassInfo".GetJsonAsync<List<ClassInfo>>();
-        operatorList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getdataentryOperatorTask".PostJsonAsync(new { }).ReceiveJson<List<dataentryOperatorTask>>();
-        var thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
-        var quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
-        List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
-        List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
-        for (int t = 0; t < allClass.Count; t++)
-        {
-            classList.Add(allClass[t].name);
-        }
-
-
-        for (int i = 0; i < operatorList.Count; i++)
-        {
-
-            int submitted = 0;
-            dataentryOperatorTask thisOp = new dataentryOperatorTask();
-
-            thisOp = operatorList[i];
-            for (int z = 0; z < teacherList.Count; z++)
-            {
-                if (thisOp.userID == teacherList[z].teacherID)
-                {
-                    thisOp.userName = teacherList[z].name;
-                    break;
-                }
-            }
-            for (int e = 0; e < allc.Count; e++)
-            {
-                if (allc[e].chapterID == thisOp.chapterID)
-                {
-                    thisOp.chapterName = allc[e].name;
-                    break;
-                }
-            }
-            int pending = 0;
-            for (int j = 0; j < thList.Count; j++)
-            {
-                CultureInfo culture = new CultureInfo("en-US");
-                DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                DateTime TaskDateFormatSt = DateTime.ParseExact(operatorList[i].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                DateTime TaskDateFormatEnd = DateTime.ParseExact(operatorList[i].endTime, "MM/dd/yyyy hh:mm tt", culture);
-                if (operatorList[i].userID == thList[j].teacherID & TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
-                {
-                    submitted++;
-
-                    for (int k = 0; k < quesList.Count; k++)
-                    {
-                        if (thList[j].questionID == quesList[k].questionID)
-                        {
-                            if (quesList[k].review == 0)
-                            {
-                                pending++;
-                            }
-                        }
-                    }
-
-                }
-            }
-            thisOp.reMain = 100 - submitted;
-            thisOp.submitted = submitted;
-
-            if (pending > 0)
-            {
-                thisOp.isTaskApp = "Not Approved";
-                thisOp.isTaskAppColor = "#979797";
-            }
-            else if (pending == 0 && submitted >= 150)
-            {
-                thisOp.isTaskApp = "Approved";
-                thisOp.isTaskAppColor = "#B590FD";
-            }
-            else if (pending == 0 && submitted < 150)
-            {
-                thisOp.isTaskApp = "Not Approved";
-                thisOp.isTaskAppColor = "#979797";
-            }
-            CultureInfo culturen = new CultureInfo("en-US");
-            var taskTime = DateTime.ParseExact(thisOp.endTime, "MM/dd/yyyy hh:mm tt", culturen);
-            if (taskTime > DateTime.Now)
-            {
-                thisOp.statusColor = "#541BD7";
-                thisOp.isTaskSubPending = "Block";
-                thisOp.isTaskSubDone = "None";
-                thisOp.isTaskSubNootDone = "None";
-                thisOp.isTaskSubColor = "#BFB10C";
-                thisOp.status = "Active";
-            }
-            else
-            {
-                thisOp.statusColor = "#979797";
-                if (submitted >= 100)
-                {
-                    thisOp.isTaskSubDone = "Block";
-                    thisOp.isTaskSubPending = "None";
-                    thisOp.isTaskSubNootDone = "None";
-                    thisOp.isTaskSubColor = "#08B483";
-                }
-                else
-                {
-                    thisOp.isTaskSubNootDone = "Block";
-                    thisOp.isTaskSubDone = "None";
-                    thisOp.isTaskSubPending = "None";
-                    thisOp.isTaskSubColor = "#979797";
-                }
-                thisOp.status = "Inactive";
-            }
-            if (thisOp.reMain < 0)
-            {
-                thisOp.reMain = 0;
-            }
-            var nt = DateTime.ParseExact(thisOp.startTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOp.startTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            nt = DateTime.ParseExact(thisOp.endTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOp.endTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            thisOp.MCQNumbers = thisOp.MCQNumbers?[0..Math.Min(thisOp.MCQNumbers.Length, 50)];
-            thisOpList.Add(thisOp);
-
-        }
-        List<dataentryOperatorTask> SortedList = new List<dataentryOperatorTask>();
-        SortedList = thisOpList.OrderBy(x => x.endTime).ToList();
-        SortedList.Reverse();
-        thisOpList = SortedList;
-        showInfo = thisOpList;
+        allClass = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        allClassForCal = allClass;
+        //clsList.ItemsSource = allClass;
     }
-
-
-
-    private void SelectedOperator(ChangeEventArgs dateEvent)
+    public void getData()
     {
-        for (int i = 0; i < teacherList.Count; i++)
-        {
-            if (teacherList[i].name == dateEvent.Value.ToString())
-            {
-                for (int j = 0; j < shiEMList.Count; j++)
-                {
-                    if (shiEMList[j].employeeID == teacherList[i].teacherID)
-                    {
-                        selecteOPID = teacherList[i].teacherID;
-                        break;
-                    }
-                }
-
-
-            }
-
-        }
+        GetAllClass();
     }
-    private void SelectedChapter(ChangeEventArgs dateEvent)
+    private void clearnItemList_Click()
     {
-        for (int i = 0; i < allc.Count; i++)
-        {
-            string cchp = "";
-            foreach (var ch in dateEvent.Value.ToString())
-            {
-                if (ch == '-')
-                {
-                    break;
-                }
-                else
-                {
-                    cchp += ch;
-                }
-            }
-            if (allc[i].name == cchp)
-            {
-
-                selectedChapterName = cchp;
-                SelectedChapterID = allc[i].chapterID;
-                break;
-            }
-        }
-
+        //TableElementList.ItemsSource = null;
+        tblItemList.Clear();
     }
-    private void SelectedClass(ChangeEventArgs dateEvent)
+    public async Task refresh()
     {
-        string thisClsName = dateEvent.Value.ToString();
-        subjectList = new List<string>();
-        List<string> thissub = new List<string>();
-        for (int i = 0; i < allClass.Count; i++)
-        {
-            if (allClass[i].name == thisClsName)
-            {
-                for (int j = 0; j < allsub.Count; j++)
-                {
-                    if (allsub[j].classID == allClass[i].classID)
-                    {
-                        thissub.Add(allsub[j].name + "-" + allsub[j].subjectID);
-                    }
-                }
-
-            }
-        }
-
-        subjectList = thissub;
+        allClass = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        allClassForCal = allClass;
+        // clsList.ItemsSource = null;
+        // clsList.ItemsSource = allClass;
+        //rfslbl.Content = "";
     }
-    private void SelectedSubject(ChangeEventArgs dateEvent)
+    public void makeThisparameterInt()
     {
-        string thisSubName = dateEvent.Value.ToString();
-        string cleanSub = "";
-        foreach (var ch in thisSubName)
-        {
-            if (ch == '-')
-            {
-                break;
-            }
-            else
-            {
-                cleanSub += ch;
-            }
-        }
-        thisSubName = cleanSub;
-
-        chapterList = new List<string>();
-        List<string> thisch = new List<string>();
-
-
-        for (int i = 0; i < allsub.Count; i++)
-        {
-            if (allsub[i].name == thisSubName)
-            {
-                for (int j = 0; j < allc.Count; j++)
-                {
-                    if (allc[j].subjectID == allsub[i].subjectID)
-                    {
-                        thisch.Add(allc[j].name + "-" + allc[j].chapterID);
-                    }
-                }
-
-            }
-        }
-        chapterList = thisch;
+        thisParameter = 1;
+        showNvarchar = "None";
+        intbtnColor = activeColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
     }
-    [Inject]
-    public NavigationManager nvi { get; set; }
-
-    public async Task Logout()
+    public void makeThisparameterString()
     {
-        await oLocalStore.ClearAsync();
-        string redirectURL = "/";
-        nvi.NavigateTo(redirectURL);
+        thisParameter = 2;
+        showNvarchar = "Block";
+        intbtnColor = inactiveColor;
+        stringbtnColor = activeColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
     }
-    public void CopyNum()
+    public void makeThisparameterDouble()
     {
-        selectedMCQList = "";
-        numList = new List<int>();
-        Random rn = new Random();
-
-        List<int> list = new List<int>();
-
-        int totalChQNum = Convert.ToInt32(totalChapQues);
-        int reqNum = Convert.ToInt32(limit);
-        while (list.Count <= reqNum)
-        {
-            int thisNum = rn.Next(1, totalChQNum);
-            bool match = false;
-            for (int j = 0; j < list.Count; j++)
-            {
-                if (list[j] == thisNum)
-                {
-                    match = true;
-                    break;
-                }
-            }
-            if (!match)
-            {
-                list.Add(thisNum);
-            }
-        }
-        numList = list;
-
-
-        List<int> SortedList = new List<int>();
-        SortedList = numList.OrderBy(x => x).ToList();
-        numList = SortedList;
-        for (int i = 0; i < numList.Count; i++)
-        {
-            if (i == numList.Count - 1)
-            {
-                selectedMCQList = selectedMCQList + numList[i];
-            }
-            else
-            {
-                selectedMCQList = selectedMCQList + numList[i] + " , ";
-            }
-
-        }
+        thisParameter = 3;
+        showNvarchar = "None";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = activeColor;
     }
-    public async Task assignTask()
+    public void makeThisparameterFloat()
     {
-        showLoading = "Block";
-        if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
+        thisParameter = 4;
+        showNvarchar = "None";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = activeColor;
+        doublebtnColor = inactiveColor;
+    }
+    private void AddTableItem_Click()
+    {
+        if (tblItemList.Count == 20 || thisParameter == 0 || clsName.Contains(" "))
         {
-            BtnString = "Connecting with server...";
-            Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var id = RandomString(50);
-            string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-            string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-            string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-
-            var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
-            {
-                userID = selecteOPID,
-                MCQNumbers = selectedMCQList + " Link#" + Link,
-                date = thisd,
-                chapterID = SelectedChapterID,
-                taskID = id,
-                startTime = sd,
-                endTime = ed
-            })
-    .ReceiveJson<Response>();
-            RefreshList();
-            await GetOperatorInfo();
-            BtnString = "Done!";
-            await Task.Delay(3000);
-            BtnString = "Assign Task";
+            errorTxt = "Select Parameter or Can't add more then 20 parameter or class name can't contain space";
+            return;
         }
         else
         {
-            BtnString = "Please fill up every info";
-            await Task.Delay(3000);
-            BtnString = "Assign Task";
+            string item = "";
+            if (!singleTableItemTextBox.Contains(" "))
+            {
+                item = singleTableItemTextBox;
+            }
+
+            if (thisParameter == 1)
+            {
+                ShowParameter.Add(item + " int");
+            }
+            if (thisParameter == 2)
+            {
+                if (nvarcharChount == "" || nvarcharChount == null)
+                {
+                    return;
+                }
+                ShowParameter.Add(item + " string nvarchar(" + nvarcharChount + ")");
+            }
+            if (thisParameter == 3)
+            {
+                ShowParameter.Add(item + " double");
+            }
+            if (thisParameter == 4)
+            {
+                ShowParameter.Add(item + " float");
+            }
+            item += " " + thisParameter;
+            thisParameter = 0;
+            nvarcharChount = "";
+            errorTxt = "";
+            singleTableItemTextBox = "";
+            showNvarchar = "None";
+            tblItemList.Add(item);
+            intbtnColor = inactiveColor;
+            stringbtnColor = inactiveColor;
+            floatbtnColor = inactiveColor;
+            doublebtnColor = inactiveColor;
+            //Show
+            //TableElementList.ItemsSource = null;
+            //TableElementList.ItemsSource = tblItemList;
         }
-        showLoading = "None";
+
     }
-    private Random random = new Random();
-    public string RandomString(int length)
+
+
+    public async Task SetClass()
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
+        List<string> list = ConvertToServerList();
+        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMaker".PostUrlEncodedAsync(new
+        {
+            @PrNumber = list[0],
+            @tableName = list[1],
+            @pr1n = list[2],
+            @pr2n = list[3],
+            @pr3n = list[4],
+            @pr4n = list[5],
+            @pr5n = list[6],
+            @pr6n = list[7],
+            @pr7n = list[8],
+            @pr8n = list[9],
+            @pr9n = list[10],
+            @pr10n = list[11],
+            @pr11n = list[12],
+            @pr12n = list[13],
+            @pr13n = list[14],
+            @pr14n = list[15],
+            @pr15n = list[16],
+            @pr16n = list[17],
+            @pr17n = list[18],
+            @pr18n = list[19],
+            @pr19n = list[20],
+            @pr20n = list[21],
+            @ID = list[22]
+        })
+   .ReceiveJson<Response>();
+
     }
+
+    private void Button_Click()
+    {
+        SetClass();
+        //rfslbl.Content = "Refresh Now";
+    }
+
+    public List<string> ConvertToServerList()
+    {
+        List<string> content = new List<string>();
+        content.Add("" + tblItemList.Count);
+        content.Add(clsName);
+        for (int i = 0; i < tblItemList.Count; i++)
+        {
+            content.Add(tblItemList[i]);
+        }
+        for (int i = tblItemList.Count; i < 20; i++)
+        {
+            content.Add("N/A");
+        }
+        if (allClassForCal.Count != 0)
+        {
+            int max = allClassForCal[0].ID;
+            for (int i = 0; i < allClassForCal.Count; i++)
+            {
+                if (max < allClassForCal[i].ID)
+                {
+                    max = allClassForCal[i].ID;
+                }
+            }
+            content.Add("" + (max + 1));
+        }
+        else
+        {
+            content.Add("" + 0);
+        }
+        return content;
+    }
+    public ClassGen converThistoClasGen()
+    {
+        ClassGen newmade = new ClassGen();
+        List<string> list = ConvertToServerList();
+
+        newmade.PrNumber = int.Parse(list[0]);
+        newmade.tableName = list[1];
+        newmade.pr1n = list[2];
+        newmade.pr2n = list[3];
+        newmade.pr3n = list[4];
+        newmade.pr4n = list[5];
+        newmade.pr5n = list[6];
+        newmade.pr6n = list[7];
+        newmade.pr7n = list[8];
+        newmade.pr8n = list[9];
+        newmade.pr9n = list[10];
+        newmade.pr10n = list[11];
+        newmade.pr11n = list[12];
+        newmade.pr12n = list[13];
+        newmade.pr13n = list[14];
+        newmade.pr14n = list[15];
+        newmade.pr15n = list[16];
+        newmade.pr16n = list[17];
+        newmade.pr17n = list[18];
+        newmade.pr18n = list[19];
+        newmade.pr19n = list[20];
+        newmade.pr20n = list[21];
+        newmade.ID = int.Parse(list[22]);
+
+        return newmade;
+    }
+    private void Button_Click_1()
+    {
+        refresh();
+    }
+
+    private void Button_Click_2()
+    {
+        ClassGen thisclasGen = converThistoClasGen();
+        cpMakesql = makeSql(thisclasGen);
+        cpMakecls = makeClass(thisclasGen);
+        cpgetapi = makeGetApi(thisclasGen);
+        cpgetapiwid = makeGetApiWithID(thisclasGen);
+        cpgetPro = makeGetProcedure(thisclasGen);
+        cpgetPrpwid = makeGetProcedureWithID(thisclasGen);
+        cpsetPro = makeSetProcedure(thisclasGen);
+        //gg
+        //rfslbl.Content = "Code Genareted!!!";
+    }
+    public string makeClass(ClassGen thisclass)
+    {
+
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+        string classCode = "";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            {
+                classCode += "public  int " + thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} \n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                classCode += "public string " + thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} \n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '3')
+            {
+                classCode += "public double " + thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} \n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '4')
+            {
+                classCode += "public float " + thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} \n";
+            }
+
+        }
+
+        classCode += "public Response { get ; set ;} \n";
+
+
+
+        return classCode;
+    }
+
+    public string makeSql(ClassGen thisclass)
+    {
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+
+        string classCode = "create table " + thisclass.tableName + "(\n";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    classCode += thisClassParameter[i].Trim(charsToTrim) + " int" + "\n";
+                }
+                else
+                {
+                    classCode += thisClassParameter[i].Trim(charsToTrim) + " int" + ",\n";
+                }
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    classCode += thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + "\n";
+                }
+                else
+                {
+                    classCode += thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + ",\n";
+                }
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '3' || thisClassParameter[i][thisClassParameter[i].Length - 1] == '4')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    classCode += thisClassParameter[i] + " float" + "\n";
+                }
+                else
+                {
+                    classCode += thisClassParameter[i] + " float" + ",\n";
+                }
+            }
+
+        }
+
+
+        return classCode;
+    }
+
+
+
+    public string makeGetProcedure(ClassGen thisClsGen)
+    {
+        string getProCode = "create procedure get" + thisClsGen.tableName + "\n as begin \n Select * from " + thisClsGen.tableName + "\n end";
+
+        getProCode = "--------------------- Get All Info Procedure ----------------------------\n" + getProCode + ";\n---------------------------------------------------------";
+
+        return getProCode;
+
+
+    }
+
+    public string makeGetProcedureWithID(ClassGen thisclass)
+    {
+
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+        string proCode = "";
+        proCode = "create procedure get" + thisclass.tableName + "WithID\n";
+        proCode += " @" + thisClassParameter[0].Trim(charsToTrim) + " int" + "\n";
+
+        proCode += "as begin \n Select ( ";
+
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (i == thisclass.PrNumber - 1)
+            {
+                proCode += thisClassParameter[i].Trim(charsToTrim);
+            }
+            else
+            {
+                proCode += thisClassParameter[i].Trim(charsToTrim) + ", ";
+            }
+
+        }
+        proCode += ") from " + thisclass.tableName + " \n Where " + thisClassParameter[0].Trim(charsToTrim) + " = @" + thisClassParameter[0].Trim(charsToTrim) + "  \nend";
+
+
+
+        return proCode;
+
+    }
+
+    public string makeGetApi(ClassGen thisclass)
+    {
+
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+
+        string apiCode = "";
+        apiCode = "[AcceptVerbs(\"GET\", \"POST\")]\npublic List<" + thisclass.tableName + "> get" + thisclass.tableName + "()\n{\nList<" + thisclass.tableName + "> objRList" + " = new List<" + thisclass.tableName + ">();";
+
+        apiCode += "\ntry \n" +
+                "{\n" +
+                "Connection();\n" +
+                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "\", conn);\n" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;\n";
+        apiCode += "conn.Open();\n" +
+                   "SqlDataReader reader = cmd.ExecuteReader();\n";
+        apiCode += "while (reader.Read())\n" +
+        "{\n";
+        apiCode += thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();\n";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            {
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); \n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+        }
+        apiCode += "objRList.Add(objAdd);\n}\n" +
+                "conn.Close();\n" +
+                "}\n" +
+                "catch (Exception ex)\n" +
+                "{\n" +
+                thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();\n" +
+                "objAdd.Response = ex.Message;\n" +
+                "objRList.Add(objAdd);\n" +
+                "}\n" +
+                "retrun objRList;\n" +
+                "}\n";
+
+        return apiCode;
+    }
+
+    public string makeGetApiWithID(ClassGen thisclass)
+    {
+
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+
+        string apiCode = "";
+        apiCode = "[AcceptVerbs(\"GET\", \"POST\")]\npublic " + thisclass.tableName + " get" + thisclass.tableName + "WithID(" + thisclass.tableName + " obj)\n{\n" + thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();";
+
+        apiCode += "\ntry \n" +
+                "{\n" +
+                "Connection();\n" +
+                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "WithID\", conn);\n" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;\n" +
+                "cmd.Parameters.AddWithValue(\"@" + thisClassParameter[0].Trim(charsToTrim) + "\", obj." + thisClassParameter[0].Trim(charsToTrim) + ");\n";
+        apiCode += "conn.Open();\n" +
+                   "SqlDataReader reader = cmd.ExecuteReader();\n";
+        apiCode += "while (reader.Read())\n" +
+        "{\n";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            {
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); \n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+            }
+        }
+        apiCode += "\n}\n" +
+                "conn.Close();\n" +
+                "}\n" +
+                "catch (Exception ex)\n" +
+                "{\n" +
+                thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();\n" +
+                "objR.Response = ex.Message;\n" +
+                "}\n" +
+                "retrun objR;\n" +
+                "}\n";
+
+        return apiCode;
+    }
+
+
+
+    public string makeSetProcedure(ClassGen thisclass)
+    {
+
+
+        List<string> thisClassParameter = new List<string>();
+        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        thisClassParameter.Add(thisclass.pr1n);
+        thisClassParameter.Add(thisclass.pr2n);
+        thisClassParameter.Add(thisclass.pr3n);
+        thisClassParameter.Add(thisclass.pr4n);
+        thisClassParameter.Add(thisclass.pr5n);
+        thisClassParameter.Add(thisclass.pr6n);
+        thisClassParameter.Add(thisclass.pr7n);
+        thisClassParameter.Add(thisclass.pr8n);
+        thisClassParameter.Add(thisclass.pr9n);
+        thisClassParameter.Add(thisclass.pr10n);
+        thisClassParameter.Add(thisclass.pr11n);
+        thisClassParameter.Add(thisclass.pr12n);
+        thisClassParameter.Add(thisclass.pr13n);
+        thisClassParameter.Add(thisclass.pr14n);
+        thisClassParameter.Add(thisclass.pr15n);
+        thisClassParameter.Add(thisclass.pr16n);
+        thisClassParameter.Add(thisclass.pr17n);
+        thisClassParameter.Add(thisclass.pr18n);
+        thisClassParameter.Add(thisclass.pr19n);
+        thisClassParameter.Add(thisclass.pr20n);
+        string getProCode = "create procedure set" + thisclass.tableName + "\n";
+
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + "\n";
+                }
+                else
+                {
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + ",\n";
+                }
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + "\n";
+                }
+                else
+                {
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + ",\n";
+                }
+            }
+            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '3' || thisClassParameter[i][thisClassParameter[i].Length - 1] == '4')
+            {
+                if (i == thisclass.PrNumber - 1)
+                {
+                    getProCode += "@" + thisClassParameter[i] + " float" + "\n";
+                }
+                else
+                {
+                    getProCode += "@" + thisClassParameter[i] + " float" + ",\n";
+                }
+            }
+        }
+        getProCode += "as begin \n Insert Into " + thisclass.tableName + "(";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (i == thisclass.PrNumber - 1)
+            {
+                getProCode += thisClassParameter[i].Trim(charsToTrim);
+            }
+            else
+            {
+                getProCode += thisClassParameter[i].Trim(charsToTrim) + ", ";
+            }
+        }
+        getProCode += ")\n values (";
+        for (int i = 0; i < thisclass.PrNumber; i++)
+        {
+            if (i == thisclass.PrNumber - 1)
+            {
+                getProCode += "@" + thisClassParameter[i].Trim(charsToTrim);
+            }
+            else
+            {
+                getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + ", ";
+            }
+        }
+        getProCode += ")\nend;";
+
+        return getProCode;
+    }
+
+
+
 
 }
 

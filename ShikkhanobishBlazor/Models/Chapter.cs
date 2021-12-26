@@ -21,5 +21,7 @@ namespace ShikkhanobishBlazor.Models
         public string thisUpdateColor { get; set; }
         public string doneColor { get; set; }
         public string Response { get; set; }
+
+
     }
 }
