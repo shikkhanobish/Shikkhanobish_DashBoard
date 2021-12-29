@@ -23,7 +23,7 @@
 <body>
 
     <!-- Begin page -->
-    <div id="wrapper" style="background-color: #F7F7F7; ">
+    <div id="wrapper" style="background-color: #F7F7F7; ">-
         <!-- LOGO -->
 
         <div class="logo-box mt-2 m-0 ml-0">
@@ -146,7 +146,7 @@
 
             <div class="content">
                 <div class="form-group row">
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="card">
                             <div class="card-body">
                                 <label style="font-size:30px;" class="card-title">Add New Class</label>
@@ -202,9 +202,10 @@
                             </div>
 
 
-                        </div>
-
-                        <div class="card">
+                        </div>                                              
+                    </div>
+                    <div class="col-6">
+                       <div class="card">
                             <div class="card-body">
                                 <label style="color: red; font-size: 11px">@errorTxt</label>
                                 <label class="card-title">Class Preview</label><br />
@@ -224,113 +225,211 @@
                                 }
 
                                 <div style="align-items: end">
-                                    <button class="btn btn-success btn-block btn-round" @onclick="Button_Click_2">Generate Code & Save</button>
+                                    <button class="btn btn-success btn-block btn-round" >Generate Code & Save</button>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
-                    <div class="col-8">
-                        <div class="card">
+                </div>
+                <div>
+                   
+
+                </div>
+                <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
                                     <label>Code Preview</label>
+                                    <select class="form-control btn btn-purple" style="" id="class" @onchange="genClassSelectedTable">                                               
+                                                <option class="">Select Class</option>
+                                                @foreach (var item in allClassGen)
+                                                {
+                                                    <option value="@item.tableName">@item.tableName</option>
+                                                }
+                                            </select>
+                                     <div class="card">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary" @onclick="@( () =>  makeGetApi(thissl))">Get Api</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary"  @onclick="@( () =>  makeGetApiWithID(thissl))">Get Api WID</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary"  >Set Api</button>
+                                    </div>
+
+                                </div>
+                                 <div class="form-group row">
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary"  @onclick="@( () =>  makeGetProcedure(thissl))">Get Pro</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary"  @onclick="@( () =>  makeGetProcedureWithID(thissl))">Get Pro WID</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn  btn-primary"  @onclick="@( () =>  makeSetProcedure(thissl))">Set Pro</button>
+                                    </div>
+
+                                </div>
+                               
+
+                            </div>
+                        </div>
                                     <div class="form-group row">
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="card-title">
-                                                        <label>Api Code</label>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Class Code</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpMakecls</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Get Api</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpgetapi</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Get Api With ID</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpgetapiwid</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="card" style="background-color: #323232">
+                                         
+
+                                            <div class="card-body" >
+                                                
+                                                <code >
+                                                    @previewCode
+                                                </code>
+                                                
+
                                             </div>
+
                                         </div>
-                                        <div class="col-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="card-title">
-                                                        <label>SQL Code</label>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">SQL Table Code</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpMakesql</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Get Procedure</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpgetPro</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Get Procedure With ID</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpgetPrpwid</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card" style="background-color: #424242">
-                                                        <div class="card-body">
-                                                            <div class="card-title">
-                                                                <label style="color: #46E897">Set Procedure</label>
-                                                            </div>
-                                                            <div class="card-text">
-                                                                <label style="text-align: center"><code style=" color: white">@cpsetPro</code></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                       
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                 <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                Class Table
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Table ID</th>
+                                    <th scope="col">Table Name</th>
+                                    <th scope="col">No. Of Parameter</th>             
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in allClassGen){
+                                     <tr>
+                                        <td>@item.ID</td>
+                                        <td>@item.tableName</td>
+                                        <td>@item.PrNumber</td>
+                                        <td><button class="btn btn-info" data-toggle="modal" data-target="#parametermodel" @onclick="@( () =>  ShowParameterList(item))"> Edit</button></td>
+                                        <td><button class="btn btn-danger" @onclick="deleteclass">Delete</button></td>
 
+                                </tr>
+                                }
+                               
+
+                            </tbody>
+                        </table>
+
+                        </div>
+                    </div>
+                    <!-- Button trigger modal -->
+
+<!-- Modal All Parameter-->
+<div class="modal fade" id="parametermodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+        <b>@showparameterclass.tableName</b> Parameter Count: @showparameterclass.PrNumber
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+            <button class="col-4 btn btn-primary" @onclick="addpapa">Add Parameter</button>
+            <button class="col-4 btn-primary" @onclick="editPara">Edit Parameter</button>
+            <button class="col-4 btn-primary" @onclick="deletePara">Delete Parameter</button>
+        </div>
+        <div class="card" style="display:@showdeletepara">
+            <div class="card-body">
+                <input placeholder="Parameter No." @bind="@singleTableItemTextBoxExist" />
+                <br />
+                <button class="btn btn-danger" @onclick="deletepara">Delete</button>
+            </div>
+
+           
+        </div>
+        <div style="display:@showeditoraddpara">
+           <div class="card">
+               
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <input class="form-control" placeholder="Parameter No. (Existing)" @bind="@singleTableItemTextBoxExist" style="display:@showeditinput" />
+                                                <br/>
+                                                <input class="form-control" placeholder="Parameter Name New" @bind="@singleTableItemTextBox" />
+                                                <br />
+                                                <div class="form-group row">
+                                                    <div class="col-3">
+                                                        <button class="btn @intbtnColor btn-sm" @onclick="makeThisparameterInt">int</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn @stringbtnColor btn-sm" @onclick="makeThisparameterString">string</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn @doublebtnColor btn-sm" @onclick="makeThisparameterDouble">Double</button>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <button class="btn  @floatbtnColor btn-sm" @onclick="makeThisparameterFloat">Float</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div>
+                                            <div class="input-group input-group-sm mb-3" style="display: @showNvarchar">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nvarchar Count</span>
+                                                </div>
+                                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" @bind="nvarcharChount">
+                                            </div>
+                                        </div>
+                                        <button class="col-12 btn btn-success" @onclick="submiteditoradd">Submit</button>
+                                    </div>
+                                                
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <lable class="col-4 font-weight-bold">1. @showparameterclass.pr1n</lable>
+            <lable class="col-4 font-weight-bold">2. @showparameterclass.pr2n</lable>
+            <lable class="col-4 font-weight-bold">3. @showparameterclass.pr3n</lable>
+            <lable class="col-4 font-weight-bold">4. @showparameterclass.pr4n</lable>
+            <lable class="col-4 font-weight-bold">5. @showparameterclass.pr5n</lable>
+            <lable class="col-4 font-weight-bold">6. @showparameterclass.pr6n</lable>
+            <lable class="col-4 font-weight-bold">7. @showparameterclass.pr7n</lable>
+            <lable class="col-4 font-weight-bold">8. @showparameterclass.pr8n</lable>
+            <lable class="col-4 font-weight-bold">9. @showparameterclass.pr9n</lable>
+            <lable class="col-4 font-weight-bold">10. @showparameterclass.pr10n</lable>
+            <lable class="col-4 font-weight-bold">11.@showparameterclass.pr11n</lable>
+            <lable class="col-4 font-weight-bold">22. @showparameterclass.pr12n</lable>
+            <lable class="col-4 font-weight-bold">13. @showparameterclass.pr13n</lable>
+            <lable class="col-4 font-weight-bold">14. @showparameterclass.pr14n</lable>
+            <lable class="col-4 font-weight-bold">15. @showparameterclass.pr15n</lable>
+            <lable class="col-4 font-weight-bold">16. @showparameterclass.pr16n</lable>
+            <lable class="col-4 font-weight-bold">17. @showparameterclass.pr17n</lable>
+            <lable class="col-4 font-weight-bold">18. @showparameterclass.pr18n</lable>
+            <lable class="col-4 font-weight-bold">19. @showparameterclass.pr19n</lable>
+            <lable class="col-4 font-weight-bold">20. @showparameterclass.pr20n</lable>
+        </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>       
+      </div>
+    </div>
+  </div>
+</div>
 
 
                 <!-- end container-fluid -->
@@ -353,6 +452,7 @@
         <!-- END content-page -->
 
     </div>
+
     <!-- END wrapper -->
     <!-- Vendor js -->
 </body>
@@ -366,17 +466,23 @@
     string clsName = "";
     string totalChapQues;
     string limit1;
+    string showdeletepara;
     string limit;
-
+    string showClasName;
+    string showeditoraddpara;
+    ClassGen showparameterclass = new ClassGen();
     int selecteOPID;
     string intbtnColor { get; set; }
     string floatbtnColor { get; set; }
     string stringbtnColor { get; set; }
     string doublebtnColor { get; set; }
     string Link;
+    string singleTableItemTextBoxExist;
+    string previewCode;
     int SelectedChapterID;
     string BtnString;
     string addName;
+    string showeditinput;
     string errorTxt;
     string addNumber;
     string showNvarchar { get; set; }
@@ -402,7 +508,7 @@
     string inactiveColor = "btn-dark";
     string nvarcharChount { get; set; }
     string activeColor = "btn-success";
-
+    ClassGen thisselctedClassGen { get; set; }
     string cpMakecls;
     string cpMakesql;
     string cpgetPro;
@@ -416,8 +522,92 @@
         string redirectURL = "/";
         //nvi.NavigateTo(redirectURL);
     }
+
+    public void ShowParameterList(ClassGen showTable)
+    {
+        thisselctedClassGen = showTable;
+        showTable.pr1n = (showTable.pr1n == "N/A") ? "" : showTable.pr1n;
+        showTable.pr2n = (showTable.pr2n == "N/A") ? "" : showTable.pr2n;
+        showTable.pr3n = (showTable.pr3n == "N/A") ? "" : showTable.pr3n;
+        showTable.pr4n = (showTable.pr4n == "N/A") ? "" : showTable.pr4n;
+        showTable.pr5n = (showTable.pr5n == "N/A") ? "" : showTable.pr5n;
+        showTable.pr6n = (showTable.pr6n == "N/A") ? "" : showTable.pr6n;
+        showTable.pr7n = (showTable.pr7n == "N/A") ? "" : showTable.pr7n;
+        showTable.pr8n = (showTable.pr8n == "N/A") ? "" : showTable.pr8n;
+        showTable.pr9n = (showTable.pr9n == "N/A") ? "" : showTable.pr9n;
+        showTable.pr10n = (showTable.pr10n == "N/A") ? "" : showTable.pr10n;
+        showTable.pr11n = (showTable.pr11n == "N/A") ? "" : showTable.pr11n;
+        showTable.pr12n = (showTable.pr12n == "N/A") ? "" : showTable.pr12n;
+        showTable.pr13n = (showTable.pr13n == "N/A") ? "" : showTable.pr13n;
+        showTable.pr14n = (showTable.pr14n == "N/A") ? "" : showTable.pr14n;
+        showTable.pr15n = (showTable.pr15n == "N/A") ? "" : showTable.pr15n;
+        showTable.pr16n = (showTable.pr16n == "N/A") ? "" : showTable.pr16n;
+        showTable.pr17n = (showTable.pr17n == "N/A") ? "" : showTable.pr17n;
+        showTable.pr18n = (showTable.pr18n == "N/A") ? "" : showTable.pr18n;
+        showTable.pr19n = (showTable.pr19n == "N/A") ? "" : showTable.pr19n;
+        showTable.pr20n = (showTable.pr20n == "N/A") ? "" : showTable.pr20n;
+
+        showTable.pr1n = cleanpara(showTable.pr1n,false);
+        showTable.pr2n = cleanpara(showTable.pr2n,false);
+        showTable.pr3n = cleanpara(showTable.pr3n,false);
+        showTable.pr4n = cleanpara(showTable.pr4n,false);
+        showTable.pr5n = cleanpara(showTable.pr5n,false);
+        showTable.pr6n = cleanpara(showTable.pr6n,false);
+        showTable.pr7n = cleanpara(showTable.pr7n,false);
+        showTable.pr8n = cleanpara(showTable.pr8n,false);
+        showTable.pr9n = cleanpara(showTable.pr9n,false);
+        showTable.pr10n = cleanpara(showTable.pr10n,false);
+        showTable.pr11n = cleanpara(showTable.pr11n,false);
+        showTable.pr12n = cleanpara(showTable.pr12n,false);
+        showTable.pr13n = cleanpara(showTable.pr13n,false);
+        showTable.pr14n = cleanpara(showTable.pr14n,false);
+        showTable.pr15n = cleanpara(showTable.pr15n,false);
+        showTable.pr16n = cleanpara(showTable.pr16n,false);
+        showTable.pr17n = cleanpara(showTable.pr17n,false);
+        showTable.pr18n = cleanpara(showTable.pr18n,false);
+        showTable.pr19n = cleanpara(showTable.pr19n,false);
+        showTable.pr20n = cleanpara(showTable.pr20n,false);
+        showparameterclass = showTable;
+    }
+    public string cleanpara(string thispara, bool isTotalClean){
+        string cleaned = "";
+        for(int i = 0; i< thispara.Length; i++){
+            if(thispara[i] != ' ')
+            {
+                cleaned += thispara[i];
+            }
+            else{
+                if (!isTotalClean)
+                {
+                    if(thispara[i+1] == '1')
+                    {
+                        cleaned += " (int)";
+                    }
+                    if(thispara[i+1] == '2')
+                    {
+                        cleaned += " (string)";
+                    }
+                    if(thispara[i+1] == '3')
+                    {
+                        cleaned += " (double)";
+                    }
+                    if(thispara[i+1] == '4')
+                    {
+                        cleaned += " (float)";
+                    }
+                }
+
+                break;
+            } 
+        }
+        return cleaned;
+    }
     protected override async Task OnInitializedAsync()
     {
+        showeditinput = "None";
+        showdeletepara = "None";
+        showeditoraddpara = "None";
+        showClasName = "Student";
         intbtnColor = inactiveColor;
         stringbtnColor = inactiveColor;
         floatbtnColor = inactiveColor;
@@ -428,14 +618,298 @@
         BtnString = "Assign Task";
         userName = StaticClassToPassData.thisAdmin.name;
         pass = StaticClassToPassData.thisAdmin.passWord;
-        getData();
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
 
 
 
     }
 
+    public void deleteclass()
+    {
+
+    }
+    public void submiteditoradd(){
+        if(showeditoraddpara == "Block")
+        {
+            eidtparameterinTable();
+        }
+        else
+        {
+            AddparameterInTable();
+        }
+    }
+    public void deletepara()
+    {
+        showeditinput = "None";
+        showdeletepara = "None";
+        showeditoraddpara = "None";
+        if(singleTableItemTextBoxExist == "1")
+        {
+            thisselctedClassGen.pr1n = "N/A";
+        }
+        if(singleTableItemTextBoxExist == "2")
+        {
+            thisselctedClassGen.pr2n = "N/A";
+        }
+        if(singleTableItemTextBoxExist == "3")
+        {
+            thisselctedClassGen.pr3n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "4")
+        {
+            thisselctedClassGen.pr4n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "5")
+        {
+            thisselctedClassGen.pr5n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "6")
+        {
+            thisselctedClassGen.pr6n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "7")
+        {
+            thisselctedClassGen.pr7n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "8")
+        {
+            thisselctedClassGen.pr8n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "9")
+        {
+            thisselctedClassGen.pr9n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "10")
+        {
+            thisselctedClassGen.pr10n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "11")
+        {
+            thisselctedClassGen.pr11n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "12")
+        {
+            thisselctedClassGen.pr12n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "13")
+        {
+            thisselctedClassGen.pr13n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "14")
+        {
+            thisselctedClassGen.pr14n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "15")
+        {
+            thisselctedClassGen.pr15n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "16")
+        {
+            thisselctedClassGen.pr16n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "17")
+        {
+            thisselctedClassGen.pr17n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "18")
+        {
+            thisselctedClassGen.pr18n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "19")
+        {
+            thisselctedClassGen.pr19n= "N/A";
+        }
+        if(singleTableItemTextBoxExist == "20")
+        {
+            thisselctedClassGen.pr20n= "N/A";
+        }
+        ///use api
+    }
+    public void eidtparameterinTable()
+    {
+        showeditinput = "None";
+        showdeletepara = "None";
+        showeditoraddpara = "None";
+        string selectedParaName = "";
+
+        if(singleTableItemTextBoxExist == "1")
+        {
+            thisselctedClassGen.pr1n = singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "2")
+        {
+            thisselctedClassGen.pr2n = singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "3")
+        {
+            thisselctedClassGen.pr3n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "4")
+        {
+            thisselctedClassGen.pr4n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "5")
+        {
+            thisselctedClassGen.pr5n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "6")
+        {
+            thisselctedClassGen.pr6n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "7")
+        {
+            thisselctedClassGen.pr7n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "8")
+        {
+            thisselctedClassGen.pr8n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "9")
+        {
+            thisselctedClassGen.pr9n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "10")
+        {
+            thisselctedClassGen.pr10n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "11")
+        {
+            thisselctedClassGen.pr11n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "12")
+        {
+            thisselctedClassGen.pr12n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "13")
+        {
+            thisselctedClassGen.pr13n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "14")
+        {
+            thisselctedClassGen.pr14n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "15")
+        {
+            thisselctedClassGen.pr15n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "16")
+        {
+            thisselctedClassGen.pr16n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "17")
+        {
+            thisselctedClassGen.pr17n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "18")
+        {
+            thisselctedClassGen.pr18n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "19")
+        {
+            thisselctedClassGen.pr19n= singleTableItemTextBox;
+        }
+        if(singleTableItemTextBoxExist == "20")
+        {
+            thisselctedClassGen.pr20n= singleTableItemTextBox;
+        }
+        ///use api
+
+    }
+    public void AddparameterInTable()
+    {
+        showeditinput = "None";
+        showdeletepara = "None";
+        showeditoraddpara = "None";
+        string selectedParaName = "";
+
+        if( thisselctedClassGen.PrNumber== 0)
+        {
+            thisselctedClassGen.pr1n = singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 1)
+        {
+            thisselctedClassGen.pr2n = singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 2)
+        {
+            thisselctedClassGen.pr3n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 3)
+        {
+            thisselctedClassGen.pr4n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 4)
+        {
+            thisselctedClassGen.pr5n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 5)
+        {
+            thisselctedClassGen.pr6n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 6)
+        {
+            thisselctedClassGen.pr7n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 7)
+        {
+            thisselctedClassGen.pr8n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 8)
+        {
+            thisselctedClassGen.pr9n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 9)
+        {
+            thisselctedClassGen.pr10n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 10)
+        {
+            thisselctedClassGen.pr11n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 11)
+        {
+            thisselctedClassGen.pr12n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 12)
+        {
+            thisselctedClassGen.pr13n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 13)
+        {
+            thisselctedClassGen.pr14n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 14)
+        {
+            thisselctedClassGen.pr15n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 15)
+        {
+            thisselctedClassGen.pr16n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 16)
+        {
+            thisselctedClassGen.pr17n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 17)
+        {
+            thisselctedClassGen.pr18n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 18)
+        {
+            thisselctedClassGen.pr19n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 19)
+        {
+            thisselctedClassGen.pr20n= singleTableItemTextBox;
+        }
+        if(thisselctedClassGen.PrNumber == 20)
+        {
+            return;
+        }
+        ///use api
+    }
     List<string> tblItemList = new List<string>();
-    List<ClassGen> allClass = new List<ClassGen>();
+    List<ClassGen> allClassGen = new List<ClassGen>();
     List<ClassGen> allClassForCal = new List<ClassGen>();
     public void RemoveParameter(string thispara)
     {
@@ -448,16 +922,32 @@
             }
         }
     }
+    public void addpapa ()
+    {
+        showdeletepara = "None";
+        showeditoraddpara = "Block";
+        showeditinput = "None";
+    }
+    public void editPara ()
+    {
+        showdeletepara = "None";
+        showeditoraddpara = "Block";
+        showeditinput = "Block";
+    }
+    public void deletePara ()
+    {
+        showdeletepara = "BLock";
+        showeditoraddpara = "None";
+        showeditinput = "None";
+
+    }
     public async Task GetAllClass()
     {
-        allClass = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
-        allClassForCal = allClass;
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        allClassForCal = allClassGen;
         //clsList.ItemsSource = allClass;
     }
-    public void getData()
-    {
-        GetAllClass();
-    }
+
     private void clearnItemList_Click()
     {
         //TableElementList.ItemsSource = null;
@@ -465,8 +955,8 @@
     }
     public async Task refresh()
     {
-        allClass = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
-        allClassForCal = allClass;
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        allClassForCal = allClassGen;
         // clsList.ItemsSource = null;
         // clsList.ItemsSource = allClass;
         //rfslbl.Content = "";
@@ -666,17 +1156,58 @@
     {
         refresh();
     }
+    ClassGen thissl = new ClassGen(); 
+    private void genClassSelectedTable(ChangeEventArgs devent)
+    {
 
-    private void Button_Click_2()
+        string data = devent.Value.ToString();
+        for(int i = 0; i < allClassGen.Count; i++){
+            if(data == allClassGen[i].tableName){
+
+                thissl = allClassGen[i];
+
+                break;
+            }
+
+        }
+
+    }
+    private void Button_Click_2(int index)
     {
         ClassGen thisclasGen = converThistoClasGen();
-        cpMakesql = makeSql(thisclasGen);
-        cpMakecls = makeClass(thisclasGen);
-        cpgetapi = makeGetApi(thisclasGen);
-        cpgetapiwid = makeGetApiWithID(thisclasGen);
-        cpgetPro = makeGetProcedure(thisclasGen);
-        cpgetPrpwid = makeGetProcedureWithID(thisclasGen);
-        cpsetPro = makeSetProcedure(thisclasGen);
+        if(index == 1)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+        if(index == 2)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+        if(index == 3)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+        if(index == 4)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+        if(index == 5)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+        if(index == 6)
+        {
+            previewCode=  "";
+            previewCode = makeSql(thisclasGen);
+        }
+
+
+
         //gg
         //rfslbl.Content = "Code Genareted!!!";
     }
@@ -730,8 +1261,8 @@
 
         classCode += "public Response { get ; set ;} \n";
 
-
-
+        previewCode = "";
+        previewCode = classCode;
         return classCode;
     }
 
@@ -800,7 +1331,8 @@
 
         }
 
-
+        previewCode = "";
+        previewCode = classCode;
         return classCode;
     }
 
@@ -810,8 +1342,8 @@
     {
         string getProCode = "create procedure get" + thisClsGen.tableName + "\n as begin \n Select * from " + thisClsGen.tableName + "\n end";
 
-        getProCode = "--------------------- Get All Info Procedure ----------------------------\n" + getProCode + ";\n---------------------------------------------------------";
-
+        previewCode = "";
+        previewCode = getProCode;
         return getProCode;
 
 
@@ -863,7 +1395,8 @@
         }
         proCode += ") from " + thisclass.tableName + " \n Where " + thisClassParameter[0].Trim(charsToTrim) + " = @" + thisClassParameter[0].Trim(charsToTrim) + "  \nend";
 
-
+        previewCode = "";
+        previewCode = proCode;
 
         return proCode;
 
@@ -939,6 +1472,8 @@
                 "retrun objRList;\n" +
                 "}\n";
 
+                previewCode = "";
+        previewCode = apiCode;
         return apiCode;
     }
 
@@ -1011,6 +1546,8 @@
                 "retrun objR;\n" +
                 "}\n";
 
+                previewCode = "";
+        previewCode = apiCode;
         return apiCode;
     }
 
@@ -1105,7 +1642,8 @@
             }
         }
         getProCode += ")\nend;";
-
+        previewCode = "";
+        previewCode = getProCode;
         return getProCode;
     }
 
