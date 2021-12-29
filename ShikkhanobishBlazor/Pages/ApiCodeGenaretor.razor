@@ -225,7 +225,7 @@
                                 }
 
                                 <div style="align-items: end">
-                                    <button class="btn btn-success btn-block btn-round" >Generate Code & Save</button>
+                                    <button class="btn btn-success btn-block btn-round" @onclick="SetClass">@saveservertxt</button>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +277,7 @@
 
                             </div>
                         </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" style="display: @showcodedisplay">
                                         <div class="card" style="background-color: #323232">
                                          
 
@@ -345,8 +345,8 @@
       <div class="modal-body">
         <div class="form-group row">
             <button class="col-4 btn btn-primary" @onclick="addpapa">Add Parameter</button>
-            <button class="col-4 btn-primary" @onclick="editPara">Edit Parameter</button>
-            <button class="col-4 btn-primary" @onclick="deletePara">Delete Parameter</button>
+            <button class="col-4 btn btn-primary" @onclick="editPara">Edit Parameter</button>
+            <button class="col-4 btn btn-primary" @onclick="deletePara">Delete Parameter</button>
         </div>
         <div class="card" style="display:@showdeletepara">
             <div class="card-body">
@@ -470,8 +470,10 @@
     string limit;
     string showClasName;
     string showeditoraddpara;
+    string showcodedisplay;
     ClassGen showparameterclass = new ClassGen();
     int selecteOPID;
+    string saveservertxt;
     string intbtnColor { get; set; }
     string floatbtnColor { get; set; }
     string stringbtnColor { get; set; }
@@ -604,6 +606,8 @@
     }
     protected override async Task OnInitializedAsync()
     {
+        saveservertxt = "Save In Server";
+        showcodedisplay = "None";
         showeditinput = "None";
         showdeletepara = "None";
         showeditoraddpara = "None";
@@ -1053,7 +1057,9 @@
 
     public async Task SetClass()
     {
+        saveservertxt = "Saving...";
         List<string> list = ConvertToServerList();
+        Random rd = new Random();
         var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMaker".PostUrlEncodedAsync(new
         {
             @PrNumber = list[0],
@@ -1078,10 +1084,11 @@
             @pr18n = list[19],
             @pr19n = list[20],
             @pr20n = list[21],
-            @ID = list[22]
+            @ID = rd.Next(100000,999999)
         })
    .ReceiveJson<Response>();
-
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        saveservertxt = "Save In Server";
     }
 
     private void Button_Click()
@@ -1214,7 +1221,7 @@
     public string makeClass(ClassGen thisclass)
     {
 
-
+        showcodedisplay = "Block";
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
         thisClassParameter.Add(thisclass.pr1n);
@@ -1268,7 +1275,7 @@
 
     public string makeSql(ClassGen thisclass)
     {
-
+            showcodedisplay = "Block";
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
         thisClassParameter.Add(thisclass.pr1n);
@@ -1340,6 +1347,7 @@
 
     public string makeGetProcedure(ClassGen thisClsGen)
     {
+            showcodedisplay = "Block";
         string getProCode = "create procedure get" + thisClsGen.tableName + "\n as begin \n Select * from " + thisClsGen.tableName + "\n end";
 
         previewCode = "";
@@ -1352,7 +1360,7 @@
     public string makeGetProcedureWithID(ClassGen thisclass)
     {
 
-
+            showcodedisplay = "Block";
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
         thisClassParameter.Add(thisclass.pr1n);
@@ -1405,7 +1413,7 @@
     public string makeGetApi(ClassGen thisclass)
     {
 
-
+            showcodedisplay = "Block";
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
         thisClassParameter.Add(thisclass.pr1n);
@@ -1479,7 +1487,7 @@
 
     public string makeGetApiWithID(ClassGen thisclass)
     {
-
+            showcodedisplay = "Block";
 
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
@@ -1555,7 +1563,7 @@
 
     public string makeSetProcedure(ClassGen thisclass)
     {
-
+            showcodedisplay = "Block";
 
         List<string> thisClassParameter = new List<string>();
         char[] charsToTrim = { ' ', '1', '2', '3', '4' };
