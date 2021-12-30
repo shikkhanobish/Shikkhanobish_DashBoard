@@ -393,7 +393,7 @@
                                                 <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" @bind="nvarcharChount">
                                             </div>
                                         </div>
-                                        <button class="col-12 btn btn-success" @onclick="submiteditoradd">Submit</button>
+                                        <button class="col-12 btn btn-success" @onclick="submiteditoradd">@submitlbl</button>
                                     </div>
                                                 
             </div>
@@ -469,6 +469,7 @@
     string showdeletepara;
     string limit;
     string showClasName;
+    string submitlbl;
     string showeditoraddpara;
     string showcodedisplay;
     ClassGen showparameterclass = new ClassGen();
@@ -525,8 +526,19 @@
         //nvi.NavigateTo(redirectURL);
     }
 
-    public void ShowParameterList(ClassGen showTable)
+    public async Task ShowParameterList(ClassGen thisclasgen)
     {
+        for(int i =0; i < allClassGen.Count; i++)
+        {
+            if(thisclasgen.ID == allClassGen[i].ID)
+            {
+                thisclasgen =  new ClassGen();
+                thisclasgen = allClassGen[i];
+            }
+        }
+        ClassGen showTable = new ClassGen();
+        showTable = thisclasgen;
+        thisselctedClassGen = new ClassGen();
         thisselctedClassGen = showTable;
         showTable.pr1n = (showTable.pr1n == "N/A") ? "" : showTable.pr1n;
         showTable.pr2n = (showTable.pr2n == "N/A") ? "" : showTable.pr2n;
@@ -569,7 +581,9 @@
         showTable.pr18n = cleanpara(showTable.pr18n,false);
         showTable.pr19n = cleanpara(showTable.pr19n,false);
         showTable.pr20n = cleanpara(showTable.pr20n,false);
+        showparameterclass = new ClassGen();
         showparameterclass = showTable;
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
     }
     public string cleanpara(string thispara, bool isTotalClean){
         string cleaned = "";
@@ -606,6 +620,7 @@
     }
     protected override async Task OnInitializedAsync()
     {
+        submitlbl = "Submit";
         saveservertxt = "Save In Server";
         showcodedisplay = "None";
         showeditinput = "None";
@@ -633,7 +648,7 @@
 
     }
     public void submiteditoradd(){
-        if(showeditoraddpara == "Block")
+        if(showeditinput == "Block")
         {
             eidtparameterinTable();
         }
@@ -642,11 +657,13 @@
             AddparameterInTable();
         }
     }
-    public void deletepara()
+    public async Task deletepara()
     {
-        showeditinput = "None";
-        showdeletepara = "None";
-        showeditoraddpara = "None";
+         singleTableItemTextBox = "";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
         if(singleTableItemTextBoxExist == "1")
         {
             thisselctedClassGen.pr1n = "N/A";
@@ -727,15 +744,46 @@
         {
             thisselctedClassGen.pr20n= "N/A";
         }
-        ///use api
+        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMakerInSingleColumn".PostUrlEncodedAsync(new
+        {
+            @PrNumber = thisselctedClassGen.PrNumber,
+            @tableName = thisselctedClassGen.tableName,
+            @pr1n = thisselctedClassGen.pr1n,
+            @pr2n = thisselctedClassGen.pr2n,
+            @pr3n = thisselctedClassGen.pr3n,
+            @pr4n = thisselctedClassGen.pr4n,
+            @pr5n = thisselctedClassGen.pr5n,
+            @pr6n = thisselctedClassGen.pr6n,
+            @pr7n = thisselctedClassGen.pr7n,
+            @pr8n = thisselctedClassGen.pr8n,
+            @pr9n = thisselctedClassGen.pr9n,
+            @pr10n = thisselctedClassGen.pr10n,
+            @pr11n = thisselctedClassGen.pr11n,
+            @pr12n = thisselctedClassGen.pr12n,
+            @pr13n = thisselctedClassGen.pr13n,
+            @pr14n = thisselctedClassGen.pr14n,
+            @pr15n = thisselctedClassGen.pr15n,
+            @pr16n = thisselctedClassGen.pr16n,
+            @pr17n = thisselctedClassGen.pr17n,
+            @pr18n = thisselctedClassGen.pr18n,
+            @pr19n = thisselctedClassGen.pr19n,
+            @pr20n = thisselctedClassGen.pr20n,
+            @ID = thisselctedClassGen.ID
+        })   .ReceiveJson<Response>();
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        ShowParameterList(thisselctedClassGen);
     }
-    public void eidtparameterinTable()
+    public async Task eidtparameterinTable()
     {
-        showeditinput = "None";
-        showdeletepara = "None";
-        showeditoraddpara = "None";
+         
         string selectedParaName = "";
-
+        for(int i = 0; i < allClassGen.Count; i++)
+        {
+            if(thisselctedClassGen.ID == allClassGen[i].ID){
+                thisselctedClassGen = new ClassGen();
+                thisselctedClassGen = allClassGen[i];
+            }
+        }
         if(singleTableItemTextBoxExist == "1")
         {
             thisselctedClassGen.pr1n = singleTableItemTextBox;
@@ -816,16 +864,56 @@
         {
             thisselctedClassGen.pr20n= singleTableItemTextBox;
         }
-        ///use api
-
+        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMakerInSingleColumn".PostUrlEncodedAsync(new
+        {
+            @PrNumber = thisselctedClassGen.PrNumber,
+            @tableName = thisselctedClassGen.tableName,
+            @pr1n = thisselctedClassGen.pr1n,
+            @pr2n = thisselctedClassGen.pr2n,
+            @pr3n = thisselctedClassGen.pr3n,
+            @pr4n = thisselctedClassGen.pr4n,
+            @pr5n = thisselctedClassGen.pr5n,
+            @pr6n = thisselctedClassGen.pr6n,
+            @pr7n = thisselctedClassGen.pr7n,
+            @pr8n = thisselctedClassGen.pr8n,
+            @pr9n = thisselctedClassGen.pr9n,
+            @pr10n = thisselctedClassGen.pr10n,
+            @pr11n = thisselctedClassGen.pr11n,
+            @pr12n = thisselctedClassGen.pr12n,
+            @pr13n = thisselctedClassGen.pr13n,
+            @pr14n = thisselctedClassGen.pr14n,
+            @pr15n = thisselctedClassGen.pr15n,
+            @pr16n = thisselctedClassGen.pr16n,
+            @pr17n = thisselctedClassGen.pr17n,
+            @pr18n = thisselctedClassGen.pr18n,
+            @pr19n = thisselctedClassGen.pr19n,
+            @pr20n = thisselctedClassGen.pr20n,
+            @ID = thisselctedClassGen.ID
+        })
+   .ReceiveJson<Response>();
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        ShowParameterList(thisselctedClassGen);
+        singleTableItemTextBox = "";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
     }
-    public void AddparameterInTable()
+    public async Task AddparameterInTable()
     {
-        showeditinput = "None";
-        showdeletepara = "None";
-        showeditoraddpara = "None";
+        submitlbl = "Submitting...";
+
+   
         string selectedParaName = "";
 
+        for(int i = 0; i < allClassGen.Count; i++)
+        {
+            if(thisselctedClassGen.ID == allClassGen[i].ID){
+                thisselctedClassGen = new ClassGen();
+                thisselctedClassGen = allClassGen[i];
+            }
+        }
+        singleTableItemTextBox += " "+thisParameter;
         if( thisselctedClassGen.PrNumber== 0)
         {
             thisselctedClassGen.pr1n = singleTableItemTextBox;
@@ -910,7 +998,45 @@
         {
             return;
         }
-        ///use api
+        thisselctedClassGen.PrNumber += 1;
+        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMakerInSingleColumn".PostUrlEncodedAsync(new
+        {
+            @PrNumber = thisselctedClassGen.PrNumber,
+            @tableName = thisselctedClassGen.tableName,
+            @pr1n = thisselctedClassGen.pr1n,
+            @pr2n = thisselctedClassGen.pr2n,
+            @pr3n = thisselctedClassGen.pr3n,
+            @pr4n = thisselctedClassGen.pr4n,
+            @pr5n = thisselctedClassGen.pr5n,
+            @pr6n = thisselctedClassGen.pr6n,
+            @pr7n = thisselctedClassGen.pr7n,
+            @pr8n = thisselctedClassGen.pr8n,
+            @pr9n = thisselctedClassGen.pr9n,
+            @pr10n = thisselctedClassGen.pr10n,
+            @pr11n = thisselctedClassGen.pr11n,
+            @pr12n = thisselctedClassGen.pr12n,
+            @pr13n = thisselctedClassGen.pr13n,
+            @pr14n = thisselctedClassGen.pr14n,
+            @pr15n = thisselctedClassGen.pr15n,
+            @pr16n = thisselctedClassGen.pr16n,
+            @pr17n = thisselctedClassGen.pr17n,
+            @pr18n = thisselctedClassGen.pr18n,
+            @pr19n = thisselctedClassGen.pr19n,
+            @pr20n = thisselctedClassGen.pr20n,
+            @ID = thisselctedClassGen.ID
+        })   .ReceiveJson<Response>();
+
+
+        
+        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        await ShowParameterList(thisselctedClassGen);        
+        singleTableItemTextBox = "";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
+        submitlbl = "Submit";
+        StateHasChanged();
     }
     List<string> tblItemList = new List<string>();
     List<ClassGen> allClassGen = new List<ClassGen>();
