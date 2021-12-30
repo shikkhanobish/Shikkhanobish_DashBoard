@@ -321,7 +321,7 @@
                                         <td>@item.tableName</td>
                                         <td>@item.PrNumber</td>
                                         <td><button class="btn btn-info" data-toggle="modal" data-target="#parametermodel" @onclick="@( () =>  ShowParameterList(item))"> Edit</button></td>
-                                        <td><button class="btn btn-danger" @onclick="deleteclass">Delete</button></td>
+                                        <td><button class="btn btn-danger" @onclick="@( () =>  RemoveClass(item.ID))">Delete</button></td>
 
                                 </tr>
                                 }
@@ -344,19 +344,11 @@
       </div>
       <div class="modal-body">
         <div class="form-group row">
-            <button class="col-4 btn btn-primary" @onclick="addpapa">Add Parameter</button>
-            <button class="col-4 btn btn-primary" @onclick="editPara">Edit Parameter</button>
-            <button class="col-4 btn btn-primary" @onclick="deletePara">Delete Parameter</button>
-        </div>
-        <div class="card" style="display:@showdeletepara">
-            <div class="card-body">
-                <input placeholder="Parameter No." @bind="@singleTableItemTextBoxExist" />
-                <br />
-                <button class="btn btn-danger" @onclick="deletepara">Delete</button>
-            </div>
-
+            <button class="col-6 btn btn-primary" @onclick="addpapa">Add Parameter</button>
+            <button class="col-6 btn btn-primary" @onclick="editPara">Edit Parameter</button>
            
         </div>
+
         <div style="display:@showeditoraddpara">
            <div class="card">
                
@@ -412,7 +404,7 @@
             <lable class="col-4 font-weight-bold">9. @showparameterclass.pr9n</lable>
             <lable class="col-4 font-weight-bold">10. @showparameterclass.pr10n</lable>
             <lable class="col-4 font-weight-bold">11.@showparameterclass.pr11n</lable>
-            <lable class="col-4 font-weight-bold">22. @showparameterclass.pr12n</lable>
+            <lable class="col-4 font-weight-bold">12. @showparameterclass.pr12n</lable>
             <lable class="col-4 font-weight-bold">13. @showparameterclass.pr13n</lable>
             <lable class="col-4 font-weight-bold">14. @showparameterclass.pr14n</lable>
             <lable class="col-4 font-weight-bold">15. @showparameterclass.pr15n</lable>
@@ -525,7 +517,13 @@
         string redirectURL = "/";
         //nvi.NavigateTo(redirectURL);
     }
-
+    public async Task RemoveClass(int id){
+        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/deleteClass".PostUrlEncodedAsync(new
+        {          
+            @ID = id
+        })   .ReceiveJson<Response>();
+         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+    }
     public async Task ShowParameterList(ClassGen thisclasgen)
     {
         for(int i =0; i < allClassGen.Count; i++)
@@ -583,7 +581,17 @@
         showTable.pr20n = cleanpara(showTable.pr20n,false);
         showparameterclass = new ClassGen();
         showparameterclass = showTable;
+         singleTableItemTextBox = "";
+        intbtnColor = inactiveColor;
+        stringbtnColor = inactiveColor;
+        floatbtnColor = inactiveColor;
+        doublebtnColor = inactiveColor;
+        submitlbl = "Submit";
+            showNvarchar = "None";
+        singleTableItemTextBox = "";
+        singleTableItemTextBoxExist = "";
         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+        StateHasChanged();
     }
     public string cleanpara(string thispara, bool isTotalClean){
         string cleaned = "";
@@ -657,125 +665,10 @@
             AddparameterInTable();
         }
     }
-    public async Task deletepara()
-    {
-         singleTableItemTextBox = "";
-        intbtnColor = inactiveColor;
-        stringbtnColor = inactiveColor;
-        floatbtnColor = inactiveColor;
-        doublebtnColor = inactiveColor;
-        if(singleTableItemTextBoxExist == "1")
-        {
-            thisselctedClassGen.pr1n = "N/A";
-        }
-        if(singleTableItemTextBoxExist == "2")
-        {
-            thisselctedClassGen.pr2n = "N/A";
-        }
-        if(singleTableItemTextBoxExist == "3")
-        {
-            thisselctedClassGen.pr3n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "4")
-        {
-            thisselctedClassGen.pr4n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "5")
-        {
-            thisselctedClassGen.pr5n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "6")
-        {
-            thisselctedClassGen.pr6n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "7")
-        {
-            thisselctedClassGen.pr7n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "8")
-        {
-            thisselctedClassGen.pr8n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "9")
-        {
-            thisselctedClassGen.pr9n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "10")
-        {
-            thisselctedClassGen.pr10n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "11")
-        {
-            thisselctedClassGen.pr11n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "12")
-        {
-            thisselctedClassGen.pr12n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "13")
-        {
-            thisselctedClassGen.pr13n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "14")
-        {
-            thisselctedClassGen.pr14n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "15")
-        {
-            thisselctedClassGen.pr15n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "16")
-        {
-            thisselctedClassGen.pr16n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "17")
-        {
-            thisselctedClassGen.pr17n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "18")
-        {
-            thisselctedClassGen.pr18n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "19")
-        {
-            thisselctedClassGen.pr19n= "N/A";
-        }
-        if(singleTableItemTextBoxExist == "20")
-        {
-            thisselctedClassGen.pr20n= "N/A";
-        }
-        var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/setAPiMakerInSingleColumn".PostUrlEncodedAsync(new
-        {
-            @PrNumber = thisselctedClassGen.PrNumber,
-            @tableName = thisselctedClassGen.tableName,
-            @pr1n = thisselctedClassGen.pr1n,
-            @pr2n = thisselctedClassGen.pr2n,
-            @pr3n = thisselctedClassGen.pr3n,
-            @pr4n = thisselctedClassGen.pr4n,
-            @pr5n = thisselctedClassGen.pr5n,
-            @pr6n = thisselctedClassGen.pr6n,
-            @pr7n = thisselctedClassGen.pr7n,
-            @pr8n = thisselctedClassGen.pr8n,
-            @pr9n = thisselctedClassGen.pr9n,
-            @pr10n = thisselctedClassGen.pr10n,
-            @pr11n = thisselctedClassGen.pr11n,
-            @pr12n = thisselctedClassGen.pr12n,
-            @pr13n = thisselctedClassGen.pr13n,
-            @pr14n = thisselctedClassGen.pr14n,
-            @pr15n = thisselctedClassGen.pr15n,
-            @pr16n = thisselctedClassGen.pr16n,
-            @pr17n = thisselctedClassGen.pr17n,
-            @pr18n = thisselctedClassGen.pr18n,
-            @pr19n = thisselctedClassGen.pr19n,
-            @pr20n = thisselctedClassGen.pr20n,
-            @ID = thisselctedClassGen.ID
-        })   .ReceiveJson<Response>();
-        allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
-        ShowParameterList(thisselctedClassGen);
-    }
+
     public async Task eidtparameterinTable()
     {
-         
+        submitlbl = "Submitting...";
         string selectedParaName = "";
         for(int i = 0; i < allClassGen.Count; i++)
         {
@@ -784,6 +677,19 @@
                 thisselctedClassGen = allClassGen[i];
             }
         }
+        if(thisParameter == 0)
+        {
+            singleTableItemTextBox = "N/A";
+        }
+        else if(thisParameter == 2)
+        {
+            singleTableItemTextBox += " "+thisParameter + " " + nvarcharChount;
+        }
+        else
+        {
+            singleTableItemTextBox += " "+thisParameter;
+        }
+
         if(singleTableItemTextBoxExist == "1")
         {
             thisselctedClassGen.pr1n = singleTableItemTextBox;
@@ -892,12 +798,17 @@
         })
    .ReceiveJson<Response>();
         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
-        ShowParameterList(thisselctedClassGen);
+        await ShowParameterList(thisselctedClassGen);
         singleTableItemTextBox = "";
         intbtnColor = inactiveColor;
         stringbtnColor = inactiveColor;
         floatbtnColor = inactiveColor;
         doublebtnColor = inactiveColor;
+        submitlbl = "Submit";
+            showNvarchar = "None";
+        singleTableItemTextBox = "";
+        singleTableItemTextBoxExist = "";
+        StateHasChanged();
     }
     public async Task AddparameterInTable()
     {
@@ -913,7 +824,14 @@
                 thisselctedClassGen = allClassGen[i];
             }
         }
-        singleTableItemTextBox += " "+thisParameter;
+        if(thisParameter == 2)
+        {
+            singleTableItemTextBox += " "+thisParameter + " " + nvarcharChount;
+        }
+        else
+        {
+            singleTableItemTextBox += " "+thisParameter;
+        }
         if( thisselctedClassGen.PrNumber== 0)
         {
             thisselctedClassGen.pr1n = singleTableItemTextBox;
@@ -1036,6 +954,7 @@
         floatbtnColor = inactiveColor;
         doublebtnColor = inactiveColor;
         submitlbl = "Submit";
+        showNvarchar = "None";
         StateHasChanged();
     }
     List<string> tblItemList = new List<string>();
