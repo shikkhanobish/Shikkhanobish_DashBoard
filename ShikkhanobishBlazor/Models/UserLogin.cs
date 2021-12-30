@@ -12,5 +12,6 @@ namespace ShikkhanobishBlazor.Models
         public string passWord { get; set; }
         public string type { get; set; }
 
+
     }
 }
