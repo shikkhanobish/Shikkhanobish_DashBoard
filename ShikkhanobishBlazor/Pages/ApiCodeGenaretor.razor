@@ -1,6 +1,7 @@
 ﻿@using Flurl.Http;
 @using ShikkhanobishBlazor.Models
 @using System.Globalization
+@inject IJSRuntime JS
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
 @page "/ApiCodeGenaretor"
 
@@ -247,83 +248,86 @@
                                             </select>
                                      <div class="card" style="display: @showreviewcodedisplay">
                             <div class="card-body">
-                                <div class="form-group row">
-                                    <div class="col-6">
+                                
+                                 <div class="form-group row">
+                                      <div class="col-6">
                                         <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">C#</div>
                                                  <div class="card-body">
                                                      <h5 class="card-title text-white">Class</h5>
-                                                     <p class="card-text"><code>@showMakeClassCode</code></p>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(1))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)showMakeClassCode)</code></p>
                                                  </div>
                                         </div>                              
+                                    </div>
+                                     <div class="col-6">
+                                       <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
+                                            <div class="card-header" style="background-color: #3C3C3C">SQL</div>
+                                                 <div class="card-body">
+                                                     <h5 class="card-title text-white">SQL Table</h5>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(2))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showMakeSQLCode)</code></p>
+                                                 </div>
+                                        </div>   
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
+                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
+                                                 <div class="card-body">
+                                                     <h5 class="card-title text-white">Get Api</h5>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(3))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showGetApiCode)</code></p>
+                                                 </div>
+                                        </div>   
+                                    </div>
+                                   
+                                      <div class="col-6">
+                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
+                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
+                                                 <div class="card-body">
+                                                     <h5 class="card-title text-white">Get With ID Api</h5>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(4))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showGetWIDApiCode)</code></p>
+                                                 </div>
+                                        </div>   
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
+                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
+                                                 <div class="card-body">
+                                                     <h5 class="card-title text-white">Set Api</h5>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(5))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showSetApiCode)</code></p>
+                                                 </div>
+                                        </div>   
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
+                                            <div class="card-header" style="background-color: #3C3C3C">SQL</div>
+                                                 <div class="card-body">
+                                                     <h5 class="card-title text-white">Get Procedure</h5
+                                                         <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(6))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showGetProCode)</code></p>
+                                                 </div>
+                                        </div>   
                                     </div>
                                     <div class="col-6">
                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">SQL</div>
                                                  <div class="card-body">
-                                                     <h5 class="card-title text-white">SQL Table</h5>
-                                                     <p class="card-text"><code>@showMakeSQLCode</code></p>
-                                                 </div>
-                                        </div>   
-                                    </div>
-                                   
-
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-4">
-                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
-                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
-                                                 <div class="card-body">
-                                                     <h5 class="card-title text-white">Get Api</h5>
-                                                     <p class="card-text"><code>@showGetApiCode</code></p>
-                                                 </div>
-                                        </div>   
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
-                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
-                                                 <div class="card-body">
-                                                     <h5 class="card-title text-white">Get With ID Api</h5>
-                                                     <p class="card-text"><code>@showGetWIDApiCode</code></p>
-                                                 </div>
-                                        </div>   
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
-                                            <div class="card-header" style="background-color: #3C3C3C">C#</div>
-                                                 <div class="card-body">
-                                                     <h5 class="card-title text-white">Set Api</h5>
-                                                     <p class="card-text"><code>@showSetApiCode</code></p>
-                                                 </div>
-                                        </div>   
-                                    </div>
-
-                                </div>
-                                 <div class="form-group row">
-                                    <div class="col-4">
-                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
-                                            <div class="card-header" style="background-color: #3C3C3C">SQL</div>
-                                                 <div class="card-body">
-                                                     <h5 class="card-title text-white">Get Procedure</h5>
-                                                     <p class="card-text"><code>@showGetProCode</code></p>
-                                                 </div>
-                                        </div>   
-                                    </div>
-                                    <div class="col-4">
-                                       <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
-                                            <div class="card-header" style="background-color: #3C3C3C">SQL</div>
-                                                 <div class="card-body">
                                                      <h5 class="card-title text-white">Get With ID Precedure</h5>
-                                                     <p class="card-text"><code>@showGetWithIDProCode</code></p>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(7))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showGetWithIDProCode)</code></p>
                                                  </div>
                                         </div>   
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-6">
                                         <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">SQL</div>
                                                  <div class="card-body">
                                                      <h5 class="card-title text-white">Det Precedure</h5>
-                                                     <p class="card-text"><code>@showSetProCode</code></p>
+                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(8))">Copy Code</button>
+                                                     <p class="card-text"><code>@((MarkupString)@showSetProCode)</code></p>
                                                  </div>
                                         </div>   
                                     </div>
@@ -572,6 +576,51 @@
             @ID = id
         })   .ReceiveJson<Response>();
         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
+    }
+    public void copymakeClassCode(int i)
+    {
+        if(i == 1)
+        {
+            string thiscopytext = showMakeClassCode;
+            thiscopytext = thiscopytext.Replace("<br/>","\n");
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", thiscopytext);
+        }
+        if(i == 2)
+        {
+            string thiscopytext = showMakeSQLCode;
+            thiscopytext = thiscopytext.Replace("<br/>","\n");
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", thiscopytext);
+        }
+        if(i == 3)
+        {
+            string thiscopytext = showGetApiCode;
+            thiscopytext = thiscopytext.Replace("<br/>","\n");
+            thiscopytext = thiscopytext.Replace("&lt;","<");
+            thiscopytext = thiscopytext.Replace("&gt;",">");
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", thiscopytext);
+        }
+        if(i == 4)
+        {
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", showGetWIDApiCode);
+        }
+        if(i == 5)
+        {
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", showSetApiCode);
+        }
+        if(i == 6)
+        {
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", showGetProCode);
+        }
+        if(i == 7)
+        {
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", showGetWithIDProCode);
+        }
+        if(i == 8)
+        {
+            JS.InvokeVoidAsync("navigator.clipboard.writeText", showSetProCode);
+        }
+
+        
     }
     public async Task ShowParameterList(ClassGen thisclasgen)
     {
@@ -1356,25 +1405,58 @@
         {
             if(thisClassParameter[i] != "N/A")
             {
-                classCode += "public " + determinevt(thisClassParameter[i]) +" "+ thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} \n";
+                classCode += "public " + determinevt(thisClassParameter[i]) +" "+ thisClassParameter[i].Trim(charsToTrim) + " { get ; set ;} <br/>";
             }
 
 
         }
 
-        classCode += "public string Response  { get ; set ;} \n";
+        classCode += "public string Response  { get ; set ;} <br/>";
 
         showMakeClassCode = "";
         showMakeClassCode = classCode;
         return classCode;
     }
+    public string determinevtsql(string para)
+    {
+        string vt = "";
+        for(int i = 0; i < para.Length; i++){
+            if(para[i] == ' ')
+            {
+                if(para[i+1] == '1')
+                {
+                    vt = "int";
+                }
+                if(para[i+1] == '2')
+                {
+                    vt = "nvarchar(";
+                    for(int j = i+2; j < para.Length; j++)
+                    {
+                        vt += para[j];
+                    }
+                    vt += ")";
+                }
+                if(para[i+1] == '3')
+                {
+                    vt = "float";
+                }
+                if(para[i+1] == '4')
+                {
+                    vt = "float";
+                }
+                break;
+            }
+        }
 
+        return vt;
+
+    }
     public string makeSql(ClassGen thisclass)
     {
         showcodedisplay = "Block";
         thisclass = thissl;
         List<string> thisClassParameter = new List<string>();
-        char[] charsToTrim = { ' ', '1', '2', '3', '4' };
+        char[] charsToTrim = { ' ', '1', '2', '3', '4','5', '6', '7', '8','9' ,'0'};
         thisClassParameter.Add(thisclass.pr1n);
         thisClassParameter.Add(thisclass.pr2n);
         thisClassParameter.Add(thisclass.pr3n);
@@ -1396,45 +1478,20 @@
         thisClassParameter.Add(thisclass.pr19n);
         thisClassParameter.Add(thisclass.pr20n);
 
-        string classCode = "create table " + thisclass.tableName + "(\n";
+        string classCode = "create table " + thisclass.tableName + "(<br/>";
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
-            if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
+            if (i == thisclass.PrNumber - 1)
             {
-                if (i == thisclass.PrNumber - 1)
-                {
-                    classCode += thisClassParameter[i].Trim(charsToTrim) + " int" + "\n";
-                }
-                else
-                {
-                    classCode += thisClassParameter[i].Trim(charsToTrim) + " int" + ",\n";
-                }
+                classCode += thisClassParameter[i].Trim(charsToTrim) + " "+determinevtsql(thisClassParameter[i]) + "<br/>";
             }
-            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
+            else
             {
-                if (i == thisclass.PrNumber - 1)
-                {
-                    classCode += thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + "\n";
-                }
-                else
-                {
-                    classCode += thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + ",\n";
-                }
-            }
-            else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '3' || thisClassParameter[i][thisClassParameter[i].Length - 1] == '4')
-            {
-                if (i == thisclass.PrNumber - 1)
-                {
-                    classCode += thisClassParameter[i] + " float" + "\n";
-                }
-                else
-                {
-                    classCode += thisClassParameter[i] + " float" + ",\n";
-                }
+                classCode += thisClassParameter[i].Trim(charsToTrim) + " "+determinevtsql(thisClassParameter[i]) + ",<br/>";
             }
 
         }
-
+        classCode += ")";
         showMakeSQLCode = "";
         showMakeSQLCode = classCode;
         return classCode;
@@ -1445,7 +1502,7 @@
     public string makeGetProcedure(ClassGen thisClsGen)
     {
         showcodedisplay = "Block";
-        string getProCode = "create procedure get" + thisClsGen.tableName + "\n as begin \n Select * from " + thisClsGen.tableName + "\n end";
+        string getProCode = "create procedure get" + thisClsGen.tableName + "<br/> as begin <br/> Select * from " + thisClsGen.tableName + "<br/> end";
 
         showGetProCode = "";
         showGetProCode = getProCode;
@@ -1481,10 +1538,10 @@
         thisClassParameter.Add(thisclass.pr19n);
         thisClassParameter.Add(thisclass.pr20n);
         string proCode = "";
-        proCode = "create procedure get" + thisclass.tableName + "WithID\n";
-        proCode += " @" + thisClassParameter[0].Trim(charsToTrim) + " int" + "\n";
+        proCode = "create procedure get" + thisclass.tableName + "WithID<br/>";
+        proCode += " @" + thisClassParameter[0].Trim(charsToTrim) + " int" + "<br/>";
 
-        proCode += "as begin \n Select ( ";
+        proCode += "as begin <br/> Select ( ";
 
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
@@ -1498,7 +1555,7 @@
             }
 
         }
-        proCode += ") from " + thisclass.tableName + " \n Where " + thisClassParameter[0].Trim(charsToTrim) + " = @" + thisClassParameter[0].Trim(charsToTrim) + "  \nend";
+        proCode += ") from " + thisclass.tableName + " <br/> Where " + thisClassParameter[0].Trim(charsToTrim) + " = @" + thisClassParameter[0].Trim(charsToTrim) + "  <br/>end";
 
         showGetWithIDProCode = "";
         showGetWithIDProCode = proCode;
@@ -1535,47 +1592,47 @@
         thisClassParameter.Add(thisclass.pr20n);
 
         string apiCode = "";
-        apiCode = "[AcceptVerbs(\"GET\", \"POST\")]\npublic List<" + thisclass.tableName + "> get" + thisclass.tableName + "()\n{\nList<" + thisclass.tableName + "> objRList" + " = new List<" + thisclass.tableName + ">();";
+        apiCode = "[System.Web.Http.AcceptVerbs(\"GET\", \"POST\")]<br/>public List&lt;" + thisclass.tableName + "> get" + thisclass.tableName + "()<br/>{<br/>List&lt;" + thisclass.tableName + "&gt; objRList" + " = new List&lt;" + thisclass.tableName + "&gt;();";
 
-        apiCode += "\ntry \n" +
-                "{\n" +
-                "Connection();\n" +
-                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "\", conn);\n" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;\n";
-        apiCode += "conn.Open();\n" +
-                   "SqlDataReader reader = cmd.ExecuteReader();\n";
-        apiCode += "while (reader.Read())\n" +
-        "{\n";
-        apiCode += thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();\n";
+        apiCode += "<br/>try <br/>" +
+                "{<br/>" +
+                "Connection();<br/>" +
+                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "\", conn);<br/>" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;<br/>";
+        apiCode += "conn.Open();<br/>" +
+                   "SqlDataReader reader = cmd.ExecuteReader();<br/>";
+        apiCode += "while (reader.Read())<br/>" +
+        "{<br/>";
+        apiCode += thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();<br/>";
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
             if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
             {
-                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); \n";
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); <br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objAdd." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
         }
-        apiCode += "objRList.Add(objAdd);\n}\n" +
-                "conn.Close();\n" +
-                "}\n" +
-                "catch (Exception ex)\n" +
-                "{\n" +
-                thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();\n" +
-                "objAdd.Response = ex.Message;\n" +
-                "objRList.Add(objAdd);\n" +
-                "}\n" +
-                "retrun objRList;\n" +
-                "}\n";
+        apiCode += "objRList.Add(objAdd);<br/>}<br/>" +
+                "conn.Close();<br/>" +
+                "}<br/>" +
+                "catch (Exception ex)<br/>" +
+                "{<br/>" +
+                thisclass.tableName + " objAdd" + " = new " + thisclass.tableName + "();<br/>" +
+                "objAdd.Response = ex.Message;<br/>" +
+                "objRList.Add(objAdd);<br/>" +
+                "}<br/>" +
+                "return objRList;<br/>" +
+                "}<br/>";
 
         showGetApiCode = "";
         showGetApiCode = apiCode;
@@ -1610,46 +1667,46 @@
         thisClassParameter.Add(thisclass.pr20n);
 
         string apiCode = "";
-        apiCode = "[AcceptVerbs(\"GET\", \"POST\")]\npublic " + thisclass.tableName + " get" + thisclass.tableName + "WithID(" + thisclass.tableName + " obj)\n{\n" + thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();";
+        apiCode = "[AcceptVerbs(\"GET\", \"POST\")]<br/>public " + thisclass.tableName + " get" + thisclass.tableName + "WithID(" + thisclass.tableName + " obj)<br/>{<br/>" + thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();";
 
-        apiCode += "\ntry \n" +
-                "{\n" +
-                "Connection();\n" +
-                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "WithID\", conn);\n" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;\n" +
-                "cmd.Parameters.AddWithValue(\"@" + thisClassParameter[0].Trim(charsToTrim) + "\", obj." + thisClassParameter[0].Trim(charsToTrim) + ");\n";
-        apiCode += "conn.Open();\n" +
-                   "SqlDataReader reader = cmd.ExecuteReader();\n";
-        apiCode += "while (reader.Read())\n" +
-        "{\n";
+        apiCode += "<br/>try <br/>" +
+                "{<br/>" +
+                "Connection();<br/>" +
+                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "WithID\", conn);<br/>" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;<br/>" +
+                "cmd.Parameters.AddWithValue(\"@" + thisClassParameter[0].Trim(charsToTrim) + "\", obj." + thisClassParameter[0].Trim(charsToTrim) + ");<br/>";
+        apiCode += "conn.Open();<br/>" +
+                   "SqlDataReader reader = cmd.ExecuteReader();<br/>";
+        apiCode += "while (reader.Read())<br/>" +
+        "{<br/>";
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
             if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '1')
             {
-                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); \n";
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"].ToString(); <br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
-                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);\n";
+                apiCode += "objR." + thisClassParameter[i].Trim(charsToTrim) + " = Convert.ToInt32(reader[\"" + thisClassParameter[i].Trim(charsToTrim) + "\"]);<br/>";
             }
         }
-        apiCode += "\n}\n" +
-                "conn.Close();\n" +
-                "}\n" +
-                "catch (Exception ex)\n" +
-                "{\n" +
-                thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();\n" +
-                "objR.Response = ex.Message;\n" +
-                "}\n" +
-                "retrun objR;\n" +
-                "}\n";
+        apiCode += "<br/>}<br/>" +
+                "conn.Close();<br/>" +
+                "}<br/>" +
+                "catch (Exception ex)<br/>" +
+                "{<br/>" +
+                thisclass.tableName + " objR" + " = new " + thisclass.tableName + "();<br/>" +
+                "objR.Response = ex.Message;<br/>" +
+                "}<br/>" +
+                "retrun objR;<br/>" +
+                "}<br/>";
 
         showGetWIDApiCode = "";
         showGetWIDApiCode = apiCode;
@@ -1684,7 +1741,7 @@
         thisClassParameter.Add(thisclass.pr18n);
         thisClassParameter.Add(thisclass.pr19n);
         thisClassParameter.Add(thisclass.pr20n);
-        string getProCode = "create procedure set" + thisclass.tableName + "\n";
+        string getProCode = "create procedure set" + thisclass.tableName + "<br/>";
 
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
@@ -1692,37 +1749,37 @@
             {
                 if (i == thisclass.PrNumber - 1)
                 {
-                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + "\n";
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + "<br/>";
                 }
                 else
                 {
-                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + ",\n";
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " int" + ",<br/>";
                 }
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '2')
             {
                 if (i == thisclass.PrNumber - 1)
                 {
-                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + "\n";
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + "<br/>";
                 }
                 else
                 {
-                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + ",\n";
+                    getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + " nvarchar(50)" + ",<br/>";
                 }
             }
             else if (thisClassParameter[i][thisClassParameter[i].Length - 1] == '3' || thisClassParameter[i][thisClassParameter[i].Length - 1] == '4')
             {
                 if (i == thisclass.PrNumber - 1)
                 {
-                    getProCode += "@" + thisClassParameter[i] + " float" + "\n";
+                    getProCode += "@" + thisClassParameter[i] + " float" + "<br/>";
                 }
                 else
                 {
-                    getProCode += "@" + thisClassParameter[i] + " float" + ",\n";
+                    getProCode += "@" + thisClassParameter[i] + " float" + ",<br/>";
                 }
             }
         }
-        getProCode += "as begin \n Insert Into " + thisclass.tableName + "(";
+        getProCode += "as begin <br/> Insert Into " + thisclass.tableName + "(";
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
             if (i == thisclass.PrNumber - 1)
@@ -1734,7 +1791,7 @@
                 getProCode += thisClassParameter[i].Trim(charsToTrim) + ", ";
             }
         }
-        getProCode += ")\n values (";
+        getProCode += ")<br/> values (";
         for (int i = 0; i < thisclass.PrNumber; i++)
         {
             if (i == thisclass.PrNumber - 1)
@@ -1746,7 +1803,7 @@
                 getProCode += "@" + thisClassParameter[i].Trim(charsToTrim) + ", ";
             }
         }
-        getProCode += ")\nend;";
+        getProCode += ")<br/>end;";
         showSetProCode = "";
         showSetProCode = getProCode;
         return getProCode;
