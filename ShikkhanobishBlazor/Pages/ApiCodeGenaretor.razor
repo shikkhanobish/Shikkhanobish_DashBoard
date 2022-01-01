@@ -254,8 +254,11 @@
                                         <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">C#</div>
                                                  <div class="card-body">
-                                                     <h5 class="card-title text-white">Class</h5>
-                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(1))">Copy Code</button>
+                                                     <div class="card-title form-group row">
+                                                         <h5 class=" text-white col-6">Class</h5>
+                                                         <button class="col-6" @onclick="@(() =>copymakeClassCode(1))" style="background: none;border:none; color: #5EFBB9; text-align: end; font-size: 12px"> Copy Code</button><br />
+                                                     </div>
+                                                
                                                      <p class="card-text"><code>@((MarkupString)showMakeClassCode)</code></p>
                                                  </div>
                                         </div>                              
@@ -264,8 +267,10 @@
                                        <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">SQL</div>
                                                  <div class="card-body">
-                                                     <h5 class="card-title text-white">SQL Table</h5>
-                                                     <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(2))">Copy Code</button>
+                                                     <div class="card-title form-group row">
+                                                         <h5 class=" text-white col-6">SQL Table</h5>
+                                                         <button class="col-6" @onclick="@(() =>copymakeClassCode(2))" style="background: none;border:none; color: #5EFBB9; text-align: end; font-size: 12px"> Copy Code</button><br />
+                                                     </div>                                               
                                                      <p class="card-text"><code>@((MarkupString)@showMakeSQLCode)</code></p>
                                                  </div>
                                         </div>   
@@ -276,20 +281,27 @@
                                                  <div class="card-body">
                                                      <div class="card-title form-group row">
                                                           <h5 class=" text-white col-6">Get Api (List)</h5>
-                                                          <button class="col-6" @onclick="@(() =>copymakeClassCode(3))" style="background: none;border:none; color: #5EFBB9; text-align: end"> Copy Code</button><br />
+                                                          <button class="col-6" @onclick="@(() =>copymakeClassCode(3))" style="background: none;border:none; color: #5EFBB9; text-align: end; font-size: 12px"> Copy Code</button><br />
                                                      </div>
+                                                    <div class="card" style="background: #3D3D3D">
+                                                        <div class="card-body">
+                                                            <input class="input-group-text col-12 text-white" style="background:none" placeholder="Api Name" @bind="listgetapicodeapiname" /><br />
+                                                             <select class="btn btn-purple col-12" style="background: #3D3D3D; border-color: white; color: white " id="class" @onchange="addparatolistgetapi">
+                                                                <option class="">Add Parameter</option>
+                                                                @foreach (var item in thisselctedCleanParameter)
+                                                                 {
+                                                                    if (item != "N/A")
+                                                                    {   
+                                                                        <option value="@item">@item</option>
+                                                                    }
 
+                                                                 }
+                                                             </select>                                                                                                                                
+                                                            <br />
+                                                            <br />
+                                                            <button class="col-4" style="background-color: #3D3D3D; color: #00FFB2; border-color: #00FFB2 " @onclick="updategetlistapicode">Update Code</button>
+                                                        </div>
                                                     
-                                                      <input class="input-group-text col-12 text-white" style="background:none" placeholder="Api Name"/><br />
-                                                     <div class="form-group row">                                    
-                                                         <select class="btn btn-purple col-8" style="" id="class">                                               
-                                                <option class="">Select Parameter</option>
-                                                @foreach (var item in thisselctedCleanParameter)
-                                                {
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                                         <button class="btn btn-success col-4" @onclick="@(() =>copymakeClassCode(4))">Add Parameter</button>
                                                      </div>
                                                      <p class="card-text"><code>@((MarkupString)@showGetApiCode)</code></p>
                                                  </div>
@@ -299,24 +311,35 @@
                                       <div class="col-6">
                                         <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">C#</div>
-                                                 <div class="card-body">
-                                                     <h5 class="card-title text-white">Get Api (Non List)</h5>
-                                                    
-                                                     <div class="form-group row">
-                                                         <button class="btn btn-success col-4" @onclick="@(() =>copymakeClassCode(4))">Copy Code</button>
-                                                         <select class="btn btn-purple col-4" style="" id="class">                                               
-                                                <option class="">Select Parameter</option>
-                                                @foreach (var item in thisselctedCleanParameter)
-                                                {
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                                         <button class="btn btn-success col-4" @onclick="@(() =>copymakeClassCode(4))">Add Parameter</button>
-                                                     </div>
+                                            <div class="card-body">
+                                                <div class="card-title form-group row">
+                                                    <h5 class=" text-white col-6">Get Api (List)</h5>
+                                                    <button class="col-6" @onclick="@(() =>copymakeClassCode(4))" style="background: none;border:none; color: #5EFBB9; text-align: end; font-size: 12px"> Copy Code</button><br />
+                                                </div>
+                                                <div class="card" style="background: #3D3D3D">
+                                                    <div class="card-body">
+                                                        <input class="input-group-text col-12 text-white" style="background:none" placeholder="Api Name" @bind="listgetapicodeapiname" /><br />
+                                                        <select class="btn btn-purple col-12" style="background: #3D3D3D; border-color: white; color: white " id="class" @onchange="addparatolistgetapi">
+                                                            <option class="">Add Parameter</option>
+                                                            @foreach (var item in thisselctedCleanParameter)
+                                                            {
+                                                                if (item != "N/A")
+                                                                {
+                                                                    <option value="@item">@item</option>
+                                                                }
 
-                                                     
-                                                     <p class="card-text"><code>@((MarkupString)@showGetWIDApiCode)</code></p>
-                                                 </div>
+                                                            }
+                                                        </select>
+                                                        <br />
+                                                        <br />
+                                                        <button class="col-4" style="background-color: #3D3D3D; color: #00FFB2; border-color: #00FFB2 " @onclick="updategetlistapicode">Update Code</button>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <p class="card-text"><code>@((MarkupString)@showGetWIDApiCode)</code></p>
+                                            </div>
                                         </div>   
                                     </div>
                                     <div class="col-6">
@@ -353,7 +376,7 @@
                                         <div class="card text-white mb-3 border-success shadow-lg rounded" style="background-color: #323232">
                                             <div class="card-header" style="background-color: #3C3C3C">SQL</div>
                                                  <div class="card-body">
-                                                     <h5 class="card-title text-white">Det Precedure</h5>
+                                                     <h5 class="card-title text-white">Set Precedure</h5>
                                                      <button class="btn btn-success" @onclick="@(() =>copymakeClassCode(8))">Copy Code</button>
                                                      <p class="card-text"><code>@((MarkupString)@showSetProCode)</code></p>
                                                  </div>
@@ -558,6 +581,8 @@
     string showLoadingRemoveTask;
     string selectedMCQList;
     string singleTableItemTextBox;
+    string listgetapicodeapiname;
+    List<string> addparatogetlistapiparaname = new List<string>();
     List<string> classList = new List<string>();
     List<string> ShowParameter = new List<string>();
     List<string> operatorListSelect = new List<string>();
@@ -598,9 +623,14 @@
         string redirectURL = "/";
         //nvi.NavigateTo(redirectURL);
     }
+    public void updategetlistapicode()
+    {
+        makeGetApi(thissl , listgetapicodeapiname);
+        StateHasChanged();
+    }
     public async Task RemoveClass(int id){
         var res1 = await "https://api.shikkhanobish.com/api/ApiMaker/deleteClass".PostUrlEncodedAsync(new
-        {          
+        {
             @ID = id
         })   .ReceiveJson<Response>();
         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
@@ -748,7 +778,7 @@
                 }
 
                 break;
-            } 
+            }
         }
         return cleaned;
     }
@@ -1074,7 +1104,7 @@
 
 
         allClassGen = await "https://api.shikkhanobish.com/api/ApiMaker/getAPiMaker".GetJsonAsync<List<ClassGen>>();
-        await ShowParameterList(thisselctedClassGen);        
+        await ShowParameterList(thisselctedClassGen);
         singleTableItemTextBox = "";
         intbtnColor = inactiveColor;
         stringbtnColor = inactiveColor;
@@ -1364,7 +1394,7 @@
         showreviewcodedisplay = "Block";
         makeClass(thissl);
         makeSql(thissl);
-        makeGetApi(thissl);
+        makeGetApi(thissl,"");
         makeGetApiWithID(thissl);
         MakeSetApi(thissl);
         makeGetProcedure(thissl);
@@ -1466,6 +1496,22 @@
         showMakeClassCode = "";
         showMakeClassCode = classCode;
         return classCode;
+    }
+    private void addparatolistgetapi(ChangeEventArgs ev)
+    {
+        bool add = true;
+        for(int i = 0; i < addparatogetlistapiparaname.Count; i++)
+        {
+            if(addparatogetlistapiparaname[i] == ev.Value.ToString())
+            {
+                add = false;
+            }
+        }
+        if (add)
+        {
+            addparatogetlistapiparaname.Add(ev.Value.ToString());
+        }
+
     }
     public string determinevtsql(string para)
     {
@@ -1643,7 +1689,7 @@
         return vt;
 
     }
-    public string makeGetApi(ClassGen thisclass)
+    public string makeGetApi(ClassGen thisclass, string apiNamePara)
     {
 
         showcodedisplay = "Block";
@@ -1671,12 +1717,25 @@
         thisClassParameter.Add(thisclass.pr20n);
 
         string apiCode = "";
-        apiCode = "[System.Web.Http.AcceptVerbs(\"GET\", \"POST\")]<br/>public List&lt;" + thisclass.tableName + "> get" + thisclass.tableName + "()<br/>{<br/>List&lt;" + thisclass.tableName + "&gt; objRList" + " = new List&lt;" + thisclass.tableName + "&gt;();";
+        string apiName = "";
+        if (apiNamePara == "" || apiNamePara == null)
+        {
+            apiName = "get" + thisclass.tableName;
+        }
+        else
+        {
+            apiName = apiNamePara;
+        }
+        apiCode = "[System.Web.Http.AcceptVerbs(\"GET\", \"POST\")]<br/>public List&lt;" + thisclass.tableName + "> " + apiName + "()<br/>{<br/>List&lt;" + thisclass.tableName + "&gt; objRList" + " = new List&lt;" + thisclass.tableName + "&gt;();";
 
         apiCode += "<br/>try <br/>" +
                 "{<br/>" +
                 "Connection();<br/>" +
-                "SqlCommand cmd = new SqlCommand(\"" + "get" + thisclass.tableName + "\", conn);<br/>" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;<br/>";
+                "SqlCommand cmd = new SqlCommand(\""  + apiName + "\", conn);<br/>" + "cmd.CommandType = System.Data.CommandType.StoredProcedure;<br/>";
+        for (int i = 0; i< addparatogetlistapiparaname.Count; i++){
+            apiCode += "cmd.Parameters.AddWithValue(\"@" + addparatogetlistapiparaname[i].Trim(charsToTrim) + "\", obj." + addparatogetlistapiparaname[i].Trim(charsToTrim) + ");<br/>";
+        }
+        
         apiCode += "conn.Open();<br/>" +
                    "SqlDataReader reader = cmd.ExecuteReader();<br/>";
         apiCode += "while (reader.Read())<br/>" +
