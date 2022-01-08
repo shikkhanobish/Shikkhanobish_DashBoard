@@ -790,6 +790,7 @@
         await GetALlChapter();
         userName = await oLocalStore.GetItemAsync<string>("name");
         pass = await oLocalStore.GetItemAsync<string>("passWord");
+        StateHasChanged();
     }
 
     public async Task GetLoginInfo()

@@ -191,6 +191,11 @@
                                             <div class="text-center p-3">
                                                 <h2 class="mt-2"><b>@pendingQues</b></h2>
                                                 <p class="text-muted mb-0">Pending</p>
+                                                <button class="btn btn-success" @onclick="automateAccept">Automate Accept A: @acceptedpendingqs  D: @declineedpendingqs</button><br/><br/>
+                                                
+                                                <div class="progress" style="@shpwpendinginfo">
+                                                    <div class="progress-bar" role="progressbar" style="width: @pendingprgs%" aria-valuenow="@pendingprgs" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -361,30 +366,7 @@
                         </div>
                         <div class="col-md-2">
 
-                            <div class="table-responsive">
-
-                                <table class="table table-bordered" style="text-align:center; ">
-                                    <thead style="color: black; font-weight: bold; font-size: 10px;">
-                                        <tr>
-                                            <th>Matching</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="font-size: 12px;font-weight:bold;">
-                                        @foreach (var item in allMatchRate)
-                                        {
-                                            <tr style="height: 150px;margin-top:30px;">
-                                                <td style="padding-top: 30px;color:@item.colorMatchRate">
-                                                    @item.MatchRate
-                                                    <label style="font-size: 15px">@item.MatchLbl</label>
-                                                </td>
-
-                                            </tr>
-
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
+                           
                         </div>
                     </div>
 
@@ -465,14 +447,14 @@
     int dEOCount1;
     int dEOCount2;
     int dEOCount3;
-
-
+    string acceptedpendingqs { get; set; }
+    string declineedpendingqs { get; set; }
     int countApproved;
     int countNotApproved;
     int countPending;
     int teachID;
-
-
+    string shpwpendinginfo { get; set; }
+    double pendingprgs { get; set; }
     int totalQues;
     int approvedQues;
     int notapprovedQues;
@@ -499,6 +481,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        declineedpendingqs = "0";
+        acceptedpendingqs = "0";
+        shpwpendinginfo = "None";
         poputaeDateList();
         teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
 
@@ -599,7 +584,44 @@
         string redirectURL = "/";
         nvi.NavigateTo(redirectURL);
     }
+    public async Task automateAccept()
+    {
+        pendingprgs = 0;
+        shpwpendinginfo = "Block";
+        declineedpendingqs = "";
+        acceptedpendingqs = "";
+        StateHasChanged();
+        int a = 0,d = 0;
+        for(int i =0; i < qList.Count; i++)
+        {
+            var rate = CheckEverySungleQS(qList[i]);
 
+            if((rate.MatchRate == 100 && rate.colorMatchRate != "#BEB60D") || rate.MatchRate >= 95)
+            {
+                qList[i].review = 2;
+                d++;
+                await Task.Run(() => declineedpendingqs = "" + d);
+                StateHasChanged();
+            }
+            else
+            {
+                qList[i].review = 1;
+                a++;
+                await Task.Run(() => acceptedpendingqs = "" + a);
+                StateHasChanged();
+            }
+            await Task.Run(() => pendingprgs = (100 * i) / qList.Count);
+
+        }
+        await Task.Run( () => declineedpendingqs = "Refreshing");
+        await Task.Run(() => acceptedpendingqs = "Refreshing");
+        Submit();
+        await Task.Run(async () => await Refresh());
+        shpwpendinginfo = "None";
+        await Task.Run(() => declineedpendingqs = "");
+        await Task.Run(() => acceptedpendingqs = "");
+        StateHasChanged();
+    }
     public async Task acceptPendingQues(Question ques)
     {
 
@@ -618,7 +640,7 @@
         }
         qList.Clear();
         qList = newqs;
-        checkSimilarity(ques);
+        //checkSimilarity(ques);
 
     }
     public async Task declinePendingQues(Question ques)
@@ -639,7 +661,7 @@
         }
         qList.Clear();
         qList = newqs;
-        checkSimilarity(ques);
+        //checkSimilarity(ques);
     }
     public void checkSimilarity(Question ques)
     {
@@ -877,10 +899,10 @@
             }
         }
         qList.Clear();
-        await Refresh();
+        //await Refresh();
         await InvokeAsync(StateHasChanged);
     }
-    public void CheckEverySungleQS(Question qs)
+    public MatchingRate CheckEverySungleQS(Question qs)
     {
 
         List<double> parcentList = new List<double>();
@@ -1037,7 +1059,7 @@
         }
         allMatchRate.Add(mr);
         doneQSList.Add(qs.questionID);
-
+        return mr;
     }
 
     double CalculateSimilarity(string source, string target)
