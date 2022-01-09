@@ -590,6 +590,9 @@
                     {
                         if (thisopTask[k].userID == thList[j].teacherID)
                         {
+                            //Work Herr
+                            //Sort Only december question from THList
+                            //Then check ChapterID with Task
                             CultureInfo culture = new CultureInfo("en-US");
                             DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
                             DateTime TaskDateFormatSt = DateTime.ParseExact(thisopTask[k].startTime, "MM/dd/yyyy hh:mm tt", culture);
@@ -602,11 +605,12 @@
                             {
                                 TaskDateFormatEnd = DateTime.ParseExact(thisopTask[k + 1].startTime, "MM/dd/yyyy hh:mm tt", culture);
                             }
-
+                            //chapterID of THL && CHapterID of TaskList
                             if ( TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
                             {
                                 thisopTask[k].submitted++;
                             }
+                            //Work Here
                         }
 
                     }
@@ -620,7 +624,7 @@
 
                 }
 
-                
+
                 ////// Active Define
                 var lastActive = DateTime.ParseExact(thisopTask[0].startTime, "MM/dd/yyyy hh:mm tt", culturen);
                 int indexID = 0;
