@@ -579,50 +579,12 @@
                         thisopTask.Add(thisOpList[k]);
                     }
                 }
-                ////// submit count
-                List<dataentryOperatorTask> SortedListN = new List<dataentryOperatorTask>();
-                SortedListN = thisopTask.OrderBy(x => x.startTime).ToList();
-                thisopTask = SortedListN;
-                int submitted = 0;
-                for (int k = 0; k < thisopTask.Count; k++)
-                {
-                    for (int j = 0; j < thList.Count; j++)
-                    {
-                        if (thisopTask[k].userID == thList[j].teacherID)
-                        {
-                            //Work Herr
-                            //Sort Only december question from THList
-                            //Then check ChapterID with Task
-                            CultureInfo culture = new CultureInfo("en-US");
-                            DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                            DateTime TaskDateFormatSt = DateTime.ParseExact(thisopTask[k].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            DateTime TaskDateFormatEnd = new DateTime();
-                            if (k == thisopTask.Count - 1)
-                            {
-                                TaskDateFormatEnd = DateTime.Now;
-                            }
-                            else
-                            {
-                                TaskDateFormatEnd = DateTime.ParseExact(thisopTask[k + 1].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            }
-                            //chapterID of THL && CHapterID of TaskList
-                            if ( TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
-                            {
-                                thisopTask[k].submitted++;
-                            }
-                            //Work Here
-                        }
 
-                    }
-                    for (int l = 0; l < thisOpList.Count; l++)
-                    {
-                        if (thisOpList[l].taskID == thisopTask[k].taskID)
-                        {
-                            thisOpList[l].submitted = thisopTask[k].submitted;
-                        }
-                    }
 
-                }
+
+
+
+
 
 
                 ////// Active Define
@@ -641,7 +603,37 @@
             }
 
         }
-        for(int i = 0; i < thisOpList.Count; i++)
+        for (int l = 0; l < operatorList.Count; l++)
+        {
+            List<int> listofTHisOPQuestionID = new List<int>();
+            for (int k = 0; k < quesList.Count; k++)
+            {
+                if (operatorList[l].chapterID == quesList[k].chapterID)
+                {
+                    listofTHisOPQuestionID.Add(quesList[k].questionID);
+                }
+            }
+            CultureInfo culture = new CultureInfo("en-US");
+            DateTime TaskDateFormatSt = DateTime.ParseExact(operatorList[l].startTime, "MM/dd/yyyy hh:mm tt", culture);
+            for (int p = 0; p < thList.Count; p++)
+            {
+                for (int o = 0; o < listofTHisOPQuestionID.Count; o++)
+                {
+                    if (listofTHisOPQuestionID[o] == thList[p].questionID)
+                    {
+                        DateTime HistoryDateFormat = DateTime.ParseExact(thList[p].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                        if (HistoryDateFormat >= TaskDateFormatSt)
+                        {
+                            thisOpList[l].submitted++;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+        for (int i = 0; i < thisOpList.Count; i++)
         {
 
             if (thisOpList[i].reMain < 0)
