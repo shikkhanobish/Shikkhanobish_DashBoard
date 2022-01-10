@@ -579,50 +579,6 @@
                         thisopTask.Add(thisOpList[k]);
                     }
                 }
-                ////// submit count
-                List<dataentryOperatorTask> SortedListN = new List<dataentryOperatorTask>();
-                SortedListN = thisopTask.OrderBy(x => x.startTime).ToList();
-                thisopTask = SortedListN;
-                int submitted = 0;
-                for (int k = 0; k < thisopTask.Count; k++)
-                {
-                    for (int j = 0; j < thList.Count; j++)
-                    {
-                        if (thisopTask[k].userID == thList[j].teacherID)
-                        {
-                            //Work Herr
-                            //Sort Only december question from THList
-                            //Then check ChapterID with Task
-                            CultureInfo culture = new CultureInfo("en-US");
-                            DateTime HistoryDateFormat = DateTime.ParseExact(thList[j].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                            DateTime TaskDateFormatSt = DateTime.ParseExact(thisopTask[k].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            DateTime TaskDateFormatEnd = new DateTime();
-                            if (k == thisopTask.Count - 1)
-                            {
-                                TaskDateFormatEnd = DateTime.Now;
-                            }
-                            else
-                            {
-                                TaskDateFormatEnd = DateTime.ParseExact(thisopTask[k + 1].startTime, "MM/dd/yyyy hh:mm tt", culture);
-                            }
-                            //chapterID of THL && CHapterID of TaskList
-                            if ( TaskDateFormatSt < HistoryDateFormat && TaskDateFormatEnd > HistoryDateFormat)
-                            {
-                                thisopTask[k].submitted++;
-                            }
-                            //Work Here
-                        }
-
-                    }
-                    for (int l = 0; l < thisOpList.Count; l++)
-                    {
-                        if (thisOpList[l].taskID == thisopTask[k].taskID)
-                        {
-                            thisOpList[l].submitted = thisopTask[k].submitted;
-                        }
-                    }
-
-                }
 
 
                 ////// Active Define
@@ -641,12 +597,48 @@
             }
 
         }
-        for(int i = 0; i < thisOpList.Count; i++)
+        for (int l = 0; l < operatorList.Count; l++)
+        {
+            List<int> listofTHisOPQuestionID = new List<int>();
+            for (int k = 0; k < quesList.Count; k++)
+            {
+                if (operatorList[l].chapterID == quesList[k].chapterID)
+                {
+                    listofTHisOPQuestionID.Add(quesList[k].questionID);
+                }
+            }
+            CultureInfo culture = new CultureInfo("en-US");
+            DateTime TaskDateFormatSt = DateTime.ParseExact(operatorList[l].startTime, "MM/dd/yyyy hh:mm tt", culture);
+            for (int p = 0; p < thList.Count; p++)
+            {
+                for (int o = 0; o < listofTHisOPQuestionID.Count; o++)
+                {
+                    if (listofTHisOPQuestionID[o] == thList[p].questionID)
+                    {
+                        DateTime HistoryDateFormat = DateTime.ParseExact(thList[p].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                        if (HistoryDateFormat >= TaskDateFormatSt)
+                        {
+                            thisOpList[l].submitted++;
+
+                        }
+                    }
+
+                }
+
+            }
+
+
+        }
+        for (int i = 0; i < thisOpList.Count; i++)
         {
 
-            if (thisOpList[i].reMain < 0)
+            if (thisOpList[i].submitted > 100)
             {
                 thisOpList[i].reMain = 0;
+            }
+            else
+            {
+                thisOpList[i].reMain = 100 - thisOpList[i].submitted ;
             }
             thisOpList[i].statusColor = "#979797";
             if (thisOpList[i].submitted >= 100)
@@ -809,14 +801,106 @@
     }
     public void CopyNum()
     {
+        //selectedMCQList = "";
+        //numList = new List<int>();
+        //Random rn = new Random();
+
+        //List<int> list = new List<int>();
+
+        //int totalChQNum = Convert.ToInt32(totalChapQues);
+        //int reqNum = Convert.ToInt32(limit);
+        //while (list.Count <= reqNum)
+        //{
+        //    int thisNum = rn.Next(1, totalChQNum);
+        //    bool match = false;
+        //    for (int j = 0; j < list.Count; j++)
+        //    {
+        //        if (list[j] == thisNum)
+        //        {
+        //            match = true;
+        //            break;
+        //        }
+        //    }
+        //    if (!match)
+        //    {
+        //        list.Add(thisNum);
+        //    }
+        //}
+        //numList = list;
+
+
+        //List<int> SortedList = new List<int>();
+        //SortedList = numList.OrderBy(x => x).ToList();
+        //numList = SortedList;
+        //for (int i = 0; i < numList.Count; i++)
+        //{
+        //    if(i == numList.Count - 1)
+        //    {
+        //        selectedMCQList = selectedMCQList + numList[i];
+        //    }
+        //    else
+        //    {
+        //        selectedMCQList = selectedMCQList + numList[i] + " , ";
+        //    }
+
+        //}
+    }
+    public async Task assignTask()
+    {
+        //    showLoading = "Block";
+        //    if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
+        //    {
+        //        BtnString = "Connecting with server...";
+        //        Random random = new Random();
+        //        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        //        var id = RandomString(50);
+        //        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+        //        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+        //        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+
+        //        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+        //        {
+        //            userID = selecteOPID,
+        //            MCQNumbers = selectedMCQList + " Link#" + Link,
+        //            date = thisd,
+        //            chapterID = SelectedChapterID,
+        //            taskID = id,
+        //            startTime = sd,
+        //            endTime = ed
+        //        })
+        //.ReceiveJson<Response>();
+        //        RefreshList();
+        //        await GetOperatorInfo();
+        //        BtnString = "Done!";
+        //        await Task.Delay(3000);
+        //        BtnString = "Assign Task";
+        //    }
+        //    else
+        //    {
+        //        BtnString = "Please fill up every info";
+        //        await Task.Delay(3000);
+        //        BtnString = "Assign Task";
+        //    }
+        //    showLoading = "None";
+    }
+    private  Random random = new Random();
+    public string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    public async Task AutomatedTaskAssigner()
+    {
         selectedMCQList = "";
         numList = new List<int>();
         Random rn = new Random();
 
         List<int> list = new List<int>();
 
-        int totalChQNum = Convert.ToInt32(totalChapQues);
-        int reqNum = Convert.ToInt32(limit);
+        int totalChQNum = 300;
+        int reqNum = 100;
         while (list.Count <= reqNum)
         {
             int thisNum = rn.Next(1, totalChQNum);
@@ -842,7 +926,7 @@
         numList = SortedList;
         for (int i = 0; i < numList.Count; i++)
         {
-            if(i == numList.Count - 1)
+            if (i == numList.Count - 1)
             {
                 selectedMCQList = selectedMCQList + numList[i];
             }
@@ -852,51 +936,40 @@
             }
 
         }
-    }
-    public async Task assignTask()
-    {
-        showLoading = "Block";
-        if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
-        {
-            BtnString = "Connecting with server...";
-            Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var id = RandomString(50);
-            string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-            string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-            string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
-            var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
-            {
-                userID = selecteOPID,
-                MCQNumbers = selectedMCQList + " Link#" + Link,
-                date = thisd,
-                chapterID = SelectedChapterID,
-                taskID = id,
-                startTime = sd,
-                endTime = ed
-            })
-    .ReceiveJson<Response>();
-            RefreshList();
-            await GetOperatorInfo();
-            BtnString = "Done!";
-            await Task.Delay(3000);
-            BtnString = "Assign Task";
-        }
-        else
+
+        if ()
         {
-            BtnString = "Please fill up every info";
-            await Task.Delay(3000);
-            BtnString = "Assign Task";
+            if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
+            {
+                BtnString = "Connecting with server...";
+                Random random = new Random();
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                var id = RandomString(50);
+                string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+                string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+
+                var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+                {
+                    userID = selecteOPID,
+                    MCQNumbers = selectedMCQList + " Link#" + Link,
+                    date = thisd,
+                    chapterID = SelectedChapterID,
+                    taskID = id,
+                    startTime = sd,
+                    endTime = ed
+                })
+        .ReceiveJson<Response>();
+                RefreshList();
+                await GetOperatorInfo();
+                //BtnString = "Done!";
+                await Task.Delay(3000);
+                //BtnString = "Assign Task";
+            }
+
         }
-        showLoading = "None";
-    }
-    private  Random random = new Random();
-    public string RandomString(int length)
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
+
     }
 
 }
