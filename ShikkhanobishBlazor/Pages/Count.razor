@@ -869,6 +869,7 @@
         SortedList.Reverse();
         SortedList = SortedList.OrderBy(x => x.doneLbl).ToList();
         showChapter = SortedList;
+        StaticClassToPassData.sortedChapter = showChapter;
     }
     [Inject]
     public NavigationManager nvi { get; set; }

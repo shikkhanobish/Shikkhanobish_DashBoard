@@ -8,5 +8,6 @@ namespace ShikkhanobishBlazor.Models
     public class StaticClassToPassData
     {
         public static UserLogin thisAdmin { get; set; }
+        public static List<Chapter> sortedChapter { get; set; }
     }
 }

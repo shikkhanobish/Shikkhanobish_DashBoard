@@ -211,13 +211,13 @@
                 <div class="container-fluid">
                     <div class="card ">
                         <div class="card-body">
-                            <label style="font-size:30px;" class="card-title">Assign Task  </label>
+                            <label style="font-size:30px;" class="card-title">Add Chaper PDF Link  </label>
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="form-control" placeholder="Enter Total Chapter Ques. Num" @bind="totalChapQues" />
+                                    <input class="form-control" placeholder="Chapter ID" @bind="chapterID" />
                                 </div>
                                 <div class="col-4">
-                                    <input class="form-control" placeholder="Enter Your Required Number" @onchange="@onChange" />
+                                    <input class="form-control" placeholder="Total Number of Question" @bind="totalQSInChpater" />
                                 </div>
 
                                 <div class="col-4">
@@ -225,81 +225,12 @@
                                 </div>
                             </div>
 
-
-
-                        </div>
-
-
-                        <div class="card-body">
-                            <table style="text-align:center; ">
-                                <thead style="color: black; font-weight: bold;font-size:12px;">
-                                    <tr>
-                                        <th>Operator Name</th>
-                                        <th>Class Name</th>
-                                        <th>Subject Name</th>
-                                        <th>Chapter Name</th>
-                                        <th>List Of MCQ Number</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody style="font-size: 12px; ">
-                                    <tr>
-                                        <td>                                          
-                                            <select class="form-control btn btn-purple" style="" id="class" @onchange="SelectedOperator">                                               
-                                                <option class="">Select Operator</option>
-                                                @foreach (var item in operatorListSelect)
-                                                {
-
-                                                    <option  value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedClass">
-                                                <option>Select Class</option>
-                                                @foreach (var item in classList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedSubject">
-                                                <option>Select Subject</option>
-                                                @foreach (var item in subjectList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control btn btn-purple" id="class" @onchange="SelectedChapter">
-                                                <option>Select Chapter</option>
-                                                @foreach (var item in chapterList)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <button class="btn btn-primary" type="button" @onclick="assignTask">
-
-                                                @BtnString
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-
-                            </table>
-
+                            <button class="btn btn-success" @onclick="addChapter"> @addbtnTxt</button>
 
                         </div>
+
+
+                       
                     </div>
 
 
@@ -397,7 +328,10 @@
 
     public string userName { get; set; }
     public string pass { get; set; }
-
+    string ID { get; set; }
+    string chapterID { get; set; }
+    string totalQSInChpater { get; set; }
+    string addbtnTxt { get; set; }
     string totalChapQues;
     string limit1;
     string limit;
@@ -424,10 +358,11 @@
     List<shiEmployee> shiEMList = new List<shiEmployee>();
     List<dataentryOperatorTask> operatorList = new List<dataentryOperatorTask>();
     List<int> numList = new List<int>();
-
+    List<Question> quesList = new List<Question>();
 
     protected override async Task OnInitializedAsync()
     {
+        addbtnTxt = "Add";
         showLoadingRemoveTask = "None";
         showLoading = "None";
         BtnString = "Assign Task";
@@ -435,8 +370,23 @@
         pass = StaticClassToPassData.thisAdmin.passWord;
 
         await GetOperatorInfo();
+        //await AutomatedTaskAssigner(1000005);
 
-
+    }
+    public async Task addChapter()
+    {
+        addbtnTxt = "Please Wait...";
+        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/setQuestionPdfLink".PostJsonAsync(new
+        {
+            chapterID = chapterID,
+            link = Link,
+            noOfQues = totalQSInChpater
+        }).
+       ReceiveJson<Response>();
+        addbtnTxt = "Add";
+        chapterID = "";
+        Link = "";
+        totalQSInChpater = "";
     }
     public async Task addNewOperator()
     {
@@ -468,7 +418,7 @@
     private void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
         limit = (string)args.Value;
-        CopyNum();
+        //CopyNum();
     }
     public void RefreshList()
     {
@@ -526,7 +476,7 @@
         allClass = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getClassInfo".GetJsonAsync<List<ClassInfo>>();
         operatorList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getdataentryOperatorTask".PostJsonAsync(new { }).ReceiveJson<List<dataentryOperatorTask>>();
         var thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
-        var quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
+        quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
         List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
         for (int t = 0; t < allClass.Count; t++)
@@ -799,99 +749,7 @@
         string redirectURL = "/";
         nvi.NavigateTo(redirectURL);
     }
-    public void CopyNum()
-    {
-        //selectedMCQList = "";
-        //numList = new List<int>();
-        //Random rn = new Random();
-
-        //List<int> list = new List<int>();
-
-        //int totalChQNum = Convert.ToInt32(totalChapQues);
-        //int reqNum = Convert.ToInt32(limit);
-        //while (list.Count <= reqNum)
-        //{
-        //    int thisNum = rn.Next(1, totalChQNum);
-        //    bool match = false;
-        //    for (int j = 0; j < list.Count; j++)
-        //    {
-        //        if (list[j] == thisNum)
-        //        {
-        //            match = true;
-        //            break;
-        //        }
-        //    }
-        //    if (!match)
-        //    {
-        //        list.Add(thisNum);
-        //    }
-        //}
-        //numList = list;
-
-
-        //List<int> SortedList = new List<int>();
-        //SortedList = numList.OrderBy(x => x).ToList();
-        //numList = SortedList;
-        //for (int i = 0; i < numList.Count; i++)
-        //{
-        //    if(i == numList.Count - 1)
-        //    {
-        //        selectedMCQList = selectedMCQList + numList[i];
-        //    }
-        //    else
-        //    {
-        //        selectedMCQList = selectedMCQList + numList[i] + " , ";
-        //    }
-
-        //}
-    }
-    public async Task assignTask()
-    {
-        //    showLoading = "Block";
-        //    if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
-        //    {
-        //        BtnString = "Connecting with server...";
-        //        Random random = new Random();
-        //        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        //        var id = RandomString(50);
-        //        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-        //        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-        //        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-
-        //        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
-        //        {
-        //            userID = selecteOPID,
-        //            MCQNumbers = selectedMCQList + " Link#" + Link,
-        //            date = thisd,
-        //            chapterID = SelectedChapterID,
-        //            taskID = id,
-        //            startTime = sd,
-        //            endTime = ed
-        //        })
-        //.ReceiveJson<Response>();
-        //        RefreshList();
-        //        await GetOperatorInfo();
-        //        BtnString = "Done!";
-        //        await Task.Delay(3000);
-        //        BtnString = "Assign Task";
-        //    }
-        //    else
-        //    {
-        //        BtnString = "Please fill up every info";
-        //        await Task.Delay(3000);
-        //        BtnString = "Assign Task";
-        //    }
-        //    showLoading = "None";
-    }
-    private  Random random = new Random();
-    public string RandomString(int length)
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-
-    public async Task AutomatedTaskAssigner()
+    public void CopyNum(int totalChapQues)
     {
         selectedMCQList = "";
         numList = new List<int>();
@@ -899,8 +757,8 @@
 
         List<int> list = new List<int>();
 
-        int totalChQNum = 300;
-        int reqNum = 100;
+        int totalChQNum = Convert.ToInt32(totalChapQues);
+        int reqNum = Convert.ToInt32(100);
         while (list.Count <= reqNum)
         {
             int thisNum = rn.Next(1, totalChQNum);
@@ -936,39 +794,122 @@
             }
 
         }
-
-
-        if ()
+    }
+    public async Task assignTask()
+    {
+        showLoading = "Block";
+        if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
         {
-            if (selecteOPID != 0 && selectedMCQList != "" && selectedMCQList != null && Link != "" || Link != null && SelectedChapterID != 0)
-            {
-                BtnString = "Connecting with server...";
-                Random random = new Random();
-                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                var id = RandomString(50);
-                string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-                string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-                string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+            BtnString = "Connecting with server...";
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var id = RandomString(50);
+            string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+            string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+            string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
-                var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+            var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+            {
+                userID = selecteOPID,
+                MCQNumbers = selectedMCQList + " Link#" + Link,
+                date = thisd,
+                chapterID = SelectedChapterID,
+                taskID = id,
+                startTime = sd,
+                endTime = ed
+            })
+    .ReceiveJson<Response>();
+            RefreshList();
+            await GetOperatorInfo();
+            BtnString = "Done!";
+            await Task.Delay(3000);
+            BtnString = "Assign Task";
+        }
+        else
+        {
+            BtnString = "Please fill up every info";
+            await Task.Delay(3000);
+            BtnString = "Assign Task";
+        }
+        showLoading = "None";
+    }
+    private  Random random = new Random();
+    public string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    public async Task<QuestionPdfLink> getNewChapterToAssign()
+    {
+        QuestionPdfLink chapter= new QuestionPdfLink();
+        //var allPdfLink = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<QuestionPdfLink>>();
+        List<QuestionPdfLink> allPdfLink = new List<QuestionPdfLink>();
+        QuestionPdfLink q1 = new QuestionPdfLink();
+        q1.noOfQues = 300;
+        q1.link = "google.com";
+        q1.chapterID = 1423;
+        QuestionPdfLink q2 = new QuestionPdfLink();
+        q2.noOfQues = 300;
+        q2.link = "google.com";
+        q2.chapterID = 1420;
+        QuestionPdfLink q3 = new QuestionPdfLink();
+        q3.noOfQues = 300;
+        q3.link = "google.com";
+        q3.chapterID = 1416;
+        allPdfLink.Add(q1);
+        allPdfLink.Add(q2);
+        allPdfLink.Add(q3);
+        for (int i = 0; i < StaticClassToPassData.sortedChapter.Count; i++)
+        {
+            for(int j = 0; j < allPdfLink.Count; j++)
+            {
+                if (StaticClassToPassData.sortedChapter[i].chapterID == allPdfLink[j].chapterID && StaticClassToPassData.sortedChapter[i].doneLbl != "Done")
                 {
-                    userID = selecteOPID,
-                    MCQNumbers = selectedMCQList + " Link#" + Link,
-                    date = thisd,
-                    chapterID = SelectedChapterID,
-                    taskID = id,
-                    startTime = sd,
-                    endTime = ed
-                })
-        .ReceiveJson<Response>();
-                RefreshList();
-                await GetOperatorInfo();
-                //BtnString = "Done!";
-                await Task.Delay(3000);
-                //BtnString = "Assign Task";
+
+                    for(int k = 0; k < allsub.Count; k++)
+                    {
+                        if(StaticClassToPassData.sortedChapter[i].subjectID == allsub[k].subjectID)
+                        {
+                            if(allsub[k].groupName == "Science" || allsub[k].groupName == "Com" && allsub[k].subjectID == StaticClassToPassData.sortedChapter[i].subjectID)
+                            {
+                                allPdfLink[j].noOfQues = 300;
+                                return allPdfLink[j];
+                            }
+                        }
+                    }
+                }
             }
 
         }
+
+
+        return chapter;
+
+    }
+
+    public async Task AutomatedTaskAssigner(int opID)
+    {
+
+        QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
+        CopyNum(thisSelectedChapterToAsign.noOfQues);
+        var id = RandomString(50);
+        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+        {
+            userID = selecteOPID,
+            MCQNumbers = selectedMCQList + " Link#" + Link,
+            date = opID,
+            chapterID = SelectedChapterID,
+            taskID = id,
+            startTime = sd,
+            endTime = ed
+        })
+.ReceiveJson<Response>();
+
 
     }
 
