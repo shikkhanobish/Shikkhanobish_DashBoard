@@ -207,6 +207,29 @@
                     </div>
 
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            Assign Task
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4">
+                                <select class="form-control btn btn-purple" id="class" @onchange="operatorChanged">
+                                    <option value="">Select Operator</option>
+                                    @foreach (var item in shiEMList)
+                                    {
+
+                                        <option value="@item.employeeID">@item.name</option>
+                                    }
+                                </select>
+                            </div>
+                            <button class="btn btn-primary col-3" @onclick="AutomatedTaskAssigner" aria-disabled="true">@MakeQSTxt</button>
+                        </div>
+                       
+                        <label style="color: red">@makeTaskError</label>
+                    </div>
+                    
+                </div>
                 <!-- Start container-fluid -->
                 <div class="container-fluid">
                     <div class="card ">
@@ -226,18 +249,60 @@
                             </div>
 
                             <button class="btn btn-success" @onclick="addChapter"> @addbtnTxt</button>
+                            <div class="Card">
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        PDF Table
+                                    </div>
+                                    <div style="overflow: scroll; height: 400px;">
+                                        <table class="table table-bordered" style="text-align: center;">
+                                            <thead style="color: black; font-weight: bold;font-size:10px;">
+                                                <tr>
+                                                    <th>Class</th>
+                                                    <th>Subject</th>
+                                                    <th>Chapter</th>
+                                                    <th>ChapterID</th>
+                                                    <th>PDF Link</th>
+                                                    <th>No Of Qs</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="font-size: 10px; ">
+                                                @foreach (var item in allPDFLink)
+                                                {
+                                                    <tr>
+                                                        <td style="color: #2E2E2E">@item.className</td>
+                                                        <td style="color: #2E2E2E">@item.subjectName</td>
+                                                        <td style="color: #2E2E2E">@item.chapterName</td>
+                                                        <td style="color: #2E2E2E">@item.chapterID</td>
+                                                        <td style="color: #2E2E2E">@item.link</td>
+                                                        <td style="color: #2E2E2E">@item.noOfQues</td>
+                                                        <td style="color: #2E2E2E"><button class="btn btn-danger" @onclick="@( async () => await RemovePDFLink(item.chapterID))"> Delete</button></td>
 
-                        </div>
 
 
-                       
+                                                    </tr>
+
+                                                }
+
+                                            </tbody>
+
+
+                                        </table>
+                                    </div>
+                                   
+                                </div>
+
+                            </div>
+                        </div>                      
                     </div>
+                   
 
 
                     <div class="card">
                         <div class="card-body">
                             <label style="color:blueviolet;font-size:30px;" class="card-title">Task  History</label>
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="overflow: scroll; height: 600px;">
                                 <table id="" class="table table-bordered" style="text-align:center; ">
                                     <thead style="color: black; font-weight: bold;font-size:10px;">
                                         <tr>
@@ -337,10 +402,12 @@
     string limit;
     int selecteOPID;
     string Link;
+    string makeTaskDisOrEn;
     int SelectedChapterID;
     string BtnString;
     string addName;
     string addNumber;
+    List<QuestionPdfLink> allPDFLink = new List<QuestionPdfLink>();
     string showLoading;
     string selectedChapterName;
     string showLoadingRemoveTask;
@@ -359,9 +426,11 @@
     List<dataentryOperatorTask> operatorList = new List<dataentryOperatorTask>();
     List<int> numList = new List<int>();
     List<Question> quesList = new List<Question>();
-
+    CultureInfo culturen = new CultureInfo("en-US");
     protected override async Task OnInitializedAsync()
     {
+        makeTaskDisOrEn = "true";
+        MakeQSTxt = "Make Task";
         addbtnTxt = "Add";
         showLoadingRemoveTask = "None";
         showLoading = "None";
@@ -372,6 +441,32 @@
         await GetOperatorInfo();
         //await AutomatedTaskAssigner(1000005);
 
+    }
+    private void operatorChanged(ChangeEventArgs opevent)
+    {
+        string thisopID = opevent.Value.ToString();
+        for(int i = 0; i < showInfo.Count; i++)
+        {
+            if(showInfo[i].userID == int.Parse(thisopID) && showInfo[i].status == "Active")
+            {
+                lastTaskEndTime = showInfo[i].endTime;
+                seletedTaskOpName = showInfo[i].userName;
+                var lastActiveTime = DateTime.ParseExact(showInfo[i].endTime, "dd/MM/yyyy hh:mm tt", culturen);
+                var thisTime = DateTime.Now;
+                if (lastActiveTime < thisTime)
+                {
+                    makeTaskDisOrEn = "true";
+                    canMakenewTask = true;
+                    selectedTaskOpID = int.Parse(thisopID);
+                }
+                else
+                {
+                    makeTaskDisOrEn = "false";
+                    selectedTaskOpID = 0;
+                    canMakenewTask = false;
+                }
+            }
+        }
     }
     public async Task addChapter()
     {
@@ -387,6 +482,45 @@
         chapterID = "";
         Link = "";
         totalQSInChpater = "";
+    }
+    public async Task RemovePDFLink(int chapterID)
+    {
+        var res = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/deleteQuestionPdfLink".PostJsonAsync(new
+        {
+            chapterID = chapterID
+        }).
+            ReceiveJson<Response>();
+        await RefreshPDFLink();
+    }
+    public async Task RefreshPDFLink()
+    {
+        allPDFLink = new List<QuestionPdfLink>();
+        var thispdfLink = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestionPdfLink".GetJsonAsync<List<QuestionPdfLink>>();
+        for (int i = 0; i < thispdfLink.Count; i++)
+        {
+            for (int j = 0; j < allc.Count; j++)
+            {
+                if (allc[j].chapterID == thispdfLink[i].chapterID)
+                {
+                    thispdfLink[i].chapterName = allc[j].name;
+                    for (int k = 0; k < allsub.Count; k++)
+                    {
+                        if (allc[j].subjectID == allsub[k].subjectID)
+                        {
+                            thispdfLink[i].subjectName = allsub[k].name;
+                            for (int l = 0; l < allClass.Count; l++)
+                            {
+                                if (allClass[l].classID == allsub[k].classID)
+                                {
+                                    thispdfLink[i].className = allClass[l].name;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        allPDFLink = thispdfLink;
     }
     public async Task addNewOperator()
     {
@@ -479,6 +613,8 @@
         quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
         List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
+        await RefreshPDFLink();
+
         for (int t = 0; t < allClass.Count; t++)
         {
             classList.Add(allClass[t].name) ;
@@ -627,8 +763,7 @@
             thisOpList[i].MCQNumbers = thisOpList[i].MCQNumbers?[0..Math.Min(thisOpList[i].MCQNumbers.Length, 50)];
         }
         List<dataentryOperatorTask> SortedList = new List<dataentryOperatorTask>();
-        SortedList = thisOpList.OrderBy(x => x.startTime).ToList();
-        SortedList.Reverse();
+        SortedList = thisOpList.OrderBy(x => x.status).ToList();
         thisOpList = SortedList;
         showInfo = thisOpList;
     }
@@ -841,46 +976,73 @@
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
-    public async Task<QuestionPdfLink> getNewChapterToAssign()
+    List<Chapter> selectedChapter = new List<Chapter>();
+    public void GetALlChapter()
     {
-        QuestionPdfLink chapter= new QuestionPdfLink();
-        //var allPdfLink = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<QuestionPdfLink>>();
-        List<QuestionPdfLink> allPdfLink = new List<QuestionPdfLink>();
-        QuestionPdfLink q1 = new QuestionPdfLink();
-        q1.noOfQues = 300;
-        q1.link = "google.com";
-        q1.chapterID = 1423;
-        QuestionPdfLink q2 = new QuestionPdfLink();
-        q2.noOfQues = 300;
-        q2.link = "google.com";
-        q2.chapterID = 1420;
-        QuestionPdfLink q3 = new QuestionPdfLink();
-        q3.noOfQues = 300;
-        q3.link = "google.com";
-        q3.chapterID = 1416;
-        allPdfLink.Add(q1);
-        allPdfLink.Add(q2);
-        allPdfLink.Add(q3);
-        for (int i = 0; i < StaticClassToPassData.sortedChapter.Count; i++)
+
+        for (int i = 0; i < allc.Count; i++)
         {
-            for(int j = 0; j < allPdfLink.Count; j++)
+
+            for (int j = 0; j < quesList.Count; j++)
             {
-                if (StaticClassToPassData.sortedChapter[i].chapterID == allPdfLink[j].chapterID && StaticClassToPassData.sortedChapter[i].doneLbl != "Done")
+                if (quesList[j].chapterID == allc[i].chapterID)
                 {
 
-                    for(int k = 0; k < allsub.Count; k++)
+                    if (quesList[j].review == 1)
                     {
-                        if(StaticClassToPassData.sortedChapter[i].subjectID == allsub[k].subjectID)
-                        {
-                            if(allsub[k].groupName == "Science" || allsub[k].groupName == "Com" && allsub[k].subjectID == StaticClassToPassData.sortedChapter[i].subjectID)
-                            {
-                                allPdfLink[j].noOfQues = 300;
-                                return allPdfLink[j];
-                            }
-                        }
+                        allc[i].approvedQS++;
                     }
                 }
             }
+
+            selectedChapter.Add(allc[i]);
+        }
+    }
+    public async Task<QuestionPdfLink> getNewChapterToAssign()
+    {
+        QuestionPdfLink chapter = new QuestionPdfLink();
+        var allPdfLink = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestionPdfLink".GetJsonAsync<List<QuestionPdfLink>>();
+
+        for (int i = 0; i < selectedChapter.Count; i++)
+        {
+            if (selectedChapter[i].approvedQS < 50)
+            {
+                for (int j = 0; j < allPdfLink.Count; j++)
+                {
+
+                    if (selectedChapter[i].chapterID == allPdfLink[j].chapterID)
+                    {
+                        bool isAssigned = false;
+                        for (int k = 0; k < operatorList.Count; k++)
+                        {
+                            if (selectedChapter[i].chapterID == operatorList[k].chapterID)
+                            {
+                                isAssigned = true;
+                            }
+                        }
+                        if (isAssigned)
+                        {
+                            break;
+                        }
+                        for (int k = 0; k < allsub.Count; k++)
+                        {
+                            if (selectedChapter[i].subjectID == allsub[k].subjectID)
+                            {
+                                if (allsub[k].groupName == "Science" || allsub[k].groupName == "Com" && allsub[k].subjectID == selectedChapter[i].subjectID)
+                                {
+
+                                    return allPdfLink[j];
+                                }
+                            }
+                        }
+
+
+                    }
+
+
+                }
+            }
+
 
         }
 
@@ -888,30 +1050,114 @@
         return chapter;
 
     }
-
-    public async Task AutomatedTaskAssigner(int opID)
+    bool canMakenewTask;
+    string MakeQSTxt;
+    string makeTaskError;
+    string lastTaskEndTime;
+    int selectedTaskOpID;
+    string seletedTaskOpName;
+    public async Task AutomatedTaskAssigner()
     {
 
-        QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
-        CopyNum(thisSelectedChapterToAsign.noOfQues);
-        var id = RandomString(50);
-        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+        if (canMakenewTask)
         {
-            userID = selecteOPID,
-            MCQNumbers = selectedMCQList + " Link#" + Link,
-            date = opID,
-            chapterID = SelectedChapterID,
-            taskID = id,
-            startTime = sd,
-            endTime = ed
-        })
-.ReceiveJson<Response>();
+            MakeQSTxt = "Making New Task. Please Wait...";
+            GetALlChapter();
+            QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
+            CopyNumNewTask(thisSelectedChapterToAsign.noOfQues);
+            var id = RandomString(50);
+            string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+            string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+            string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+            var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
+            {
+                userID = selectedTaskOpID,
+                MCQNumbers = selectedMCQList + " Link#" + thisSelectedChapterToAsign.link,
+                date = thisd,
+                chapterID = thisSelectedChapterToAsign.chapterID,
+                taskID = id,
+                startTime = sd,
+                endTime = ed
+            })
+    .ReceiveJson<Response>();
 
+            RefreshList();
+            await GetOperatorInfo();
+            MakeQSTxt = "Done";
+            await Task.Delay(1000);
+            MakeQSTxt = "Make New Task";
+        }
+        else
+        {
+            makeTaskError = "You can make new task for "+ seletedTaskOpName+" after(MM/DD/YY) : " + lastTaskEndTime;
+        }
 
     }
+    public void CopyNumNewTask(int totalChapQues)
+    {
+        selectedMCQList = "";
+        numList = new List<int>();
+        Random rn = new Random();
+
+        List<int> list = new List<int>();
+        int num = 0;
+        int totalChQNum = Convert.ToInt32(totalChapQues);
+        if (totalChQNum <= 160)
+        {
+            num = totalChQNum;
+            for (int i = 0; i < num; i++)
+            {
+                if (i == 150)
+                {
+                    break;
+                }
+                list.Add(i + 1);
+            }
+            numList = list;
+        }
+        else
+        {
+            num = 150;
+            int reqNum = Convert.ToInt32(150);
+            while (list.Count <= reqNum)
+            {
+                int thisNum = rn.Next(1, totalChQNum);
+                bool match = false;
+                for (int j = 0; j < list.Count; j++)
+                {
+                    if (list[j] == thisNum)
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match)
+                {
+                    list.Add(thisNum);
+                }
+            }
+            numList = list;
+        }
+
+
+
+        List<int> SortedList = new List<int>();
+        SortedList = numList.OrderBy(x => x).ToList();
+        numList = SortedList;
+        for (int i = 0; i < numList.Count; i++)
+        {
+            if (i == numList.Count - 1)
+            {
+                selectedMCQList = selectedMCQList + numList[i];
+            }
+            else
+            {
+                selectedMCQList = selectedMCQList + numList[i] + " , ";
+            }
+
+        }
+    }
+
 
 }
 
