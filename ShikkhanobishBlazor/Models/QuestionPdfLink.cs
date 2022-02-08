@@ -12,6 +12,9 @@ namespace ShikkhanobishBlazor.Models
         public string chapterName { get; set; }
         public int chapterID { get; set; }
         public string link { get; set; }
+        public string isDone { get; set; }
+        public int doneNum { get; set; }
+        public int remaining { get; set; }
         public int noOfQues { get; set; }
         public string Response { get; set; }
     }

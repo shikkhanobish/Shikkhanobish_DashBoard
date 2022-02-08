@@ -161,7 +161,7 @@
                                 <button class="btn btn-outline-success" @onclick="addNewOperator">Add</button>
                             </div>
 
-
+                            
                         </div>
                     </div>
 
@@ -207,28 +207,105 @@
                     </div>
 
                 </div>
-                <div class="card">
+                <div class="card ">
                     <div class="card-body">
-                        <div class="card-title">
-                            Assign Task
-                        </div>
+                        <label style="font-size:30px;" class="card-title">Assign Task  </label>
+                        <table style="text-align:center; ">
+                            <thead style="color: black; font-weight: bold;font-size:12px;">
+                                <tr>
+                                    <th>Operator Name</th>
+                                    <th>Class Name</th>
+                                    <th>Subject Name</th>
+                                    <th>Chapter Name</th>
+                                    <th>Total MCQ</th>
+                                    <th>Done Number</th>
+
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px; ">
+                                <tr>
+                                    <td>
+                                        <select class="form-control btn btn-purple" style="" id="class" @onchange="SelectedOperator">
+                                            <option class="">Select Operator</option>
+                                            @foreach (var item in operatorListSelect)
+                                            {
+
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control btn btn-purple" id="class" @onchange="SelectedClass">
+                                            <option>Select Class</option>
+                                            @foreach (var item in classList)
+                                            {
+
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control btn btn-purple" id="class" @onchange="SelectedSubject">
+                                            <option>Select Subject</option>
+                                            @foreach (var item in subjectList)
+                                            {
+
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control btn btn-purple" id="class" @onchange="SelectedChapter">
+                                            <option>Select Chapter</option>
+                                            @foreach (var item in chapterList)
+                                            {
+
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </td>
+
+                                    <td style="width: 150px">
+                                        <b>@totalChapQues</b>
+                                    </td>
+                                    <td style="width: 150px">
+                                        <b>@doneNum</b>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+
+                        </table>
+
+                        <br />
+                        <b>Pdf Link: @Link</b>
+                    </div>
+                    <div class="card-body">
+                        
                         <div class="form-group row">
                             <div class="col-4">
-                                <select class="form-control btn btn-purple" id="class" @onchange="operatorChanged">
-                                    <option value="">Select Operator</option>
-                                    @foreach (var item in shiEMList)
-                                    {
-
-                                        <option value="@item.employeeID">@item.name</option>
-                                    }
-                                </select>
+                                <input class="form-control" placeholder="Staring Number" @bind="Staringnum" />
                             </div>
-                            <button class="btn btn-primary col-3" @onclick="AutomatedTaskAssigner" aria-disabled="true">@MakeQSTxt</button>
+                            <div class="col-4">
+                                <input class="form-control" placeholder="Ending Number" @onchange="@onChange" />
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary" type="button" @onclick="assignTask">
+
+                                    @BtnString
+                                </button>
+                            </div>
+
                         </div>
-                       
-                        <label style="color: red">@makeTaskError</label>
+
+
+
                     </div>
-                    
+
+
+
                 </div>
                 <!-- Start container-fluid -->
                 <div class="container-fluid">
@@ -264,24 +341,28 @@
                                                     <th>ChapterID</th>
                                                     <th>PDF Link</th>
                                                     <th>No Of Qs</th>
+                                                    <th>IsDone</th>
+                                                    <th>Done Number</th>
                                                     <th>Delete</th>
                                                 </tr>
                                             </thead>
                                             <tbody style="font-size: 10px; ">
                                                 @foreach (var item in allPDFLink)
                                                 {
-                                                    <tr>
-                                                        <td style="color: #2E2E2E">@item.className</td>
-                                                        <td style="color: #2E2E2E">@item.subjectName</td>
-                                                        <td style="color: #2E2E2E">@item.chapterName</td>
-                                                        <td style="color: #2E2E2E">@item.chapterID</td>
-                                                        <td style="color: #2E2E2E">@item.link</td>
-                                                        <td style="color: #2E2E2E">@item.noOfQues</td>
-                                                        <td style="color: #2E2E2E"><button class="btn btn-danger" @onclick="@( async () => await RemovePDFLink(item.chapterID))"> Delete</button></td>
+                                                <tr>
+                                                    <td style="color: #2E2E2E">@item.className</td>
+                                                    <td style="color: #2E2E2E">@item.subjectName</td>
+                                                    <td style="color: #2E2E2E">@item.chapterName</td>
+                                                    <td style="color: #2E2E2E">@item.chapterID</td>
+                                                    <td style="color: #2E2E2E; width: 150px">@item.link</td>
+                                                    <td style="color: #2E2E2E">@item.noOfQues</td>
+                                                    <td style="color: #2E2E2E">@item.isDone</td>
+                                                    <td style="color: #2E2E2E">@item.doneNum</td>
+                                                    <td style="color: #2E2E2E"><button class="btn btn-danger" @onclick="@( async () => await RemovePDFLink(item.chapterID))"> Delete</button></td>
 
 
 
-                                                    </tr>
+                                                </tr>
 
                                                 }
 
@@ -398,8 +479,8 @@
     string totalQSInChpater { get; set; }
     string addbtnTxt { get; set; }
     string totalChapQues;
-    string limit1;
-    string limit;
+    int limit1;
+    int limit;
     int selecteOPID;
     string Link;
     string makeTaskDisOrEn;
@@ -425,6 +506,7 @@
     List<shiEmployee> shiEMList = new List<shiEmployee>();
     List<dataentryOperatorTask> operatorList = new List<dataentryOperatorTask>();
     List<int> numList = new List<int>();
+    int doneNum;
     List<Question> quesList = new List<Question>();
     CultureInfo culturen = new CultureInfo("en-US");
     protected override async Task OnInitializedAsync()
@@ -467,6 +549,11 @@
                 }
             }
         }
+        if(selectedTaskOpID == 0 && canMakenewTask == false)
+        {
+            selectedTaskOpID = int.Parse(thisopID);
+            canMakenewTask = true;
+        }
     }
     public async Task addChapter()
     {
@@ -500,9 +587,26 @@
         {
             for (int j = 0; j < allc.Count; j++)
             {
+
                 if (allc[j].chapterID == thispdfLink[i].chapterID)
                 {
                     thispdfLink[i].chapterName = allc[j].name;
+                    for (int a = 0; a < selectedChapter.Count; a++)
+                    {
+                        if (selectedChapter[a].chapterID == thispdfLink[i].chapterID)
+                        {
+                            if (thispdfLink[i].noOfQues - selectedChapter[a].approvedQS <= 150)
+                            {
+                                thispdfLink[i].isDone = "Done";
+                            }
+                            else
+                            {
+                                thispdfLink[i].isDone = "Not Done";
+                            }
+                            thispdfLink[i].doneNum = selectedChapter[a].approvedQS;
+                            thispdfLink[i].remaining = thispdfLink[i].noOfQues - thispdfLink[i].doneNum;
+                        }
+                    }
                     for (int k = 0; k < allsub.Count; k++)
                     {
                         if (allc[j].subjectID == allsub[k].subjectID)
@@ -520,6 +624,10 @@
                 }
             }
         }
+        List<QuestionPdfLink> SortedList = new List<QuestionPdfLink>();
+        SortedList = thispdfLink.OrderBy(x => x.remaining).ToList();
+        thispdfLink = SortedList;
+        thispdfLink.Reverse();
         allPDFLink = thispdfLink;
     }
     public async Task addNewOperator()
@@ -551,15 +659,20 @@
 
     private void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
-        limit = (string)args.Value;
-        //CopyNum();
+        string thisNum = (string)args.Value;
+        if(thisNum != null)
+        {
+            limit = int.Parse(thisNum);
+        }
+
+        CopyNum();
     }
     public void RefreshList()
     {
         totalChapQues = "";
         selecteOPID = 0;
         Link = "";
-        limit = "";
+        limit = 0;
         SelectedChapterID = 0;
         selectedChapterName = "";
         selectedMCQList = "";
@@ -613,6 +726,7 @@
         quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
         List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
+        GetALlChapter();
         await RefreshPDFLink();
 
         for (int t = 0; t < allClass.Count; t++)
@@ -814,6 +928,15 @@
                 break;
             }
         }
+        for(int i = 0; i < allPDFLink.Count; i++)
+        {
+            if(SelectedChapterID == allPDFLink[i].chapterID)
+            {
+                doneNum = allPDFLink[i].doneNum;
+                Link = allPDFLink[i].link;
+                totalChapQues = allPDFLink[i].noOfQues.ToString();
+            }
+        }
 
     }
     private void SelectedClass(ChangeEventArgs dateEvent)
@@ -884,7 +1007,7 @@
         string redirectURL = "/";
         nvi.NavigateTo(redirectURL);
     }
-    public void CopyNum(int totalChapQues)
+    public void CopyNum()
     {
         selectedMCQList = "";
         numList = new List<int>();
@@ -892,26 +1015,38 @@
 
         List<int> list = new List<int>();
 
-        int totalChQNum = Convert.ToInt32(totalChapQues);
-        int reqNum = Convert.ToInt32(100);
-        while (list.Count <= reqNum)
+        int totalChQNum = limit - Staringnum;
+        if (totalChQNum <= 160)
         {
-            int thisNum = rn.Next(1, totalChQNum);
-            bool match = false;
-            for (int j = 0; j < list.Count; j++)
+            for (int i = Staringnum; i <= limit; i++)
             {
-                if (list[j] == thisNum)
+                list.Add(i);
+            }
+            numList = list;
+        }
+        else
+        {
+            int reqNum = Convert.ToInt32(150);
+            while (list.Count <= reqNum)
+            {
+                int thisNum = rn.Next(Staringnum, limit);
+                bool match = false;
+                for (int j = 0; j < list.Count; j++)
                 {
-                    match = true;
-                    break;
+                    if (list[j] == thisNum)
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match)
+                {
+                    list.Add(thisNum);
                 }
             }
-            if (!match)
-            {
-                list.Add(thisNum);
-            }
+            numList = list;
         }
-        numList = list;
+
 
 
         List<int> SortedList = new List<int>();
@@ -998,6 +1133,8 @@
             selectedChapter.Add(allc[i]);
         }
     }
+    public int Staringnum = 0;
+    public int EndingNum = 0;
     public async Task<QuestionPdfLink> getNewChapterToAssign()
     {
         QuestionPdfLink chapter = new QuestionPdfLink();
@@ -1005,7 +1142,7 @@
 
         for (int i = 0; i < selectedChapter.Count; i++)
         {
-            if (selectedChapter[i].approvedQS < 50)
+            if (selectedChapter[i].approvedQS < 20)
             {
                 for (int j = 0; j < allPdfLink.Count; j++)
                 {
@@ -1015,8 +1152,23 @@
                         bool isAssigned = false;
                         for (int k = 0; k < operatorList.Count; k++)
                         {
-                            if (selectedChapter[i].chapterID == operatorList[k].chapterID)
+                            if (selectedChapter[i].chapterID == operatorList[k].chapterID  && operatorList[k].status!= "Active")
                             {
+                                for(int l = 0; l < allPDFLink.Count; l++)
+                                {
+                                    if(allPdfLink[j].chapterID == allPDFLink[l].chapterID)
+                                    {
+                                        Staringnum = ((allPDFLink[l].doneNum / 130)) * 200;
+                                        if(Staringnum + 200 > allPdfLink[j].noOfQues)
+                                        {
+                                            EndingNum = allPdfLink[j].noOfQues;
+                                        }
+                                        else
+                                        {
+                                            EndingNum = Staringnum + 200;
+                                        }
+                                    }
+                                }
                                 isAssigned = true;
                             }
                         }
