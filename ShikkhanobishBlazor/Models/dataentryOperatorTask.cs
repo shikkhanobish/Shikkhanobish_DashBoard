@@ -11,6 +11,8 @@ namespace ShikkhanobishBlazor.Models
         public string userName { get; set; }
         public string taskID { get; set; }
         public int chapterID { get; set; }
+        public string ActiveStatus { get; set; }
+        public int TotalSubmitted { get; set; }
         public string MCQNumbers { get; set; }
         public string startTime { get; set; }
         public string endTime { get; set; }

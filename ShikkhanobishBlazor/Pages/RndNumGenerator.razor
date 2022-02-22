@@ -1,6 +1,7 @@
 ﻿@using Flurl.Http;
 @using ShikkhanobishBlazor.Models
 @using System.Globalization
+@using Radzen.Blazor;
 @inject Blazored.LocalStorage.ILocalStorageService oLocalStore
 @page "/RndNumGenerator"
 
@@ -161,7 +162,7 @@
                                 <button class="btn btn-outline-success" @onclick="addNewOperator">Add</button>
                             </div>
 
-                            
+
                         </div>
                     </div>
 
@@ -283,7 +284,7 @@
                         <b>Pdf Link: @Link</b>
                     </div>
                     <div class="card-body">
-                        
+
                         <div class="form-group row">
                             <div class="col-4">
                                 <input class="form-control" placeholder="Staring Number" @bind="Staringnum" />
@@ -349,20 +350,20 @@
                                             <tbody style="font-size: 10px; ">
                                                 @foreach (var item in allPDFLink)
                                                 {
-                                                <tr>
-                                                    <td style="color: #2E2E2E">@item.className</td>
-                                                    <td style="color: #2E2E2E">@item.subjectName</td>
-                                                    <td style="color: #2E2E2E">@item.chapterName</td>
-                                                    <td style="color: #2E2E2E">@item.chapterID</td>
-                                                    <td style="color: #2E2E2E; width: 150px">@item.link</td>
-                                                    <td style="color: #2E2E2E">@item.noOfQues</td>
-                                                    <td style="color: #2E2E2E">@item.isDone</td>
-                                                    <td style="color: #2E2E2E">@item.doneNum</td>
-                                                    <td style="color: #2E2E2E"><button class="btn btn-danger" @onclick="@( async () => await RemovePDFLink(item.chapterID))"> Delete</button></td>
+                                                    <tr>
+                                                        <td style="color: #2E2E2E">@item.className</td>
+                                                        <td style="color: #2E2E2E">@item.subjectName</td>
+                                                        <td style="color: #2E2E2E">@item.chapterName</td>
+                                                        <td style="color: #2E2E2E">@item.chapterID</td>
+                                                        <td style="color: #2E2E2E; width: 150px">@item.link</td>
+                                                        <td style="color: #2E2E2E">@item.noOfQues</td>
+                                                        <td style="color: #2E2E2E">@item.isDone</td>
+                                                        <td style="color: #2E2E2E">@item.doneNum</td>
+                                                        <td style="color: #2E2E2E"><button class="btn btn-danger" @onclick="@( async () => await RemovePDFLink(item.chapterID))"> Delete</button></td>
 
 
 
-                                                </tr>
+                                                    </tr>
 
                                                 }
 
@@ -371,13 +372,13 @@
 
                                         </table>
                                     </div>
-                                   
+
                                 </div>
 
                             </div>
-                        </div>                      
+                        </div>
                     </div>
-                   
+
 
 
                     <div class="card">
@@ -394,7 +395,7 @@
                                             <th>Chapter Name</th>
                                             <th>Task Date</th>
                                             <th>Assign Time (DD/MM/YYYY)</th>
-                      
+
                                             <th>Submitted</th>
                                             <th>Remaining</th>
                                             <th>IS Task Submitted</th>
@@ -414,12 +415,14 @@
                                                 <td style="color: #2E2E2E">@item.chapterName</td>
                                                 <td style="color: #2E2E2E">@item.date</td>
                                                 <td style="color: #2E2E2E">@item.startTime</td>
-                       
-                                                <td style="color: green" >@item.submitted</td>
+
+                                                <td style="color: green">@item.submitted</td>
                                                 <td style="color: red">@item.reMain</td>
-                                                <td style="color: @item.isTaskSubColor; font-weight: bold"> <i class="fas fa-times" style="display:@item.isTaskSubNootDone"></i>
-                                                                                                            <i class="fas fa-check-double" style="display:@item.isTaskSubDone"></i>
-                                                                                                            <i style="display:@item.isTaskSubPending">---</i></td>
+                                                <td style="color: @item.isTaskSubColor; font-weight: bold">
+                                                    <i class="fas fa-times" style="display:@item.isTaskSubNootDone"></i>
+                                                    <i class="fas fa-check-double" style="display:@item.isTaskSubDone"></i>
+                                                    <i style="display:@item.isTaskSubPending">---</i>
+                                                </td>
                                                 <td style="color: @item.statusColor; font-weight: bold">@item.status</td>
                                                 <td>
                                                     <button type="button" class="btn btn-danger btn-sm px-3" @onclick="@( async () => await RemoveTask(item.taskID))">
@@ -442,8 +445,34 @@
 
                     </div>
 
-                </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <a class="card-title">Submission Check. Date: @DateTime.Now.ToString("dd'-'MM'-'yyyy")</a>
+                            <div class="form-group row">
+                                <select class="form-control btn btn-purple col-3" style="" id="class" @onchange="SubOpSelected">
+                                    <option class="">Select Operator</option>
+                                    @foreach (var item in operatorListSelect)
+                                    {
 
+                                        <option value="@item">@item</option>
+                                    }
+                                </select>
+                                <div class="col-3">
+                                    <input @bind="@startingDateSub" />
+                                </div>
+                                <div class="col-3">
+                                    <input @bind="@endingDateSub" />
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-secondary" @onclick="checkSubmission">Check</button>
+                                </div>
+                            </div>
+                            <br/>
+                            @TotalSubmittion
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- end container-fluid -->
                 <!-- Footer Start -->
                 <footer class="footer">
@@ -480,6 +509,7 @@
     string addbtnTxt { get; set; }
     string totalChapQues;
     int limit1;
+    int TotalSubmittion;
     int limit;
     int selecteOPID;
     string Link;
@@ -488,6 +518,8 @@
     string BtnString;
     string addName;
     string addNumber;
+    string startingDateSub ;
+    string endingDateSub ;
     List<QuestionPdfLink> allPDFLink = new List<QuestionPdfLink>();
     string showLoading;
     string selectedChapterName;
@@ -496,6 +528,7 @@
     List<string> classList = new List<string>();
     List<string> operatorListSelect = new List<string>();
     List<string> subjectList = new List<string>();
+
     List<string> chapterList = new List<string>();
     List<dataentryOperatorTask> showInfo = new List<dataentryOperatorTask>();
     List<dataentryOperatorTask> LiveshowInfo = new List<dataentryOperatorTask>();
@@ -507,6 +540,7 @@
     List<dataentryOperatorTask> operatorList = new List<dataentryOperatorTask>();
     List<int> numList = new List<int>();
     int doneNum;
+    List<TecaherQuestionHistory> thList = new List<TecaherQuestionHistory>();
     List<Question> quesList = new List<Question>();
     CultureInfo culturen = new CultureInfo("en-US");
     protected override async Task OnInitializedAsync()
@@ -722,7 +756,7 @@
         allsub = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
         allClass = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getClassInfo".GetJsonAsync<List<ClassInfo>>();
         operatorList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getdataentryOperatorTask".PostJsonAsync(new { }).ReceiveJson<List<dataentryOperatorTask>>();
-        var thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
+        thList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getTeacherQuestionHistory".GetJsonAsync<List<TecaherQuestionHistory>>();
         quesList = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getQuestion".GetJsonAsync<List<Question>>();
         List<dataentryOperatorTask> thisOpList = new List<dataentryOperatorTask>();
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
@@ -838,7 +872,7 @@
             }
             else
             {
-                thisOpList[i].reMain = 100 - thisOpList[i].submitted ;
+                thisOpList[i].reMain = 150 - thisOpList[i].submitted ;
             }
             thisOpList[i].statusColor = "#979797";
             if (thisOpList[i].submitted >= 100)
@@ -909,18 +943,21 @@
         for(int i = 0; i < allc.Count; i++)
         {
             string cchp = "";
+            bool start = false;
             foreach (var ch in dateEvent.Value.ToString())
             {
-                if (ch == '-')
-                {
-                    break;
-                }
-                else
+                if (start)
                 {
                     cchp += ch;
                 }
+                if (ch == '#')
+                {
+                    start = true;
+                }
+
             }
-            if (allc[i].name == cchp)
+            int chID = int.Parse(cchp);
+            if (allc[i].chapterID == chID)
             {
 
                 selectedChapterName = cchp;
@@ -928,15 +965,25 @@
                 break;
             }
         }
-        for(int i = 0; i < allPDFLink.Count; i++)
+        if(SelectedChapterID == 0)
         {
-            if(SelectedChapterID == allPDFLink[i].chapterID)
+            doneNum = 0;
+            Link = "";
+            totalChapQues = "";
+        }
+        else
+        {
+            for (int i = 0; i < allPDFLink.Count; i++)
             {
-                doneNum = allPDFLink[i].doneNum;
-                Link = allPDFLink[i].link;
-                totalChapQues = allPDFLink[i].noOfQues.ToString();
+                if (SelectedChapterID == allPDFLink[i].chapterID)
+                {
+                    doneNum = allPDFLink[i].doneNum;
+                    Link = allPDFLink[i].link;
+                    totalChapQues = allPDFLink[i].noOfQues.ToString();
+                }
             }
         }
+
 
     }
     private void SelectedClass(ChangeEventArgs dateEvent)
@@ -990,7 +1037,7 @@
                 {
                     if (allc[j].subjectID == allsub[i].subjectID)
                     {
-                        thisch.Add(allc[j].name + "-" + allc[j].chapterID);
+                        thisch.Add(allc[j].name + "#" + allc[j].chapterID);
                     }
                 }
 
@@ -1026,8 +1073,7 @@
         }
         else
         {
-            int reqNum = Convert.ToInt32(150);
-            while (list.Count <= reqNum)
+            while (list.Count <= 150)
             {
                 int thisNum = rn.Next(Staringnum, limit);
                 bool match = false;
@@ -1211,38 +1257,31 @@
     public async Task AutomatedTaskAssigner()
     {
 
-        if (canMakenewTask)
+        MakeQSTxt = "Making New Task. Please Wait...";
+        GetALlChapter();
+        QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
+        CopyNumNewTask(thisSelectedChapterToAsign.noOfQues);
+        var id = RandomString(50);
+        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
+        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
         {
-            MakeQSTxt = "Making New Task. Please Wait...";
-            GetALlChapter();
-            QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
-            CopyNumNewTask(thisSelectedChapterToAsign.noOfQues);
-            var id = RandomString(50);
-            string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-            string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-            string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-            var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
-            {
-                userID = selectedTaskOpID,
-                MCQNumbers = selectedMCQList + " Link#" + thisSelectedChapterToAsign.link,
-                date = thisd,
-                chapterID = thisSelectedChapterToAsign.chapterID,
-                taskID = id,
-                startTime = sd,
-                endTime = ed
-            })
-    .ReceiveJson<Response>();
+            userID = selectedTaskOpID,
+            MCQNumbers = selectedMCQList + " Link#" + thisSelectedChapterToAsign.link,
+            date = thisd,
+            chapterID = thisSelectedChapterToAsign.chapterID,
+            taskID = id,
+            startTime = sd,
+            endTime = ed
+        })
+.ReceiveJson<Response>();
 
-            RefreshList();
-            await GetOperatorInfo();
-            MakeQSTxt = "Done";
-            await Task.Delay(1000);
-            MakeQSTxt = "Make New Task";
-        }
-        else
-        {
-            makeTaskError = "You can make new task for "+ seletedTaskOpName+" after(MM/DD/YY) : " + lastTaskEndTime;
-        }
+        RefreshList();
+        await GetOperatorInfo();
+        MakeQSTxt = "Done";
+        await Task.Delay(1000);
+        MakeQSTxt = "Make New Task";
 
     }
     public void CopyNumNewTask(int totalChapQues)
@@ -1309,7 +1348,63 @@
 
         }
     }
+    int subOpSelectedID = 0;
+    private void SubOpSelected(ChangeEventArgs subOp)
+    {
+        for (int i = 0; i < teacherList.Count; i++)
+        {
+            if (teacherList[i].name == subOp.Value.ToString())
+            {
+                for (int j = 0; j < shiEMList.Count; j++)
+                {
+                    if (shiEMList[j].employeeID == teacherList[i].teacherID)
+                    {
+                        subOpSelectedID = teacherList[i].teacherID;
+                        break;
+                    }
+                }
 
+
+            }
+        }
+    }
+    CultureInfo culture = new CultureInfo("en-US");
+    public async Task checkSubmission()
+    {
+        TotalSubmittion = 0;
+        for(int i =0; i < thList.Count; i++)
+        {
+            if(subOpSelectedID == thList[i].teacherID)
+            {
+
+                DateTime HistoryDateFormat = DateTime.ParseExact(thList[i].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
+                DateTime st = DateTime.ParseExact(startingDateSub, "dd'-'MM'-'yyyy", culture);
+                DateTime ed = DateTime.ParseExact(endingDateSub, "dd'-'MM'-'yyyy", culture);
+                if (HistoryDateFormat >= st && HistoryDateFormat <= ed)
+                {
+                    TotalSubmittion++;
+                }
+            }
+        }
+        //await SetSubmitNum();
+
+    }
+
+    public async Task SetSubmitNum()
+    {
+        for(int i = 0; i < showInfo.Count; i++)
+        {
+            if(showInfo[i].status == "Active")
+            {
+                var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/makeTaskActive".PostUrlEncodedAsync(new
+                {
+                    taskID = showInfo[i].taskID,
+                })
+.ReceiveJson<Response>();
+            }
+
+        }
+    }
 
 }
 
