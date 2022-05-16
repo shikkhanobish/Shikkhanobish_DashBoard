@@ -293,6 +293,16 @@
                                 <input class="form-control" placeholder="Ending Number" @onchange="@onChange" />
                             </div>
                             <div class="col-4">
+                                <select class="form-control btn btn-purple" id="class" @onchange="SelectedType">
+                                    <option>Select Task Type</option>
+                                    @for(int i = 1; i <=2; i++)
+                                    {
+
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-4">
                                 <button class="btn btn-primary" type="button" @onclick="assignTask">
 
                                     @BtnString
@@ -344,6 +354,7 @@
                                                     <th>No Of Qs</th>
                                                     <th>IsDone</th>
                                                     <th>Done Number</th>
+
                                                     <th>Delete</th>
                                                 </tr>
                                             </thead>
@@ -393,46 +404,41 @@
                                             <th>Assigned Number</th>
                                             <th>Chapter ID</th>
                                             <th>Chapter Name</th>
-                                            <th>Task Date</th>
-                                            <th>Assign Time (DD/MM/YYYY)</th>
-
-                                            <th>Submitted</th>
-                                            <th>Remaining</th>
-                                            <th>IS Task Submitted</th>
+                                            <th>Task Date</th>                                        
+                                            <th>Submitted</th>                                        
                                             <th>Status</th>
+                                            <th>Task Type</th>
                                             <th>Delete Task</th>
+
 
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 10px; ">
                                         @foreach (var item in showInfo)
                                         {
-                                            <tr>
-                                                <td style="color: #2E2E2E">@item.userID</td>
-                                                <td style="color: #2E2E2E">@item.userName</td>
-                                                <td style="color: #2E2E2E">@item.MCQNumbers</td>
-                                                <td style="color: #2E2E2E">@item.chapterID</td>
-                                                <td style="color: #2E2E2E">@item.chapterName</td>
-                                                <td style="color: #2E2E2E">@item.date</td>
-                                                <td style="color: #2E2E2E">@item.startTime</td>
+                                        <tr>
+                                            <td style="color: #2E2E2E">@item.userID</td>
+                                            <td style="color: #2E2E2E">@item.userName</td>
+                                            <td style="color: #2E2E2E">@item.MCQNumbers</td>
+                                            <td style="color: #2E2E2E">@item.chapterID</td>
+                                            <td style="color: #2E2E2E">@item.chapterName</td>
+                                            <td style="color: #2E2E2E">@item.date</td>
 
-                                                <td style="color: green">@item.submitted</td>
-                                                <td style="color: red">@item.reMain</td>
-                                                <td style="color: @item.isTaskSubColor; font-weight: bold">
-                                                    <i class="fas fa-times" style="display:@item.isTaskSubNootDone"></i>
-                                                    <i class="fas fa-check-double" style="display:@item.isTaskSubDone"></i>
-                                                    <i style="display:@item.isTaskSubPending">---</i>
-                                                </td>
-                                                <td style="color: @item.statusColor; font-weight: bold">@item.status</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm px-3" @onclick="@( async () => await RemoveTask(item.taskID))">
-                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="display:@showLoadingRemoveTask"></span>
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </td>
+                                            <td style="color: green">@item.TotalSubmitted</td>
 
 
-                                            </tr>
+                                            <td><button class="@item.activeBtnActive"  @onclick="@( async () => await MakeActiveOrInactive(item.ActiveStatus, item.taskID))"> @item.activeBtnTxt</button></td>
+                                            <td style="color: #2E2E2E">@item.taskType</td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm px-3" @onclick="@( async () => await RemoveTask(item.taskID))">
+                                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="display:@showLoadingRemoveTask"></span>
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+
+
+                                        </tr>
 
                                         }
 
@@ -528,7 +534,7 @@
     List<string> classList = new List<string>();
     List<string> operatorListSelect = new List<string>();
     List<string> subjectList = new List<string>();
-
+    int selectedTaskType { get; set; }
     List<string> chapterList = new List<string>();
     List<dataentryOperatorTask> showInfo = new List<dataentryOperatorTask>();
     List<dataentryOperatorTask> LiveshowInfo = new List<dataentryOperatorTask>();
@@ -554,7 +560,7 @@
         userName = StaticClassToPassData.thisAdmin.name;
         pass = StaticClassToPassData.thisAdmin.passWord;
 
-        await GetOperatorInfo();
+        await GetTaskInfo();
         //await AutomatedTaskAssigner(1000005);
 
     }
@@ -729,7 +735,7 @@
             taskID = taskID
         }).
        ReceiveJson<Response>();
-        await GetOperatorInfo();
+        await GetTaskInfo();
         showLoadingRemoveTask = "None";
     }
     public async Task getOpe()
@@ -749,10 +755,10 @@
 
         }
     }
-    public async Task GetOperatorInfo()
+    public async Task GetTaskInfo()
     {
         await getOpe();
-        allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
+
         allsub = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getSubject".GetJsonAsync<List<Subject>>();
         allClass = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getClassInfo".GetJsonAsync<List<ClassInfo>>();
         operatorList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getdataentryOperatorTask".PostJsonAsync(new { }).ReceiveJson<List<dataentryOperatorTask>>();
@@ -762,159 +768,60 @@
         List<dataentryOperatorTask> LivethisOpList = new List<dataentryOperatorTask>();
         GetALlChapter();
         await RefreshPDFLink();
-
-        for (int t = 0; t < allClass.Count; t++)
+        allc = await "https://api.shikkhanobish.com/api/ShikkhanobishLogin/getChapter".GetJsonAsync<List<Chapter>>();
+        teacherList = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/getAllTeacher".PostJsonAsync(new { }).ReceiveJson<List<Teachers>>();
+        List<dataentryOperatorTask> thisTeacherActiveTask = new List<dataentryOperatorTask>();
+        foreach(var task in operatorList)
         {
-            classList.Add(allClass[t].name) ;
-        }
 
-        CultureInfo culturen = new CultureInfo("en-US");
-        thisOpList = operatorList;
-        List<string> activeTaskList = new List<string>();
-        List<int> doneOP = new List<int>();
-        List<dataentryOperatorTask> thisopTask = new List<dataentryOperatorTask>();
-        for (int i = 0; i < thisOpList.Count; i++)
-        {
-            thisOpList[i] = operatorList[i];
             for (int z = 0; z < teacherList.Count; z++)
             {
-                if (thisOpList[i].userID == teacherList[z].teacherID)
+                if (task.userID == teacherList[z].teacherID)
                 {
-                    thisOpList[i].userName = teacherList[z].name;
+                    task.userName = teacherList[z].name;
                     break;
                 }
             }
             for (int e = 0; e < allc.Count; e++)
             {
-                if (allc[e].chapterID == thisOpList[i].chapterID)
+                if (allc[e].chapterID == task.chapterID)
                 {
-                    thisOpList[i].chapterName = allc[e].name;
+                    task.chapterName = allc[e].name;
                     break;
                 }
             }
-            //indivisual TAsk
-            thisopTask = new List<dataentryOperatorTask>();
-            bool shouldCheck = true;
-            for(int j = 0; j < doneOP.Count; j++)
+            task.activeBtnTxt = task.ActiveStatus;
+            if (task.ActiveStatus == "Active")
             {
-                if (doneOP[j] == thisOpList[i].userID)
-                {
-                    shouldCheck = false ;
-                }
+      
+                task.activeBtnActive = "btn btn-success";
             }
-
-            if (shouldCheck)
+            if (task.ActiveStatus == "Inactive")
             {
-                doneOP.Add(thisOpList[i].userID);
-                for (int k = 0; k < thisOpList.Count; k++)
-                {
-                    if(thisOpList[i].userID == thisOpList[k].userID)
-                    {
-                        thisopTask.Add(thisOpList[k]);
-                    }
-                }
 
-
-                ////// Active Define
-                var lastActive = DateTime.ParseExact(thisopTask[0].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-                int indexID = 0;
-                for (int l = 0; l < thisopTask.Count; l++)
-                {
-                    var thisDatetime = DateTime.ParseExact(thisopTask[l].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-                    if(lastActive < thisDatetime)
-                    {
-                        indexID = l;
-                        lastActive = thisDatetime;
-                    }
-                }
-                activeTaskList.Add(thisopTask[indexID].taskID);
+                task.activeBtnActive = "btn btn-info";
             }
-
-        }
-        for (int l = 0; l < operatorList.Count; l++)
-        {
-            List<int> listofTHisOPQuestionID = new List<int>();
-            for (int k = 0; k < quesList.Count; k++)
-            {
-                if (operatorList[l].chapterID == quesList[k].chapterID)
-                {
-                    listofTHisOPQuestionID.Add(quesList[k].questionID);
-                }
-            }
-            CultureInfo culture = new CultureInfo("en-US");
-            DateTime TaskDateFormatSt = DateTime.ParseExact(operatorList[l].startTime, "MM/dd/yyyy hh:mm tt", culture);
-            for (int p = 0; p < thList.Count; p++)
-            {
-                for (int o = 0; o < listofTHisOPQuestionID.Count; o++)
-                {
-                    if (listofTHisOPQuestionID[o] == thList[p].questionID)
-                    {
-                        DateTime HistoryDateFormat = DateTime.ParseExact(thList[p].review, "dd'-'MM'-'yyyy' 'HH':'mm':'ss", culture);
-                        if (HistoryDateFormat >= TaskDateFormatSt)
-                        {
-                            thisOpList[l].submitted++;
-
-                        }
-                    }
-
-                }
-
-            }
-
-
-        }
-        for (int i = 0; i < thisOpList.Count; i++)
-        {
-
-            if (thisOpList[i].submitted > 100)
-            {
-                thisOpList[i].reMain = 0;
-            }
-            else
-            {
-                thisOpList[i].reMain = 150 - thisOpList[i].submitted ;
-            }
-            thisOpList[i].statusColor = "#979797";
-            if (thisOpList[i].submitted >= 100)
-            {
-                thisOpList[i].isTaskSubDone = "Block";
-                thisOpList[i].isTaskSubPending = "None";
-                thisOpList[i].isTaskSubNootDone = "None";
-                thisOpList[i].isTaskSubColor = "#08B483";
-            }
-            else
-            {
-                thisOpList[i].isTaskSubNootDone = "Block";
-                thisOpList[i].isTaskSubDone = "None";
-                thisOpList[i].isTaskSubPending = "None";
-                thisOpList[i].isTaskSubColor = "#CE0C0C";
-            }
-            thisOpList[i].status = "Inactive";
-            ////
-            for (int j = 0; j < activeTaskList.Count; j++)
-            {
-                if (activeTaskList[j] == thisOpList[i].taskID)
-                {
-                    thisOpList[i].statusColor = "#541BD7";
-                    thisOpList[i].isTaskSubPending = "Block";
-                    thisOpList[i].isTaskSubDone = "None";
-                    thisOpList[i].isTaskSubNootDone = "None";
-                    thisOpList[i].isTaskSubColor = "#BFB10C";
-                    thisOpList[i].status = "Active";
-                }
-            }
-            ///
-            var nt = DateTime.ParseExact(thisOpList[i].startTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOpList[i].startTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            nt = DateTime.ParseExact(thisOpList[i].endTime, "MM/dd/yyyy hh:mm tt", culturen);
-            thisOpList[i].endTime = nt.ToString("dd/MM/yyyy hh:mm tt");
-            thisOpList[i].MCQNumbers = thisOpList[i].MCQNumbers?[0..Math.Min(thisOpList[i].MCQNumbers.Length, 50)];
         }
         List<dataentryOperatorTask> SortedList = new List<dataentryOperatorTask>();
-        SortedList = thisOpList.OrderBy(x => x.status).ToList();
-        thisOpList = SortedList;
-        showInfo = thisOpList;
+        SortedList = operatorList.OrderBy(x => x.ActiveStatus).ToList();
+        operatorList = SortedList;
+        showInfo = operatorList;
+
     }
+    public async Task MakeActiveOrInactive(string status, string id)
+    {
+        if (status == "Active")
+        {
+            var res = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/MakeTaskInActive".PostJsonAsync(new { taskID = id }).ReceiveJson<Response>();
+        }
+        else
+        {
+            var res = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/makeTaskActive".PostJsonAsync(new { taskID = id }).ReceiveJson<Response>();
+        }
+        await GetTaskInfo();
+        StateHasChanged();
+    }
+
 
 
 
@@ -1045,6 +952,11 @@
         }
         chapterList = thisch;
     }
+    private void SelectedType(ChangeEventArgs dateEvent)
+    {
+        string type = dateEvent.Value.ToString();
+        selectedTaskType = int.Parse(type);
+    }
     [Inject]
     public NavigationManager nvi { get; set; }
 
@@ -1132,11 +1044,13 @@
                 chapterID = SelectedChapterID,
                 taskID = id,
                 startTime = sd,
-                endTime = ed
+                endTime = ed,
+                taskType = selectedTaskType
+
             })
     .ReceiveJson<Response>();
             RefreshList();
-            await GetOperatorInfo();
+            await GetTaskInfo();
             BtnString = "Done!";
             await Task.Delay(3000);
             BtnString = "Assign Task";
@@ -1254,36 +1168,7 @@
     string lastTaskEndTime;
     int selectedTaskOpID;
     string seletedTaskOpName;
-    public async Task AutomatedTaskAssigner()
-    {
 
-        MakeQSTxt = "Making New Task. Please Wait...";
-        GetALlChapter();
-        QuestionPdfLink thisSelectedChapterToAsign = await getNewChapterToAssign();
-        CopyNumNewTask(thisSelectedChapterToAsign.noOfQues);
-        var id = RandomString(50);
-        string sd = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-        string ed = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy hh:mm tt");
-        string thisd = DateTime.Now.ToString("dddd, dd MMMM yyyy");
-        var res1 = await "https://api.shikkhanobish.com/api/ShikkhanobishTeacher/setdataentryOperatorTask".PostUrlEncodedAsync(new
-        {
-            userID = selectedTaskOpID,
-            MCQNumbers = selectedMCQList + " Link#" + thisSelectedChapterToAsign.link,
-            date = thisd,
-            chapterID = thisSelectedChapterToAsign.chapterID,
-            taskID = id,
-            startTime = sd,
-            endTime = ed
-        })
-.ReceiveJson<Response>();
-
-        RefreshList();
-        await GetOperatorInfo();
-        MakeQSTxt = "Done";
-        await Task.Delay(1000);
-        MakeQSTxt = "Make New Task";
-
-    }
     public void CopyNumNewTask(int totalChapQues)
     {
         selectedMCQList = "";
